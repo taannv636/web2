@@ -177,7 +177,7 @@ header section.logo a img {
   top: 2.3rem;
   left: 0px;
   z-index: 10;
-  width: 150%;
+  width: 300%;
   border: 1px solid grey;
   border-radius: 5px;
   padding: 10px 0;
@@ -189,7 +189,7 @@ header section.logo a img {
   margin: 10px 0;
 }
 #wrapper header .container section.menu-right .login .logout a:hover {
-  opacity: 0.8;
+  opacity: 1;
 }
 /* END HEADER  */
 main .container {

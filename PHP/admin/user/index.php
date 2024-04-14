@@ -163,6 +163,7 @@ require_once('../database/dbhelper.php');
                 'id_user': id_user,
                 'action': 'delete'
             }, function(data) {
+                console.log("Xóa thành công")
                 location.reload()
             })
         }

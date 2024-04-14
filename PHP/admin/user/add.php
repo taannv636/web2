@@ -98,7 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-group">
                         <label for="username">Tên Đăng Nhập:</label>
-                        <input required="true" type="text" class="form-control" id="username" name="username" value="<?= $username ?>" readonly>
+                        <input required="true" type="text" class="form-control" id="username" name="username" value="<?= $username ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật Khẩu:</label>
+                        <input required="true" type="password" class="form-control" id="password" name="password" value="<?= $password ?>">
                     </div>
                     <div class="form-group">
                         <label for="phone">Số Điện Thoại:</label>

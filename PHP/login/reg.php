@@ -138,6 +138,7 @@ require_once('../database/dbhelper.php');
       $repass = $_POST['repassword'];
       $phone = $_POST['phone'];
       $email = $_POST['email'];
+      $trang_thai = 1;
       //kiểm tra trùng paswword không
       if ($pass != $repass) {
         echo '<script language="javascript">
@@ -157,7 +158,7 @@ require_once('../database/dbhelper.php');
              </script>';
         die();
       }
-      $sql = 'INSERT INTO user(hoten,username,password,phone,email) values ("' . $name . '","' . $username . '","' . $pass . '","' . $phone . '","' . $email . '")';
+      $sql = 'INSERT INTO user(hoten,username,password,phone,email,trang_thai) values ("' . $name . '","' . $username . '","' . $pass . '","' . $phone . '","' . $email . '","' . $trang_thai . '")';
       execute($sql);
       echo '<script language="javascript">
                 alert("Bạn đăng ký thành công!");
