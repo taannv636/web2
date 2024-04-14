@@ -41,10 +41,16 @@ require_once('../database/dbhelper.php');
                 <h2 class="text-center">Quản lý User</h2>
             </div>
             <div class="panel-body"></div>
+            <form action="" method="get" class="form-inline">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="keyword" name="keyword" placeholder="Tìm kiếm theo họ tên">
+                </div>
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </form>
+            <br>
             <a href="add.php">
                 <button class=" btn btn-success" style="margin-bottom:20px">Thêm User</button>
             </a>
-            
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr style="font-weight: 500;">
@@ -71,15 +77,20 @@ require_once('../database/dbhelper.php');
                     }
 
                     try {
-
-                        if (isset($_GET['page'])) {
-                            $page = $_GET['page'];
+                        if (isset($_GET['keyword'])) {
+                            $keyword = $_GET['keyword'];
+                            $sql = "SELECT * FROM user WHERE hoten LIKE '%$keyword%'";
                         } else {
-                            $page = 1;
+                            if (isset($_GET['page'])) {
+                                $page = $_GET['page'];
+                            } else {
+                                $page = 1;
+                            }
+                            $limit = 5;
+                            $start = ($page - 1) * $limit;
+                            $sql = "SELECT * FROM user limit $start,$limit";
                         }
-                        $limit = 5;
-                        $start = ($page - 1) * $limit;
-                        $sql = "SELECT * FROM user limit $start,$limit";
+
                         executeResult($sql);
                         $userList = executeResult($sql);
 
