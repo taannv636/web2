@@ -111,8 +111,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group">
                         <label for="trang_thai">Trạng Thái:</label>
                         <select class="form-control" id="trang_thai" name="trang_thai">
-                            <option value="1" <?= $trang_thai == 1 ? 'selected' : '' ?>>Hiện</option>
-                            <option value="0" <?= $trang_thai == 0 ? 'selected' : '' ?>>Ẩn</option>
+                            <option value="1" <?= $trang_thai == 1 ? 'selected' : '' ?>>Hoạt động</option>
+                            <option value="0" <?= $trang_thai == 0 ? 'selected' : '' ?>>Cấm</option>
                         </select>
                     </div>
                     <button class="btn btn-success">Lưu</button>

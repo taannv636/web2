@@ -111,44 +111,42 @@ require_once('../database/dbhelper.php');
     <?php
     require_once('../database/config.php');
     require_once('../database/dbhelper.php');
+
+    // Kiểm tra nếu người dùng đã submit form đăng nhập
     if (isset($_POST["submit"]) && $_POST["username"] != '' && $_POST["password"] != '') {
         $username = $_POST["username"];
         $password = $_POST["password"];
-        // $password = md5($password);
-        $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password' ";
-        execute($sql);
-        $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-        $user = mysqli_query($con, $sql);
-        if ($username == 'AdminThanh' && $password == 'thanh1010') {
+        $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password'";
+        $user = executeSingleResult($sql); // Thực hiện truy vấn để lấy thông tin người dùng từ CSDL
+
+        // Nếu không tìm thấy người dùng
+        if (!$user) {
             echo '<script language="javascript">
-                alert("Đăng nhập Admin thành công!"); 
-                window.location = "../admin/index.php";
-            </script>';
-            $username = trim(strip_tags($_POST['username']));
-            $password = trim(strip_tags($_POST['password']));
-            session_start();
-            setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
-            setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
-        } else if (mysqli_num_rows($user) > 0) {
-            echo '<script language="javascript">
+            alert("Tài khoản và mật khẩu không chính xác !");
+            window.location = "login.php";
+         </script>';
+        } else {
+            // Nếu tài khoản tồn tại, kiểm tra trạng thái của tài khoản
+            $status = $user['trang_thai'];
+            if ($status == 1) {
+                // Trạng thái cho phép đăng nhập
+                echo '<script language="javascript">
                 alert("Đăng nhập thành công!"); 
                 window.location = "../index.php";
             </script>';
-            $username = trim(strip_tags($_POST['username']));
-            $password = trim(strip_tags($_POST['password']));
-            session_start();
-            setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
-            setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
-        } else {
-            echo '<script language="javascript">
-                alert("Tài khoản và mật khẩu không chính xác !");
-                window.location = "login.php";
-             </script>';
+                // Lưu thông tin tài khoản vào cookie
+                $username = trim(strip_tags($_POST['username']));
+                $password = trim(strip_tags($_POST['password']));
+                session_start();
+                setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
+                setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
+            } elseif ($status == 0) {
+                // Trạng thái cấm đăng nhập
+                echo '<script language="javascript">
+                alert("Tài khoản của bạn bị cấm!");
+            </script>';
+            }
         }
-
-
-        // setcookie("username", "", time() - 3600);
-        // setcookie("password", "", time() - 3600);
     }
     ?>
 </body>
