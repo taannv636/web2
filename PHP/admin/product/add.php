@@ -156,13 +156,16 @@ if (isset($_GET['id'])) {
             <a class="nav-link" href="../index.php">Thống kê</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="index.php">Quản lý danh mục</a>
+            <a class="nav-link" href="../category/">Quản lý danh mục</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="../product/">Quản lý sản phẩm</a>
+            <a class="nav-link active" href="../product/">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Quản lý giỏ hàng</a>
+            <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="../user/">Quản lý User</a>
         </li>
     </ul>
     <div class="container">

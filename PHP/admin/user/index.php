@@ -26,34 +26,35 @@ require_once('../database/dbhelper.php');
             <a class="nav-link " href="../category/">Quản lý Danh Mục</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="../product/">Quản lý sản phẩm</a>
+            <a class="nav-link" href="../product/">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="../user">Quản lý User</a>
+            <a class="nav-link active" href="../user/">Quản lý User</a>
         </li>
     </ul>
     <div class="container">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h2 class="text-center">Quản lý Sản Phẩm</h2>
+                <h2 class="text-center">Quản lý User</h2>
             </div>
             <div class="panel-body"></div>
             <a href="add.php">
-                <button class=" btn btn-success" style="margin-bottom:20px">Thêm Sản Phẩm</button>
+                <button class=" btn btn-success" style="margin-bottom:20px">Thêm User</button>
             </a>
+            
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr style="font-weight: 500;">
                         <td width="70px">STT</td>
-                        <td>Thumbnail</td>
-                        <td>Tên Sản Phẩm</td>
-                        <td>Giá</td>
-                        <td>Số lượng</td>
-                        <td>Nội dung</td>
                         <td>ID</td>
+                        <td>Họ tên</td>
+                        <td>username</td>
+                        <td>SĐT</td>
+                        <td>Email</td>
+                        <td>Trạng thái</td>
                         <td width="50px"></td>
                         <td width="50px"></td>
                     </tr>
@@ -78,30 +79,28 @@ require_once('../database/dbhelper.php');
                         }
                         $limit = 5;
                         $start = ($page - 1) * $limit;
-                        $sql = "SELECT * FROM product limit $start,$limit";
+                        $sql = "SELECT * FROM user limit $start,$limit";
                         executeResult($sql);
-                        // $sql = 'select * from product limit $star,$limit';
-                        $productList = executeResult($sql);
+                        $userList = executeResult($sql);
 
                         $index = 1;
-                        foreach ($productList as $item) {
+                        foreach ($userList as $item) {
                             echo '  <tr>
                     <td>' . ($index++) . '</td>
-                    <td style="text-align:center">
-                        <img src="' . $item['thumbnail'] . '" alt="" style="width: 50px">
-                    </td>
-                    <td>' . $item['title'] . '</td>
-                    <td>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</td>
-                    <td>' . $item['number'] . '</td>
-                    <td>' . $item['content'] . '</td>
-                    <td>' . $item['id_category'] . '</td>
+                    
+                    <td>' . $item['id_user'] . '</td>
+                    <td>' . $item['hoten'] . '</td>
+                    <td>' . $item['username'] . '</td>
+                    <td>' . $item['phone'] . '</td>
+                    <td>' . $item['email'] . '</td>
+                    <td>' . $item['trang_thai'] . '</td>
                     <td>
-                        <a href="add.php?id=' . $item['id'] . '">
+                        <a href="add.php?id_user=' . $item['id_user'] . '">
                             <button class=" btn btn-warning">Sửa</button> 
                         </a> 
                     </td>
                     <td>            
-                    <button class="btn btn-danger" onclick="deleteProduct(' . $item['id'] . ')">Xoá</button>
+                    <button class="btn btn-danger" onclick="deleteUser(' . $item['id_user'] . ')">Xoá</button>
                     </td>
                 </tr>';
                         }
@@ -115,7 +114,7 @@ require_once('../database/dbhelper.php');
 
         <ul class="pagination">
             <?php
-            $sql = "SELECT * FROM `product`";
+            $sql = "SELECT * FROM `user`";
             $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result)) {
@@ -141,16 +140,16 @@ require_once('../database/dbhelper.php');
 
     </div>
     <script type="text/javascript">
-        function deleteProduct(id) {
-            var option = confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?')
+        function deleteUser(id_user) {
+            var option = confirm('Bạn có chắc chắn muốn xoá user này không?')
             if (!option) {
                 return;
             }
 
-            console.log(id)
+            console.log(id_user)
             //ajax - lenh post
             $.post('ajax.php', {
-                'id': id,
+                'id_user': id_user,
                 'action': 'delete'
             }, function(data) {
                 location.reload()

@@ -36,6 +36,9 @@
                 <li class="nav-item ">
                     <a class="nav-link " href="dashboard.php">Quản lý đơn hàng</a>
                 </li>
+                <li class="nav-item ">
+                    <a class="nav-link " href="user/">Quản lý User</a>
+                </li>
             </ul>
         </header>
         <div class="container">
@@ -61,7 +64,7 @@
                             $result = mysqli_query($conn, $sql);
                             echo '<span>' . mysqli_num_rows($result) . '</span>';
                             ?>
-                            <p><a href="">xem chi tiết➜</a></p>
+                            <p><a href="user/">xem chi tiết➜</a></p>
                         </div>
                         <div class="sp dm">
                             <p>Danh mục</p>
@@ -97,24 +100,24 @@
                             <td>Số điện thoại</td>
                         </tr>
                         <?php
-                            try {
+                        try {
 
-                                if (isset($_GET['page'])) {
-                                    $page = $_GET['page'];
-                                } else {
-                                    $page = 1;
-                                }
-                                $limit = 10;
-                                $start = ($page - 1) * $limit;
+                            if (isset($_GET['page'])) {
+                                $page = $_GET['page'];
+                            } else {
+                                $page = 1;
+                            }
+                            $limit = 10;
+                            $start = ($page - 1) * $limit;
 
-                                $sql = "SELECT * from orders, order_details, product
+                            $sql = "SELECT * from orders, order_details, product
                                 where order_details.order_id=orders.id and product.id=order_details.product_id ORDER BY order_date DESC limit $start,$limit ";
-                                $order_details_List = executeResult($sql);
-                                $total = 0;
-                                $count = 0;
-                                // if (is_array($order_details_List) || is_object($order_details_List)){
-                                foreach ($order_details_List as $item) {
-                                    echo '
+                            $order_details_List = executeResult($sql);
+                            $total = 0;
+                            $count = 0;
+                            // if (is_array($order_details_List) || is_object($order_details_List)){
+                            foreach ($order_details_List as $item) {
+                                echo '
                                         <tr style="text-align: center;">
                                             <td>' . (++$count) . '</td>
                                             <td>' . $item['fullname'] . '</td>
@@ -124,11 +127,11 @@
                                             <td class="b-500">' . $item['phone_number'] . '</td>
                                         </tr>
                                     ';
-                                }
-                            } catch (Exception $e) {
-                                die("Lỗi thực thi sql: " . $e->getMessage());
                             }
-                            ?>
+                        } catch (Exception $e) {
+                            die("Lỗi thực thi sql: " . $e->getMessage());
+                        }
+                        ?>
                     </table>
                 </section>
             </main>
@@ -136,9 +139,10 @@
     </div>
 </body>
 <style>
-    #wrapper{
+    #wrapper {
         padding-bottom: 5rem;
     }
+
     .b-500 {
         font-weight: 500;
     }
