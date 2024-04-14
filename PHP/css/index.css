@@ -189,6 +189,7 @@ header section.logo a img {
   margin: 10px 0;
 }
 #wrapper header .container section.menu-right .login .logout a:hover {
+  color: #00b14c;
   opacity: 1;
 }
 /* END HEADER  */
@@ -220,6 +221,12 @@ main section.search-quan input {
   outline: 0;
   border: 0;
   background-color: #f7f7f7;
+}
+
+main section.search-quan input:hover {
+  border-width: 2px;
+  border-style: solid;
+  border-color: #00b14c;
 }
 /* END MAIN TOP  */
 main #ant-layout section.main-layout {

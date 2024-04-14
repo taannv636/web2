@@ -6,7 +6,7 @@ require_once('../database/dbhelper.php');
 <html>
 
 <head>
-    <title>Quản Lý Sản Phẩm</title>
+    <title>Quản Lý User</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!-- jQuery library -->
@@ -136,9 +136,9 @@ require_once('../database/dbhelper.php');
             for ($i = 1; $i <= $current_page; $i++) {
                 // Nếu là trang hiện tại thì hiển thị thẻ span
                 // ngược lại hiển thị thẻ a
-                if ($i == $current_page) {
+                if ($i == $pg) {
                     echo '
-            <li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+        <li class="page-item active"><a class="page-link" style="color: yellow; font-weight: bold;" href="?page=' . $i . '">' . $i . '</a></li>';
                 } else {
                     echo '
             <li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>
@@ -150,6 +150,8 @@ require_once('../database/dbhelper.php');
     </div>
 
     </div>
+
+
     <script type="text/javascript">
         function deleteUser(id_user) {
             var option = confirm('Bạn có chắc chắn muốn xoá user này không?')

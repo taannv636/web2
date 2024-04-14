@@ -225,6 +225,12 @@
             /* Để giống với các input khác */
         }
 
+        main section.search-quan select:hover {
+            border-width: 2px;
+            border-style: solid;
+            border-color: #00b14c;
+        }
+
         main section.search-quan button[type="submit"] {
             width: auto;
             /* Để nút có chiều rộng tự động theo nội dung */
@@ -244,6 +250,7 @@
 
         main section.search-quan button[type="submit"]:hover {
             background-color: #45a049;
+            color: yellow;
             /* Màu nền hover */
         }
     </style>
