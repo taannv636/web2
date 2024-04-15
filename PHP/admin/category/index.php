@@ -31,7 +31,7 @@ require_once('../database/dbhelper.php');
             <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="../user">Quản lý User</a>
+            <a class="nav-link" href="../user">Quản lý người dùng</a>
         </li>
     </ul>
     <div class="container">

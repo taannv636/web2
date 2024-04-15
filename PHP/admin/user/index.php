@@ -6,7 +6,7 @@ require_once('../database/dbhelper.php');
 <html>
 
 <head>
-    <title>Quản Lý User</title>
+    <title>Quản Lý Người Dùng</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!-- jQuery library -->
@@ -23,7 +23,7 @@ require_once('../database/dbhelper.php');
             <a class="nav-link" href="../index.php">Thống kê</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="../category/">Quản lý Danh Mục</a>
+            <a class="nav-link " href="../category/">Quản lý danh mục</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="../product/">Quản lý sản phẩm</a>
@@ -32,13 +32,13 @@ require_once('../database/dbhelper.php');
             <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="../user/">Quản lý User</a>
+            <a class="nav-link active" href="../user/">Quản lý người dùng</a>
         </li>
     </ul>
     <div class="container">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h2 class="text-center">Quản lý User</h2>
+                <h2 class="text-center">Quản lý Người Dùng</h2>
             </div>
             <div class="panel-body"></div>
             <form action="" method="get" class="form-inline">
@@ -49,7 +49,7 @@ require_once('../database/dbhelper.php');
             </form>
             <br>
             <a href="add.php">
-                <button class=" btn btn-success" style="margin-bottom:20px">Thêm User</button>
+                <button class=" btn btn-success" style="margin-bottom:20px">Thêm Người dùng</button>
             </a>
             <table class="table table-bordered table-hover">
                 <thead>
@@ -70,10 +70,10 @@ require_once('../database/dbhelper.php');
                     // Lấy danh sách Sản Phẩm
                     if (!isset($_GET['page'])) {
                         $pg = 1;
-                        echo 'Bạn đang ở trang: 1';
+                        //echo 'Bạn đang ở trang: 1';
                     } else {
                         $pg = $_GET['page'];
-                        echo 'Bạn đang ở trang: ' . $pg;
+                        //echo 'Bạn đang ở trang: ' . $pg;
                     }
 
                     try {
