@@ -88,52 +88,7 @@
                         </div>
                     </div>
                 </section>
-                <section class="new-order">
-                    <h4>Đơn hàng mới</h4>
-                    <table>
-                        <tr class="bold">
-                            <td>STT</td>
-                            <td>Tên</td>
-                            <td>Tên sản phẩm/Số lượng</td>
-                            <td>Giá sản phẩm</td>
-                            <td>Địa chỉ</td>
-                            <td>Số điện thoại</td>
-                        </tr>
-                        <?php
-                        try {
-
-                            if (isset($_GET['page'])) {
-                                $page = $_GET['page'];
-                            } else {
-                                $page = 1;
-                            }
-                            $limit = 10;
-                            $start = ($page - 1) * $limit;
-
-                            $sql = "SELECT * from orders, order_details, product
-                                where order_details.order_id=orders.id and product.id=order_details.product_id ORDER BY order_date DESC limit $start,$limit ";
-                            $order_details_List = executeResult($sql);
-                            $total = 0;
-                            $count = 0;
-                            // if (is_array($order_details_List) || is_object($order_details_List)){
-                            foreach ($order_details_List as $item) {
-                                echo '
-                                        <tr style="text-align: center;">
-                                            <td>' . (++$count) . '</td>
-                                            <td>' . $item['fullname'] . '</td>
-                                            <td>' . $item['title'] . '<br>(<strong>' . $item['num'] . '</strong>)</td>
-                                            <td class="b-500 red">' . number_format($item['num'] * $item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                            <td>' . $item['address'] . '</td>
-                                            <td class="b-500">' . $item['phone_number'] . '</td>
-                                        </tr>
-                                    ';
-                            }
-                        } catch (Exception $e) {
-                            die("Lỗi thực thi sql: " . $e->getMessage());
-                        }
-                        ?>
-                    </table>
-                </section>
+                
             </main>
         </div>
     </div>
