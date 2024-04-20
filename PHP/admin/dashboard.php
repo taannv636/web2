@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Quản lý Giỏ Hàng</title>
+    <title>Quản lý Đơn Hàng</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!-- jQuery library -->
@@ -31,7 +31,7 @@
             <a class="nav-link" href="product/">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item ">
-            <a class="nav-link active" href="dashboard.php">Quản lý giỏ hàng</a>
+            <a class="nav-link active" href="dashboard.php">Quản lý đơn hàng</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="user/">Quản lý người dùng</a>
@@ -40,7 +40,7 @@
     <div class="container">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h2 class="text-center">Quản lý giỏ hàng</h2>
+                <h2 class="text-center">Quản lý đơn hàng</h2>
             </div>
             <div class="panel-body">
                 <form action="" method="POST">

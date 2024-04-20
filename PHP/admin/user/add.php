@@ -1,20 +1,19 @@
 <?php
 require_once('../database/dbhelper.php');
 
-$id_user = $hoten = $username = $password = $phone = $email = $trang_thai = "";
+$id_user = $hoten = $username = $password = $phone = $email = $status = "";
 
 // Check if the user is accessing the page to update an existing user
 if (isset($_GET['id_user'])) {
     $id_user = $_GET['id_user'];
-    $sql = "SELECT * FROM user WHERE id_user=$id_user";
+    $sql = "SELECT * FROM user WHERE id_user= ' . $id_user . '";
     $user = executeSingleResult($sql);
     if ($user) {
         $hoten = $user['hoten'];
-        $username = $user['username'];
         $password = $user['password'];
         $phone = $user['phone'];
         $email = $user['email'];
-        $trang_thai = $user['trang_thai'];
+        $status = $user['status'];
     }
 }
 
@@ -22,11 +21,10 @@ if (isset($_GET['id_user'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve form data
     $hoten = $_POST['hoten'];
-    $username = $_POST['username'];
     $password = $_POST['password'];
     $phone = $_POST['phone'];
     $email = $_POST['email'];
-    $trang_thai = $_POST['trang_thai'];
+    $status = $_POST['status'];
 
     // Validate form data
     if (!empty($hoten) && !empty($username) && !empty($password) && !empty($phone) && !empty($email)) {
@@ -96,10 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="hoten">Họ và Tên:</label>
                         <input required="true" type="text" class="form-control" id="hoten" name="hoten" value="<?= $hoten ?>">
                     </div>
-                    <div class="form-group">
-                        <label for="username">Tên Đăng Nhập:</label>
-                        <input required="true" type="text" class="form-control" id="username" name="username" value="<?= $username ?>">
-                    </div>
+                   
                     <div class="form-group">
                         <label for="password">Mật Khẩu:</label>
                         <input required="true" type="password" class="form-control" id="password" name="password" value="<?= $password ?>">
@@ -114,9 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-group">
                         <label for="trang_thai">Trạng Thái:</label>
-                        <select class="form-control" id="trang_thai" name="trang_thai">
-                            <option value="1" <?= $trang_thai == 1 ? 'selected' : '' ?>>Hoạt động</option>
-                            <option value="0" <?= $trang_thai == 0 ? 'selected' : '' ?>>Cấm</option>
+                        <select class="form-control" id="status" name="status">
+                            <option value="1" <?= $status == 1 ? 'selected' : '' ?>>Hoạt động</option>
+                            <option value="0" <?= $status == 0 ? 'selected' : '' ?>>Cấm</option>
                         </select>
                     </div>
                     <button class="btn btn-success">Lưu</button>

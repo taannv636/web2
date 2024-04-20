@@ -57,7 +57,6 @@ require_once('../database/dbhelper.php');
                         <td width="70px">STT</td>
                         <td>ID</td>
                         <td>Họ tên</td>
-                        <td>username</td>
                         <td>SĐT</td>
                         <td>Email</td>
                         <td>Trạng thái</td>
@@ -101,10 +100,9 @@ require_once('../database/dbhelper.php');
                     
                     <td>' . $item['id_user'] . '</td>
                     <td>' . $item['hoten'] . '</td>
-                    <td>' . $item['username'] . '</td>
                     <td>' . $item['phone'] . '</td>
                     <td>' . $item['email'] . '</td>
-                    <td>' . $item['trang_thai'] . '</td>
+                    <td>' . $item['status'] . '</td>
                     <td>
                         <a href="add.php?id_user=' . $item['id_user'] . '">
                             <button class=" btn btn-warning">Sửa</button> 
