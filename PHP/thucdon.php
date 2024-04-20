@@ -46,24 +46,19 @@
                     break;
                 default:
                     // Hiển thị phần title và product-recently
-                    if (isset($_GET['id_category'])) {
-                        $id_category = trim(strip_tags($_GET['id_category']));
+                    if (isset($_GET['id'])) {
+                        $id = trim(strip_tags($_GET['id']));
                     } else {
-                        $id_category = 0;
+                        $id = 0;
                     }
             ?>
                     <section class="recently">
                         <div class="title">
                             <?php
-                            // Nếu id_category được chọn, hiển thị tên category
-                            if (!empty($id_category)) {
-                                $sql = "SELECT * FROM category WHERE id=$id_category";
-                                $name = executeResult($sql);
-                                foreach ($name as $ten) {
-                                    echo '<h1>' . $ten['name'] . '</h1>';
-                                }
-                            } else {
-                                echo '<h1>Tất cả sản phẩm</h1>';
+                            $sql = "select * from category where id=$id_category";
+                            $name = executeResult($sql);
+                            foreach ($name as $ten) {
+                                echo '<h1>' . $ten['name'] . '</h1>';
                             }
                             ?>
                         </div>
@@ -78,36 +73,12 @@
 
                                 // Tạo query dựa trên id_category, search terms, and price range
                                 $query_condition = "";
-
-                                if (isset($_GET['search_name']) && !empty($_GET['search_name'])) {
-                                    $search_name = trim(strip_tags($_GET['search_name']));
-                                    $query_condition .= " title LIKE '%$search_name%'";
-                                }
-
-                                $price_condition = ""; // Initialize price condition
-
-                                if (isset($_GET['search_price_min']) && !empty($_GET['search_price_min'])) {
-                                    $price_min = trim(strip_tags($_GET['search_price_min']));
-                                    $price_condition .= " price >= $price_min";
-                                }
-
-                                if (isset($_GET['search_price_max']) && !empty($_GET['search_price_max'])) {
-                                    $price_max = trim(strip_tags($_GET['search_price_max']));
-                                    $price_condition .= (empty($price_condition) ? "" : " AND ") . " price <= $price_max";
-                                }
-
-                                // Combine query conditions
-                                if (!empty($query_condition)) {
-                                    $query_condition = "WHERE $query_condition";
-                                }
-
-                                if (!empty($price_condition)) {
-                                    $query_condition .= (empty($query_condition) ? "WHERE " : " AND ") . $price_condition;
-                                }
-
-                                // Add category filter if applicable
-                                if (!empty($id_category)) {
-                                    $query_condition .= (empty($query_condition) ? "WHERE " : " AND ") . " id_category = $id_category";
+                                if (isset($_GET['id_category'])) {
+                                    $id_category = trim(strip_tags($_GET['id_category']));
+                                    $query_condition = "WHERE id_category = $id_category";
+                                } elseif (isset($_GET['search'])) {
+                                    $search = $_GET['search'];
+                                    $query_condition = "WHERE title LIKE '%$search%'";
                                 }
 
                                 // Thêm limit và offset vào query để lấy sản phẩm cho trang hiện tại
@@ -172,7 +143,29 @@
                             <div class="pagination">
                                 <ul>
                                     <?php
-                                    // Nếu không phải trang đầu tiên thì hiển thị nút Prev
+                                    // Tạo query dựa trên id_category hoặc search
+                                    $query_condition = "";
+                                    if (isset($_GET['id_category'])) {
+                                        $id_category = trim(strip_tags($_GET['id_category']));
+                                        $query_condition = "WHERE id_category = $id_category";
+                                    } elseif (isset($_GET['search'])) {
+                                        $search = $_GET['search'];
+                                        $query_condition = "WHERE title LIKE '%$search%'";
+                                    }
+
+                                    // Lấy tổng số lượng sản phẩm dựa trên điều kiện query
+                                    $sql = "SELECT COUNT(*) AS total FROM `product` $query_condition";
+                                    $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+                                    $result = mysqli_query($conn, $sql);
+                                    $row = mysqli_fetch_assoc($result);
+                                    $total_products = $row['total'];
+
+                                    // Tính số trang cần hiển thị dựa trên số lượng sản phẩm và số sản phẩm mỗi trang (8 sản phẩm/trang)
+                                    $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+                                    $products_per_page = 8;
+                                    $total_pages = ceil($total_products / $products_per_page);
+
+                                    // Hiển thị nút Previous (Trang trước)
                                     if ($current_page > 1) {
                                         $prev_page = $current_page - 1;
                                         echo '<li><a href="?page=' . $prev_page . $additional_params . '">Prev</a></li>';

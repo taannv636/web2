@@ -6,7 +6,7 @@ require_once('utils/utility.php');
 // Lấy id từ trang index.php truyền sang rồi hiển thị nó
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = 'select * from product where id=' . $id;
+    $sql = 'SELECT * FROM product WHERE id ="' . $id . '"';
     $product = executeSingleResult($sql);
     // Kiểm tra nếu ko có id sp đó thì trả về index.php
     if ($product == null) {
@@ -56,9 +56,9 @@ if (isset($_GET['id'])) {
 
                                 <p class="price">Giá: <span id="price"><?= number_format($product['price'], 0, ',', '.') ?></span><span> VNĐ</span><span class="gia none"><?= $product['price'] ?></span></p>
                                 <!-- <a class="add-cart" href="" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</a> -->
-                                <button class="add-cart" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
+                                <button class="add-cart" onclick="addToCart(<?= '$id' ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                 <!-- <a class="buy-now" href="checkout.php" >Mua ngay</a> -->
-                                <button class="buy-now" onclick="buyNow(<?= $id ?>)">Mua ngay</button>
+                                <button class="buy-now" onclick="buyNow(<?= '$id' ?>)">Mua ngay</button>
 
                                 <script>
                                     function updatePrice() {

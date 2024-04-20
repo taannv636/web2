@@ -116,11 +116,12 @@ require_once('../database/dbhelper.php');
     if (isset($_POST["submit"]) && $_POST["username"] != '' && $_POST["password"] != '') {
         $username = $_POST["username"];
         $password = $_POST["password"];
-        $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password'";
-        $user = executeSingleResult($sql); // Thực hiện truy vấn để lấy thông tin người dùng từ CSDL
-
-        // Nếu không tìm thấy người dùng
-        if (!$user) {
+        // $password = md5($password);
+        $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password' ";
+        execute($sql);
+        $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+        $user = mysqli_query($con, $sql);
+        if ($username == 'AdminThanh' && $password == 'thanh1010') {
             echo '<script language="javascript">
             alert("Tài khoản và mật khẩu không chính xác !");
             window.location = "login.php";
@@ -134,18 +135,16 @@ require_once('../database/dbhelper.php');
                 alert("Đăng nhập thành công!"); 
                 window.location = "../index.php";
             </script>';
-                // Lưu thông tin tài khoản vào cookie
-                $username = trim(strip_tags($_POST['username']));
-                $password = trim(strip_tags($_POST['password']));
-                session_start();
-                setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
-                setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
-            } elseif ($status == 0) {
-                // Trạng thái cấm đăng nhập
-                echo '<script language="javascript">
-                alert("Tài khoản của bạn bị cấm!");
-            </script>';
-            }
+            $username = trim(strip_tags($_POST['username']));
+            $password = trim(strip_tags($_POST['password']));
+            session_start();
+            setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
+            setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
+        } else {
+            echo '<script language="javascript">
+                alert("Tài khoản và mật khẩu không chính xác !");
+                window.location = "login.php";
+             </script>';
         }
     }
     ?>

@@ -9,7 +9,7 @@ if (!empty($_POST)) {
 				if (isset($_POST['id'])) {
 					$id = $_POST['id'];
 
-					$sql = 'delete from category where id = '.$id;
+					$sql = 'DELETE FROM category WHERE id= "' . $id . '"';
 					execute($sql);
 				}
 				break;

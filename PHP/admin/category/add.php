@@ -1,5 +1,6 @@
 <?php
-require_once('../database/dbhelper.php');
+require('../database/dbhelper.php');
+
 $id = $name = '';
 if (!empty($_POST['name'])) {
     $name = '';
@@ -10,14 +11,17 @@ if (!empty($_POST['name'])) {
     if (isset($_POST['id'])) {
         $id = $_POST['id'];
     }
+
+    
     if (!empty($name)) {
-        $created_at = $updated_at = date('Y-m-d H:s:i');
-        // Lưu vào DB
+        // Save to DB
+        $sql='';
         if ($id == '') {
             // Thêm danh mục
             $sql = 'insert into category(name, created_at,updated_at) 
             values ("' . $name . '","' . $created_at . '","' . $updated_at . '")';
-        } else {
+        } 
+        else {
             // Sửa danh mục
             $sql = 'update category set name="' . $name . '", updated_at="' . $updated_at . '" where id=' . $id;
         }
@@ -27,16 +31,15 @@ if (!empty($_POST['name'])) {
     }
 }
 
-
-
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $sql = 'select * from category where id=' . $id;
+    $id = $_GET['id']; // Convert to integer
+    $sql = 'SELECT * FROM category WHERE id ="' . $id . '"';
     $category = executeSingleResult($sql);
     if ($category != null) {
         $name = $category['name'];
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -90,6 +93,7 @@ if (isset($_GET['id'])) {
                         $previous = $_SERVER['HTTP_REFERER'];
                     }
                     ?>
+                 
                     <a href="<?= $previous ?>" class="btn btn-warning">Back</a>
                 </form>
             </div>

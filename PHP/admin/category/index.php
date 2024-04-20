@@ -47,7 +47,8 @@ require_once('../database/dbhelper.php');
                 <thead>
                     <tr>
                         <td width="70px">STT</td>
-                        <td>Tên danh mục</td>
+                        <td width="150px">Mã danh mục</td>
+                        <td >Tên danh mục</td>
                         <td width="50px"></td>
                         <td width="50px"></td>
                     </tr>
@@ -61,6 +62,7 @@ require_once('../database/dbhelper.php');
                     foreach ($categoryList as $item) {
                         echo '  <tr>
                     <td>' . ($index++) . '</td>
+                    <td>' . $item['id'] . '</td>
                     <td>' . $item['name'] . '</td>
                     <td>
                         <a href="add.php?id=' . $item['id'] . '">
@@ -68,7 +70,7 @@ require_once('../database/dbhelper.php');
                         </a> 
                     </td>
                     <td>            
-                    <button class="btn btn-danger" onclick="deleteCategory(' . $item['id'] . ')">Xoá</button>
+                    <button class="btn btn-danger" onclick="deleteCategory('.$item['id'].')">Xoá</button>
                     </td>
                 </tr>';
                     }
@@ -79,20 +81,20 @@ require_once('../database/dbhelper.php');
     </div>
     </div>
     <script type="text/javascript">
-        function deleteCategory(id) {
-            var option = confirm('Bạn có chắc chắn muốn xoá danh mục này không?')
-            if (!option) {
-                return;
-            }
-            console.log(id)
-            $.post('ajax.php', {
-                'id': id,
-                'action': 'delete'
-            }, function(data) {
-                location.reload()
-            })
-        }
-    </script>
+		function deleteCategory(id) {
+			var option = confirm('Bạn có chắc chắn muốn xoá danh mục này không?')
+			if(!option) {
+				return;
+			}
+			console.log(id)
+			$.post('ajax.php', {
+				'id': id,
+				'action': 'delete'
+			}, function(data) {
+				location.reload()
+			})
+		}
+	</script>
 </body>
 
 </html>

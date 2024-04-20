@@ -22,7 +22,7 @@ require_once('database/dbhelper.php');
                     foreach ($categoryList as $item) {
                         echo '
                                     <div class="box">
-                                        <a href="thucdon.php?id_category=' . $item['id'] . '">
+                                        <a href="thucdon.php?id=' . $item['id'] . '">
                                             <p>' . $item['name'] . '</p>
                                             <div class="bg"></div>
                                             <img src="images/bg/gantoi.jpeg" alt="">
@@ -46,13 +46,13 @@ require_once('database/dbhelper.php');
                 <div class="product-recently">
                     <div class="row">
                         <?php
-                        $sql = 'SELECT * from product, order_details where order_details.product_id=product.id order by order_details.num DESC limit 4';
+                        $sql = 'SELECT * from product, order_details where order_details.id_product=product.id order by order_details.number DESC limit 4';
                         $productList = executeResult($sql);
                         $index = 1;
                         foreach ($productList as $item) {
                             echo '
                                 <div class="col">
-                                    <a href="details.php?id=' . $item['product_id'] . '">
+                                    <a href="details.php?id=' . $item['id'] . '">
                                         <img class="thumbnail" src="admin/product/' . $item['thumbnail'] . '" alt="">
                                         <div class="title">
                                             <p>' . $item['title'] . '</p>
@@ -134,7 +134,7 @@ require_once('database/dbhelper.php');
                     <div class="pagination">
                         <ul>
                             <?php
-                            $sql = "SELECT * FROM `product`";
+                            $sql = 'SELECT * FROM product';
                             $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
                             $result = mysqli_query($conn, $sql);
                             if (mysqli_num_rows($result)) {

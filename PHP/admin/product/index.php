@@ -47,13 +47,25 @@ require_once('../database/dbhelper.php');
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr style="font-weight: 500;">
-                        <td width="70px">STT</td>
+                        <td width="30px">STT</td>
+                        <td width="30px">Mã sản phẩm</td>
+                        <td>Tên Sản Phẩm
+                        <div><br></div>
+                        <div class="filter">
+                            <label for="sort"></label></label>
+                            <select id="sort">
+                            <option value="" >Tất cả</option> <!-- Option mới để quay lại trạng thái ban đầu -->
+                                <option value="name_az">A-Z</option>
+                                <option value="name_za">Z-A</option>
+                            </select>
+                        </div>
+                       
+                        </td>
                         <td>Thumbnail</td>
-                        <td>Tên Sản Phẩm</td>
                         <td>Giá</td>
                         <td>Số lượng</td>
-                        <td>Nội dung</td>
-                        <td>ID</td>
+                        <td>Trạng thái</td>
+                        <td>Danh mục</td>
                         <td width="50px"></td>
                         <td width="50px"></td>
                     </tr>
@@ -76,32 +88,71 @@ require_once('../database/dbhelper.php');
                         } else {
                             $page = 1;
                         }
+                       
                         $limit = 5;
                         $start = ($page - 1) * $limit;
-                        $sql = "SELECT * FROM product limit $start,$limit";
-                        executeResult($sql);
-                        // $sql = 'select * from product limit $star,$limit';
-                        $productList = executeResult($sql);
-
+                       
+                        $sortOption = isset($_GET['sort']) ? $_GET['sort'] : '';
+                            if ($sortOption == 'name_az') {
+                                $sql = "SELECT p.*, c.name 
+                                    FROM product AS p 
+                                    LEFT JOIN category AS c ON p.id_category = c.id 
+                                    ORDER BY p.title ASC 
+                                    LIMIT $start, $limit";
+                            }
+                        
+                        else{
+                        $sql = "SELECT p.*, c.name 
+                        FROM product AS p 
+                        LEFT JOIN category AS c ON p.id_category = c.id 
+                        LIMIT $start, $limit";
+                        
+                        //$sql = "SELECT * FROM product limit $start,$limit"; 
+                        }
+              
+                        $productList = executeResult($sql);                        
                         $index = 1;
+
+                        function getStatus($stt)
+                        {
+                            $status_text = '';
+                            switch ($stt) {
+                                case 0:
+                                    $status_text = 'Ngừng kinh doanh';
+                                    break;
+                                case 1:
+                                    $status_text = 'Còn kinh doanh';
+                                    break;
+                                case 2:
+                                    $status_text = 'Tạm ngừng kinh doanh';
+                                    break;
+                                default:
+                                    $status_text = 'Không xác định';
+                                    break;
+                            }
+                            return $status_text;
+                        }
+                       
+                        //bỏ content 
                         foreach ($productList as $item) {
                             echo '  <tr>
                     <td>' . ($index++) . '</td>
+                    <td>' . $item['id'] . '</td>
+                    <td>' . $item['title'] . '</td>
                     <td style="text-align:center">
                         <img src="' . $item['thumbnail'] . '" alt="" style="width: 50px">
                     </td>
-                    <td>' . $item['title'] . '</td>
                     <td>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</td>
                     <td>' . $item['number'] . '</td>
-                    <td>' . $item['content'] . '</td>
-                    <td>' . $item['id_category'] . '</td>
+                    <td>' . getStatus($item['status']) . '</td>   
+                    <td>' . $item['name'] . '</td>
                     <td>
                         <a href="add.php?id=' . $item['id'] . '">
                             <button class=" btn btn-warning">Sửa</button> 
                         </a> 
                     </td>
                     <td>            
-                    <button class="btn btn-danger" onclick="deleteProduct(' . $item['id'] . ')">Xoá</button>
+                    <button class="btn btn-danger" onclick="deleteProduct(\'' . $item['id'] . '\')">Xoá</button>
                     </td>
                 </tr>';
                         }
