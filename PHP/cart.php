@@ -12,10 +12,11 @@ foreach ($cart as $item) {
     $idList[] = $item['id'];
 }
 if (count($idList) > 0) {
-    $idList = implode(',', $idList); // chuyeern
+    $idList = '\'' . implode(',', $idList) . '\'';
     //[2, 5, 6] => 2,5,6
 
     $sql = "select * from product where id in ($idList)";
+
     $cartList = executeResult($sql);
 } else {
     $cartList = [];

@@ -66,8 +66,10 @@
                                 $limit = 10;
                                 $start = ($page - 1) * $limit;
 
-                                $sql = "SELECT * from orders, order_details, product
-                                where order_details.order_id=orders.id and product.id=order_details.product_id ORDER BY order_date DESC limit $start,$limit ";
+                                $sql = "SELECT * FROM orders
+                                    INNER JOIN order_details ON order_details.order_id = orders.id
+                                    INNER JOIN product ON product.id = order_details.product_id
+                                    ORDER BY order_date DESC LIMIT $start, $limit";
                                 $order_details_List = executeResult($sql);
                                 $total = 0;
                                 $count = 0;
@@ -99,7 +101,7 @@
             <ul class="pagination">
                 <?php
                 $sql = "SELECT * from orders, order_details, product
-                where order_details.order_id=orders.id and product.id=order_details.product_id";
+                where order_details.id_order=orders.id and product.id=order_details.id_product";
                 $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
                 $result = mysqli_query($conn, $sql);
                 $current_page = 0;

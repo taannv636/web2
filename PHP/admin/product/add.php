@@ -1,5 +1,6 @@
 <?php
 require_once('../database/dbhelper.php');
+
 $id = $title = $price = $number = $thumbnail = $content = $id_category = "";
 if (!empty($_POST['title'])) {
     if (isset($_POST['title'])) {
@@ -24,6 +25,7 @@ if (!empty($_POST['title'])) {
         die;
     }
 
+
     // Kiểm tra có dữ liệu thumbnail trong $_FILES không
     // Nếu không có thì dừng
     if (!isset($_FILES["thumbnail"])) {
@@ -31,11 +33,14 @@ if (!empty($_POST['title'])) {
         die;
     }
 
+    //không có hình tải lên thì add, update có error dữ liệu upload bị lỗi
+    
     // Kiểm tra dữ liệu có bị lỗi không
-    if ($_FILES["thumbnail"]['error'] != 0) {
+    if ($_FILES["thumbnail"]['error'] != 0 && $thumbnail != "") {
         echo "Dữ liệu upload bị lỗi";
         die;
     }
+
 
     // Đã có dữ liệu upload, thực hiện xử lý file upload
 
@@ -89,6 +94,11 @@ if (!empty($_POST['title'])) {
         echo "Không upload được file, có thể do file lớn, kiểu file không đúng ...";
     }
 
+    if (isset($_POST['status'])) {
+        $status = $_POST['status'];
+        $status = str_replace('"', '\\"', $status);
+    }
+
     if (isset($_POST['content'])) {
         $content = $_POST['content'];
         $content = str_replace('"', '\\"', $content);
@@ -98,15 +108,20 @@ if (!empty($_POST['title'])) {
         $id_category = str_replace('"', '\\"', $id_category);
     }
     if (!empty($title)) {
-        $created_at = $updated_at = date('Y-m-d H:s:i');
         // Lưu vào DB
         if ($id == '') {
             // Thêm danh mục
-            $sql = 'insert into product(title, price, number, thumbnail, content, id_category, created_at, updated_at) 
-            values ("' . $title . '","' . $price . '","' . $number . '","' . $target_file . '","' . $content . '","' . $id_category . '","' . $created_at . '","' . $updated_at . '")';
-        } else {
+            $id = generateId('id','product','SP');
+            $sql = 'INSERT INTO product(id, title, thumbnail, price, number , id_category , status, content ) 
+            VALUES ("' . $id . '","' . $title . '","' . $target_file . '","' . $price . '","' . $number . '",
+            "' . $id_category . '","' . $status . '","' . $content . '")';     
+    }
+        else {
             // Sửa danh mục
-            $sql = 'update product set title="' . $title . '",price="' . $price . '",number="' . $number . '",thumbnail="' . $target_file . '",content="' . $content . '",id_category="' . $id_category . '", updated_at="' . $updated_at . '" where id=' . $id;
+
+            $sql = 'UPDATE product SET title="' . $title . '", thumbnail="' . $target_file . '", price="' . $price . '", number="' . $number . '",
+            id_category="' . $id_category . '", status="' . $status . '", content="' . $content . '"
+            WHERE id = "' . $id . '"';
         }
         execute($sql);
         header('Location: index.php');
@@ -116,19 +131,20 @@ if (!empty($_POST['title'])) {
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = 'select * from product where id=' . $id;
+    $sql = 'SELECT * FROM product WHERE id ="' . $id . '"';
     $product = executeSingleResult($sql);
     if ($product != null) {
         $title = $product['title'];
+        $thumbnail = $product['thumbnail'];
         $price = $product['price'];
         $number = $product['number'];
-        $thumbnail = $product['thumbnail'];
-        $content = $product['content'];
         $id_category = $product['id_category'];
-        $created_at = $product['created_at'];
-        $updated_at = $product['updated_at'];
+        $status = $product['status'];
+        $content = $product['content'];
     }
+
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -177,23 +193,26 @@ if (isset($_GET['id'])) {
                         <input type="text" id="id" name="id" value="<?= $id ?>" hidden="true">
                         <input required="true" type="text" class="form-control" id="title" name="title" value="<?= $title ?>">
                     </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Chọn Danh Mục</label>
-                        <select class="form-control" id="id_category" name="id_category">
-                            <option>Chọn danh mục</option>
-                            <?php
-                            $sql = 'select * from category';
-                            $categoryList = executeResult($sql);
-                            foreach ($categoryList as $item) {
-                                if ($item['id'] == $id_category) {
-                                    echo '<option selected value="' . $item['id'] . '">' . $item['name'] . '</option>';
-                                } else {
-                                    echo '<option value="' . $item['id'] . '">' . $item['name'] . '</option>';
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
+
+        <div class="form-group">
+        <label for="exampleFormControlSelect1">Chọn Danh Mục</label>
+            <select class="form-control" id="id_category" name="id_category">
+                <option>Chọn danh mục</option>
+                <?php
+                $sql = 'SELECT * FROM category';
+                $categoryList = executeResult($sql);
+                foreach ($categoryList as $item) {
+                    if ($item['id'] == $id_category ) {
+                        echo '<option selected value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                    } else {
+                        echo '<option value="' . $item['id'] . '">' . $item['name'] . '</option>';
+                    }
+                }
+                ?>
+               
+            </select>
+        </div>
+
                     <div class="form-group">
                         <label for="name">Giá Sản Phẩm:</label>
                         <input required="true" type="text" class="form-control" id="price" name="price" value="<?= $price ?>">
@@ -202,17 +221,84 @@ if (isset($_GET['id'])) {
                         <label for="name">Số Lượng Sản Phẩm:</label>
                         <input required="true" type="number" class="form-control" id="number" name="number" value="<?= $number ?>">
                     </div>
+
+                    <!-- Status  -->
+                    <div class="form-group">
+                    <label for="exampleFormControlSelect1">Chọn Trạng Thái</label>
+                        <select class="form-control" id="status" name="status">
+                        <option>Chọn trạng thái</option>
+                            <?php
+                            //show string in combobox
+                    $sql = 'SELECT DISTINCT status FROM product';
+                    $statusList = executeResult($sql);
+                foreach ($statusList as $item) {
+                    $status_text = '';
+                    switch ($item['status']) {
+                        case 0:
+                            $status_text = 'Ngừng kinh doanh';
+                            break;
+                        case 1:
+                            $status_text = 'Còn kinh doanh';
+                            break;
+                        case 2:
+                            $status_text = 'Tạm ngừng kinh doanh';
+                            break;
+                        default:
+                            $status_text = 'Không xác định';
+                            break;
+                    }
+
+                    $selected = ($item['status'] == $status) ? 'selected' : '';
+
+                    echo '<option value="' . $item['status'] . '" ' . $selected . '>' . $status_text . '</option>';
+
+                    //insert value tiny int into databse
+
+                }
+                ?>
+             </select>
+                    </div>
+                
                     <div class="form-group">
                         <!-- <label for="exampleFormControlFile1">Thumbnail:<label> -->
                         <label for="name">Thumbnail:</label>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1" id="thumbnail" name="thumbnail">
-                        <img src="<?= $thumbnail ?>" style="max-width: 200px" id="img_thumbnail">
-                    </div>
+            <input type="hidden" name="current_thumbnail" value="<?= $thumbnail ?>">
+            <input type="file" class="form-control-file" id="exampleFormControlFile1" id="thumbnail" name="thumbnail" onchange="previewImage(event)">
+            <img src="<?= $thumbnail ?>" style="max-width: 200px" id="img_thumbnail">
+
+            <script>
+                var currentThumbnail = "<?= $thumbnail ?>";
+                var thumbnailInput = document.getElementById('thumbnail');
+                var imgThumbnail = document.getElementById('img_thumbnail');
+
+                // Kiểm tra xem người dùng đã chọn hình mới hay không
+                function previewImage(event) {
+                    var reader = new FileReader();
+                    reader.onload = function(){
+                        imgThumbnail.src = reader.result;
+                    };
+                    
+                    // Nếu người dùng đã chọn hình mới
+                    if (event.target.files.length > 0) {
+                        reader.readAsDataURL(event.target.files[0]);
+                    } else {
+                        // Nếu không có hình mới được chọn, giữ nguyên đường dẫn hình ảnh hiện tại
+                        imgThumbnail.src = currentThumbnail;
+                        // Đặt giá trị mặc định cho input file
+                        thumbnailInput.value = "";
+                    }
+                }
+            </script>
+                 </div>
+
+                        
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Nội dung</label>
-                        <textarea class="form-control" id="content" rows="3" name="content"><?= $content ?></textarea>
+                       <textarea class="form-control" id="content" rows="3" name="content"><?= $content ?></textarea>
                     </div>
-                    <button class="btn btn-success">Lưu</button>
+
+                    <button type="submit" class="btn btn-success" name="save">Lưu</button>
+               
                     <?php
                     $previous = "javascript:history.go(-1)";
                     if (isset($_SERVER['HTTP_REFERER'])) {

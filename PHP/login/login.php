@@ -115,11 +115,11 @@ require_once('../database/dbhelper.php');
         $username = $_POST["username"];
         $password = $_POST["password"];
         // $password = md5($password);
-        $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password' ";
+        $sql = "SELECT * FROM user WHERE hoten = '$username' AND password = '$password' ";
         execute($sql);
         $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
         $user = mysqli_query($con, $sql);
-        if ($username == 'AdminThanh' && $password == 'thanh1010') {
+        if ($username == 'admin' && $password == '12345678') {
             echo '<script language="javascript">
                 alert("Đăng nhập Admin thành công!"); 
                 window.location = "../admin/index.php";
@@ -137,7 +137,7 @@ require_once('../database/dbhelper.php');
             $username = trim(strip_tags($_POST['username']));
             $password = trim(strip_tags($_POST['password']));
             session_start();
-            setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
+            setcookie("us", $username, time() + 30 * 24 * 60 * 60, '/');
             setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
         } else {
             echo '<script language="javascript">

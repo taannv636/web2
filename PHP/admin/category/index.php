@@ -44,7 +44,8 @@ require_once('../database/dbhelper.php');
                 <thead>
                     <tr>
                         <td width="70px">STT</td>
-                        <td>Tên danh mục</td>
+                        <td width="150px">Mã danh mục</td>
+                        <td >Tên danh mục</td>
                         <td width="50px"></td>
                         <td width="50px"></td>
                     </tr>
@@ -58,15 +59,17 @@ require_once('../database/dbhelper.php');
                     foreach ($categoryList as $item) {
                         echo '  <tr>
                     <td>' . ($index++) . '</td>
+                    <td>' . $item['id'] . '</td>
                     <td>' . $item['name'] . '</td>
                     <td>
                         <a href="add.php?id=' . $item['id'] . '">
                             <button class=" btn btn-warning">Sửa</button> 
                         </a> 
                     </td>
-                    <td>            
-                    <button class="btn btn-danger" onclick="deleteCategory('.$item['id'].')">Xoá</button>
-                    </td>
+                    <td>     
+                    <button class="btn btn-danger" onclick="deleteCategory(\'' . $item['id'] . '\')">Xoá</button>
+                </td>
+                
                 </tr>';
                     }
                     ?>
@@ -77,6 +80,14 @@ require_once('../database/dbhelper.php');
     </div>
     <script type="text/javascript">
 		function deleteCategory(id) {
+            if (typeof id !== 'string') {
+        console.warn('ID không phải là kiểu chuỗi. Chuyển đổi thành chuỗi.');
+        id = String(id);
+    }
+            if (!id) {
+        alert('Không có ID được cung cấp.');
+        return;
+    }
 			var option = confirm('Bạn có chắc chắn muốn xoá danh mục này không?')
 			if(!option) {
 				return;

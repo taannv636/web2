@@ -26,16 +26,16 @@
                     break;
                 default:
                     // Hiển thị phần title và product-recently
-                    if (isset($_GET['id_category'])) {
-                        $id_category = trim(strip_tags($_GET['id_category']));
+                    if (isset($_GET['id'])) {
+                        $id = trim(strip_tags($_GET['id']));
                     } else {
-                        $id_category = 0;
+                        $id = 0;
                     }
             ?>
                     <section class="recently">
                         <div class="title">
                             <?php
-                            $sql = "select * from category where id=$id_category";
+                            $sql = "select * from category where id= ' . $id . ' ";
                             $name = executeResult($sql);
                             foreach ($name as $ten) {
                                 echo '<h1>' . $ten['name'] . '</h1>';
@@ -53,9 +53,9 @@
 
                                 // Tạo query dựa trên id_category hoặc search
                                 $query_condition = "";
-                                if (isset($_GET['id_category'])) {
-                                    $id_category = trim(strip_tags($_GET['id_category']));
-                                    $query_condition = "WHERE id_category = $id_category";
+                                if (isset($_GET['id'])) {
+                                    $id_category = trim(strip_tags($_GET['id']));
+                                    $query_condition = "WHERE id = ' . $id . '";
                                 } elseif (isset($_GET['search'])) {
                                     $search = $_GET['search'];
                                     $query_condition = "WHERE title LIKE '%$search%'";
@@ -99,9 +99,9 @@
                                     <?php
                                     // Tạo query dựa trên id_category hoặc search
                                     $query_condition = "";
-                                    if (isset($_GET['id_category'])) {
+                                    if (isset($_GET['id'])) {
                                         $id_category = trim(strip_tags($_GET['id_category']));
-                                        $query_condition = "WHERE id_category = $id_category";
+                                        $query_condition = "WHERE id_category = ' . $id_category . '";
                                     } elseif (isset($_GET['search'])) {
                                         $search = $_GET['search'];
                                         $query_condition = "WHERE title LIKE '%$search%'";
