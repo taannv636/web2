@@ -17,13 +17,14 @@ if (!empty($_POST['name'])) {
         // Save to DB
         $sql='';
         if ($id == '') {
-            // Thêm danh mục
-            $sql = 'insert into category(name, created_at,updated_at) 
-            values ("' . $name . '","' . $created_at . '","' . $updated_at . '")';
-        } 
-        else {
-            // Sửa danh mục
-            $sql = 'update category set name="' . $name . '", updated_at="' . $updated_at . '" where id=' . $id;
+            // Insert category
+            $id = generateId('id','category','DMSP');
+            $sql = 'INSERT INTO category (id,name) VALUES ("' . $id . '", "' . $name . '")';
+
+        } else {
+            // Update category
+            $sql = 'UPDATE category SET name="' . $name . '" WHERE id = "' . $id . '"';
+
         }
         execute($sql);
         header('Location: index.php');
@@ -68,7 +69,7 @@ if (isset($_GET['id'])) {
             <a class="nav-link" href="../product/">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
+            <a class="nav-link" href="../dashboard.php">Quản lý đơn hàng</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="../user/">Quản lý người dùng</a>

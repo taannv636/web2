@@ -70,7 +70,7 @@ require_once('../database/dbhelper.php');
                         </a> 
                     </td>
                     <td>            
-                    <button class="btn btn-danger" onclick="deleteCategory('.$item['id'].')">Xoá</button>
+                    <button class="btn btn-danger" onclick="deleteCategory(\'' . $item['id'] . '\')">Xoá</button>
                     </td>
                 </tr>';
                     }
