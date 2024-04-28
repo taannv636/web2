@@ -118,10 +118,9 @@ if (!empty($_POST['title'])) {
     }
         else {
             // Sửa danh mục
-
             $sql = 'UPDATE product SET title="' . $title . '", thumbnail="' . $target_file . '", price="' . $price . '", number="' . $number . '",
             id_category="' . $id_category . '", status="' . $status . '", content="' . $content . '"
-            WHERE id = "' . $id . '"';
+                WHERE id = "' . $id . '"';  
         }
         execute($sql);
         header('Location: index.php');

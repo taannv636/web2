@@ -48,11 +48,10 @@
                         <thead>
                             <tr style="font-weight: 500;text-align: center;">
                                 <td width="50px">STT</td>
-                                <td width="200px">Tên User</td>
-                                <td>Tên Sản Phẩm/<br>Số lượng</td>
-                                <td>Tổng tiền</td>
-                                <td width="250px">Địa chỉ</td>
-                                <td>Số điện thoại</td>
+                                <td width="50px">Mã đơn</td>
+                                <td width="250px">Tên khách hàng</td>
+                                <td width="350px">Địa chỉ</td>
+                                <td width="150px">Tổng tiền</td>
                                 <td>Trạng thái</td>
                                 <!-- <td width="50px">Lưu</td> -->
                             </tr>
@@ -69,30 +68,74 @@
                                 $limit = 10;
                                 $start = ($page - 1) * $limit;
 
-                                $sql = "SELECT * FROM orders
-                                    INNER JOIN order_details ON order_details.order_id = orders.id
-                                    INNER JOIN product ON product.id = order_details.product_id
-                                    ORDER BY order_date DESC LIMIT $start, $limit";
-                                $order_details_List = executeResult($sql);
-                                $total = 0;
-                                $count = 0;
-                                // if (is_array($order_details_List) || is_object($order_details_List)){
-                                foreach ($order_details_List as $item) {
-                                    echo '
-                                        <tr style="text-align: center;">
-                                            <td width="50px">' . (++$count) . '</td>
-                                            <td style="text-align:center">' . $item['fullname'] . '</td>
-                                            <td>' . $item['title'] . '<br>(<strong>' . $item['num'] . '</strong>)</td>
-                                            <td class="b-500 red">' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                            <td width="100px">' . $item['address'] . '</td>
-                                            <td width="100px">' . $item['phone_number'] . '</td>
-                                            <td width="100px" class="green b-500">' . $item['status'] . '</td>
-                                            <td width="100px">
-                                                <a href="edit.php?order_id=' . $item['order_id'] . '" class="btn btn-success">Edit</a>
-                                            </td>
-                                        </tr>
-                                    ';
-                                }
+                                $sql = "SELECT orders.id AS order_id, order_details.id_order AS order_detail_id, user.hoten, user.address, user.phone, product.price, orders.status
+                                FROM orders
+                                INNER JOIN order_details ON order_details.id_order = orders.id
+                                INNER JOIN user ON user.id_user = orders.id_user
+                                INNER JOIN product ON product.id = order_details.id_product
+                                ORDER BY orders.order_date DESC LIMIT $start, $limit";
+                        
+                        $order_details_List = executeResult($sql);
+                        
+                        $total = 0;
+                        $count = 0;
+                        
+                        //combobox status for orders
+                        function getStatus($stt)
+                        {
+                            $status_text = '';
+                            switch ($stt) {
+                                case 1:
+                                    $status_text = 'Đang chuẩn bị hàng';
+                                    break;
+                                case 2:
+                                    $status_text = 'Đang giao hàng';
+                                    break;
+                                case 3:
+                                    $status_text = 'Đã giao hàng';
+                                    break;
+                                case 4:
+                                    $status_text = 'Đã hủy đơn hàng';
+                                    break;
+                                default:
+                                    $status_text = 'Không xác định';
+                                    break;
+                            }
+                            return $status_text;
+                        }
+                      
+                        // Hàm trả về class CSS tương ứng với trạng thái
+                        function getStatusColorClass($status) {
+                            switch ($status) {
+                                case 1:
+                                    return 'brown';
+                                case 2:
+                                    return 'blue';
+                                case 3:
+                                    return 'green';
+                                case 4:
+                                    return 'red';
+                                default:
+                                    return ''; // Trả về class mặc định nếu không có trạng thái nào khớp
+                            }
+                        }
+                        
+                        foreach ($order_details_List as $item) {
+                            echo '
+                                <tr style="text-align: center;">
+                                    <td width="50px">' . (++$count) . '</td>
+                                    <td style="text-align:center" id="id_order" value="' . $item['order_id'] . '">' . $item['order_id'] . '</td>
+                                    <td>' . $item['hoten'] . '</td>
+                                    <td width="100px">' . $item['address'] . '</td>
+                                    <td class="b-500 red">' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
+                                    <td width="100px" style="color: ' . getStatusColorClass($item['status']) . '">' . getStatus($item['status']) . '</td>
+                                    <td width="100px">
+                                        <a href="edit.php?order_id=' . $item['order_id'] . '" class="btn btn-success">Edit</a>
+                                    </td>
+                                </tr>
+                            ';
+                        }
+                        
                             } catch (Exception $e) {
                                 die("Lỗi thực thi sql: " . $e->getMessage());
                             }
