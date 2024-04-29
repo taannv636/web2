@@ -83,8 +83,6 @@ require_once('../database/dbhelper.php');
                         }
 
                         ?>
-
-
                     </div>
                 </section>
             </div>
@@ -117,18 +115,26 @@ require_once('../database/dbhelper.php');
         $username = $_POST["username"];
         $password = $_POST["password"];
         // $password = md5($password);
-        $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password' ";
-        execute($sql);
+        //Đổi username = email
+        $sql = "SELECT * FROM user WHERE email = '$username' AND password = '$password' ";
+
+        //execute($sql);
+
         $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-        $user = mysqli_query($con, $sql);
-        if ($username == 'AdminThanh' && $password == 'thanh1010') {
+        $result = mysqli_query($con, $sql);
+
+        // Lấy dữ liệu từ kết quả truy vấn
+        $user = mysqli_fetch_assoc($result);
+
+        //Kiểm tra email, password và quyền
+        if ($username == $user['email'] && $password == $user['password'] && $user['right'] == 0) {
             echo '<script language="javascript">
             alert("Tài khoản và mật khẩu không chính xác !");
-            window.location = "login.php";
+            window.location = "../index.php";
          </script>';
         } else {
             // Nếu tài khoản tồn tại, kiểm tra trạng thái của tài khoản
-            $status = $user['trang_thai'];
+            $status = $user['status'];
             if ($status == 1) {
                 // Trạng thái cho phép đăng nhập
                 echo '<script language="javascript">
@@ -147,7 +153,7 @@ require_once('../database/dbhelper.php');
              </script>';
         }
     }
+}
     ?>
 </body>
-
 </html>

@@ -1,26 +1,29 @@
 <?php
 require_once('database/dbhelper.php');
+require_once('database/delete_cart.php');
 require_once('utils/utility.php');
+// require_once('../database/config.php');
+// require_once('../database/dbhelper.php');
 
-$cart = [];
-if (isset($_COOKIE['cart'])) {
-    $json = $_COOKIE['cart'];
-    $cart = json_decode($json, true);
-}
-$idList = [];
-foreach ($cart as $item) {
-    $idList[] = $item['id'];
-}
-if (count($idList) > 0) {
-    $idList = '\'' . implode(',', $idList) . '\'';
-    //[2, 5, 6] => 2,5,6
+// $cart = [];
+// if (isset($_COOKIE['cart'])) {
+//     $json = $_COOKIE['cart'];
+//     $cart = json_decode($json, true);
+// }
+// $idList = [];
+// foreach ($cart as $item) {
+//     $idList[] = $item['id'];
+// }
+// if (count($idList) > 0) {
+//     $idList = '\'' . implode(',', $idList) . '\'';
+//     //[2, 5, 6] => 2,5,6
 
-    $sql = "select * from product where id in ($idList)";
+//     $sql = "select * from product where id in ($idList)";
 
-    $cartList = executeResult($sql);
-} else {
-    $cartList = [];
-}
+//     $cartList = executeResult($sql);
+// } else {
+//     $cartList = [];
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,7 +68,7 @@ if (count($idList) > 0) {
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr style="font-weight: 500;text-align: center;">
-                                    <td width="50px">STT</td>
+                                    <td width="50px"></td>
                                     <td>Ảnh</td>
                                     <td>Tên Sản Phẩm</td>
                                     <td>Giá</td>
@@ -76,37 +79,43 @@ if (count($idList) > 0) {
                             </thead>
                             <tbody>
                                 <?php
-                                $count = 0;
-                                $total = 0;
-                                foreach ($cartList as $item) {
-                                    $num = 0;
-                                    foreach ($cart as $value) {
-                                        if ($value['id'] == $item['id']) {
-                                            $num = $value['num'];
-                                            break;
-                                        }
+                                if (isset($_COOKIE['username'])) {
+                                    $username = $_COOKIE['username'];
+                                    $sql_id = "SELECT * FROM user WHERE email = '$username'";
+                                    $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+                                    $result_id = mysqli_query($con, $sql_id);
+
+                                    // Lấy dữ liệu từ kết quả truy vấn
+                                    $user = mysqli_fetch_assoc($result_id);
+                                    $id_user = $user['id_user'];
+                                    $sql = "SELECT product.id as id, cart.number as numbers, product.title as title, product.thumbnail as thumbnail, product.price as price
+                                            FROM cart JOIN product ON cart.id_product = product.id WHERE cart.id_user = '$id_user'";
+                                    $result = executeResult($sql);
+                                    foreach ($result as $item) {
+                                        echo '
+                                            <tr style="text-align: center;">
+                                                <td width="50px">
+                                                    <input type="checkbox" class="checkbox" id="myCheckbox" name="myCheckbox" value="1">
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <img src="admin/product/' . $item['thumbnail'] . '" alt="" style="width: 50px">
+                                                </td>
+                                                <td>' . $item['title'] . '</td>
+                                                <td class="b-500 red" >' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
+                                                <td width="100px">' . $item['numbers'] . '</td>
+                                                <td class="b-500 red" ><span class = "total_item">' . number_format($item['price'] * $item['numbers'], 0, ',', '.') . '</span><span> VNĐ</span></td>
+                                                <td>
+                                                    <a href = "delete_cart.php?id_user=<?php echo $id_user;?>">
+                                                        <button class="btn btn-danger">Xoá</button>
+                                                    </a>
+                                                </td>
+                                            </tr>';
                                     }
-                                    $total += $num * $item['price'];
-                                    echo '
-                                    <tr style="text-align: center;">
-                                        <td width="50px">' . (++$count) . '</td>
-                                        <td style="text-align:center">
-                                            <img src="admin/product/' . $item['thumbnail'] . '" alt="" style="width: 50px">
-                                        </td>
-                                        <td>' . $item['title'] . '</td>
-                                        <td class="b-500 red">' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                        <td width="100px">' . $num . '</td>
-                                        <td class="b-500 red">' . number_format($num * $item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                        <td>
-                                            <button class="btn btn-danger" onclick="deleteCart(' . $item['id'] . ')">Xoá</button>
-                                        </td>
-                                    </tr>
-                                    ';
                                 }
                                 ?>
                             </tbody>
                         </table>
-                        <p>Tổng đơn hàng: <span class="red bold"><?= number_format($total, 0, ',', '.') ?><span> VNĐ</span></span></p>
+                        <p>Tổng đơn hàng: <span class="red bold" id="total"><?= number_format(0, 0, ',', '.') ?><span> VNĐ</span></span></p>
                         <a href="checkout.php" onclick="checkLogin()"><button class="btn btn-success">Thanh toán</button></a>
                     </div>
                 </div>
@@ -116,17 +125,74 @@ if (count($idList) > 0) {
     </div>
     <script type="text/javascript">
         function deleteCart(id) {
-            $.post('api/cookie.php', {
-                'action': 'delete',
-                'id': id
-            }, function(data) {
-                location.reload()
-            })
+            // $.post('api/cookie.php', {
+            //     'action': 'delete',
+            //     'id': id
+            // }, function(data) {
+            //     location.reload()
+            // })
         }
 
         function checkLogin() {
 
         }
+
+        function number_format_script(number, decimals, dec_point, thousands_sep) {
+            // Chuyển đổi số thành chuỗi, nếu số này không phải là số thì trả về số ban đầu
+            number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+            var n = !isFinite(+number) ? 0 : +number, // Kiểm tra số có hợp lệ không
+                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals), // Xác định số thập phân
+                sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep, // Xác định ký tự phân cách hàng nghìn
+                dec = (typeof dec_point === 'undefined') ? '.' : dec_point, // Xác định ký tự phân cách số thập phân
+                s = '',
+
+                // Hàm để thêm ký tự phân cách hàng nghìn
+                toFixedFix = function(n, prec) {
+                    var k = Math.pow(10, prec);
+                    return '' + Math.round(n * k) / k;
+                };
+
+            // Xử lý số thập phân
+            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+
+            // Xử lý hàng nghìn
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(s[0])) {
+                s[0] = s[0].replace(rgx, '$1' + sep + '$2');
+            }
+
+            // Nối lại kết quả
+            if ((s[1] || '').length < prec) {
+                s[1] = s[1] || '';
+                s[1] += new Array(prec - s[1].length + 1).join('0');
+            }
+
+            return s.join(dec);
+        }
+
+        function convertCurrencyToNumber(currencyString) {
+            // Loại bỏ các ký tự không phải số từ chuỗi
+            var numberString = currencyString.replace(/[^\d]/g, '');
+            // Chuyển đổi chuỗi số thành số nguyên
+            var number = parseInt(numberString);
+            return number;
+        }
+        var total = 0;
+        document.querySelectorAll('.checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('click', function() {
+                if (this.checked) {
+                    var total_item = this.closest('tr').querySelector('.total_item').innerHTML;
+                    total = total + convertCurrencyToNumber(total_item);
+                    alert("Kiểu dữ liệu là: " + total);
+                    document.getElementById('total').innerHTML = number_format_script(total, 0, ',', '.') + " VNĐ";
+                } else {
+                    var total_item = this.closest('tr').querySelector('.total_item').innerHTML;
+                    total = total - convertCurrencyToNumber(total_item);
+                    alert("Kiểu dữ liệu là: " + total);
+                    document.getElementById('total').innerHTML = number_format_script(total, 0, ',', '.') + " VNĐ";
+                }
+            });
+        });
     </script>
 </body>
 <style>

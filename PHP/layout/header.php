@@ -50,15 +50,24 @@ require_once('database/dbhelper.php');
                     <div class="cart">
                         <a href="cart.php"><img src="images/icon/cart.svg" alt=""></a>
                         <?php
-                        $cart = [];
-                        if (isset($_COOKIE['cart'])) {
-                            $json = $_COOKIE['cart'];
-                            $cart = json_decode($json, true);
-                        }
+                        //Viết lại
                         $count = 0;
-                        foreach ($cart as $item) {
-                            $count += $item['num']; // đếm tổng số item
+                        if (isset($_COOKIE['username'])) {
+                            $username = $_COOKIE['username'];
+                            $sql = "SELECT * FROM cart JOIN user ON cart.id_user = user.id_user WHERE user.email = '$username'";
+                            $result = executeResult($sql);
+                            $count = sizeof($result);
                         }
+
+                        // $cart = [];
+                        // if (isset($_COOKIE['cart'])) {
+                        //     $json = $_COOKIE['cart'];
+                        //     $cart = json_decode($json, true);
+                        // }
+                        // $count = 0;
+                        // foreach ($cart as $item) {
+                        //     $count += $item['num']; // đếm tổng số item
+                        // }
                         ?>
                         <span><?= $count ?></span>
                         <!-- <div class="history">
@@ -76,7 +85,13 @@ require_once('database/dbhelper.php');
                                     <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
                                 </div>';
                             } else {
-                                echo '<a style="color:black;" href="">' . $_COOKIE['username'] . '</a>
+                                $sql = "SELECT * FROM user WHERE email = '$username'";
+                                $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+                                $result = mysqli_query($con, $sql);
+                                // Lấy dữ liệu từ kết quả truy vấn
+                                $user = mysqli_fetch_assoc($result);
+                                //Thay $_COOKIE['username'] bằng user['hoten']
+                                echo '<a style="color:black;" href="">' . $user['hoten'] . '</a>
                             <div class="logout">
                                 <a href="login/changePass.php"><i class="fas fa-exchange-alt"></i>Đổi mật khẩu</a> <br>
                                 <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>

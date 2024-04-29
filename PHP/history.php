@@ -48,56 +48,46 @@ require_once('utils/utility.php');
                             <h2 style="padding-top:2rem" class="">Lịch sử mua hàng</h2>
                         </div>
                         <div class="panel-body"></div>
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr style="font-weight: 500;text-align: center;">
-                                    <td width="50px">STT</td>
-                                    <td>Ảnh</td>
-                                    <td>Tên sản phẩm</td>
-                                    <td>Giá</td>
-                                    <td>Số lượng</td>
-                                    <td>Tổng cộng</td>
-                                    <td>Trạng thái</td>
-                                    <!-- <td width="50px"></td> -->
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-
-                                if (isset($_COOKIE['username'])) {
-                                    $username = $_COOKIE['username'];
-
-                                    $sql = "SELECT * FROM user WHERE username = '$username'";
-                                    $user = executeResult($sql); // in ra 1 dòng 
-                                    foreach ($user as $item) {
-                                        $userId = $item['id_user'];
-                                    }
-
-                                    $sql = "SELECT * from order_details, product where product.id=order_details.product_id AND order_details.id_user = '$userId' ORDER BY order_id DESC";
-                                    $order_details_List = executeResult($sql);
+                        <tbody>
+                            <?php
+                            if (isset($_COOKIE['username'])) {
+                                $username = $_COOKIE['username'];
+                                $sql = "SELECT orders.order_date as order_date, orders.id as id, orders.status as order_status FROM user JOIN orders ON user.id_user = orders.id_user WHERE user.email = '$username'";
+                                $result = executeResult($sql);
+                                foreach ($result as $row) {
                                     $total = 0;
-                                    $count = 0;
-                                    // $sql = 'SELECT * FROM user where username = $username';
-                                    foreach ($order_details_List as $item) {
-                                        echo '
-                                        <tr style="text-align: center;">
-                                            <td width="50px">' . (++$count) . '</td>
-                                            <td style="text-align:center">
-                                                <img width="50px" src="admin/product/' . $item['thumbnail'] . '">
-                                            </td>
-                                            <td>' . $item['title'] . '</td>
-                                            <td class="b-500 orange">' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                            <td width="100px">' . $item['num'] . '</td>
-                                            <td class="b-500 red">' . number_format($item['num'] * $item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                            <td style="color:green; font-weight:600;">' . $item['status'] . '</td>
-                                        </tr>
-                                        ';
+                                    $status = $row['order_status'] == 1 ? "Đã hoàn thành" : "Chưa hoàn thành";
+                                    echo '<div class="product-list">
+                                                <div class = "product-date-status">
+                                                    <div class="product-date">' . $row['order_date'] . '</div>
+                                                    <div class="product-status">' . $status . '</div>
+                                                </div>
+                                                <hr>';
+                                    $id_orders = $row['id'];
+                                    $sql_product = "SELECT product.thumbnail as thumbnail, product.title as title, order_details.number as numbers, product.price as price FROM order_details JOIN product ON order_details.id_product = product.id WHERE order_details.id_order = '$id_orders'";
+                                    $result_product = executeResult($sql_product);
+                                    foreach ($result_product as $row_product) {
+                                        echo '<div class="product">
+                                                <div class = "product-image-title-number">
+                                                    <img src="' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image">
+                                                    <div class = "product-title-number">
+                                                        <div class="product-title">' . $row_product['title'] . '</div>
+                                                        <div class="product-number">Số lượng: ' . $row_product['numbers'] . '</div>
+                                                    </div>
+                                                </div>
+                                        
+                                                <div class="product-price">'. number_format($row_product['numbers']*$row_product['price'], 0, ',', '.') .'<span> VNĐ</span></div>
+                                            </div>
+                                            <hr>';
+                                        $total += $row_product['numbers']*$row_product['price'];
                                     }
+                                    echo '<div class="product-total">Tổng tiền: '. number_format($total, 0, ',', '.') .'<span> VNĐ</span></div>
+                                        </div>';
                                 }
+                            }
+                            ?>
+                        </tbody>
 
-                                ?>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </section>
@@ -107,9 +97,10 @@ require_once('utils/utility.php');
     </script>
 </body>
 <style>
-    main{
+    main {
         padding-bottom: 4rem;
     }
+
     .b-500 {
         font-weight: 500;
     }
@@ -124,6 +115,47 @@ require_once('utils/utility.php');
 
     .orange {
         color: #a25437;
+    }
+
+    .product-list {
+        font-family: Arial, sans-serif;
+        background-color: #F5FCFF;
+        margin-top: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .product {
+        display: flex;
+        justify-content: space-between;
+        /* Phân chia không gian đều giữa các phần tử */
+        width: 100%;
+    }
+
+    .product-image-title-number {
+        display: flex;
+    }
+
+    .product-image,
+    .product-title-number,
+    .product-price {
+        padding: 10px;
+    }
+
+    .product-image {
+        width: 50px;
+        height: 50px;
+    }
+
+    .product-date-status {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    .product-total {
+        text-align: right;
+        padding: 10px;
     }
 </style>
 
