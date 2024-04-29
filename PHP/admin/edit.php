@@ -157,46 +157,34 @@ if (isset($_GET['order_id'])) {
                     </div>
 
                     <!-- Status  -->
+                    <!-- Status  -->
                     <div class="form-group">
-                <label for="exampleFormControlSelect1">Trạng Thái Đơn Hàng</label>
-                <select class="form-control" id="status" name="status">
-                    <option>Chọn trạng thái</option>
-                    <?php
-                    // Lấy dữ liệu trạng thái từ cơ sở dữ liệu
-                    $sql = 'SELECT DISTINCT status FROM orders';
-                    $statusList = executeResult($sql);
-
-                    // Duyệt qua danh sách trạng thái và hiển thị trong dropdown
-                    foreach ($statusList as $item) {
-                        // Chuyển đổi trạng thái sang văn bản
-                        $status_text = '';
-                        switch ($item['status']) {
-                            case 1:
-                                $status_text = 'Đang chuẩn bị hàng';
-                                break;
-                            case 2:
-                                $status_text = 'Đang giao hàng';
-                                break;
-                            case 3:
-                                $status_text = 'Đã giao hàng';
-                                break;
-                            case 4:
-                                $status_text = 'Đã hủy đơn hàng';
-                                break;
-                            default:
-                                $status_text = 'Không xác định';
-                                break;
-                        }
-
-                        // Kiểm tra xem trạng thái hiện tại có phải là trạng thái mặc định không
-                        $selected = ($item['status'] == $status) ? 'selected' : '';
-
-                        // Hiển thị option trong dropdown
-                        echo '<option value="' . $item['status'] . '" ' . $selected . '>' . $status_text . '</option>';
-                    }
-                    ?>
-                </select>
-            </div>
+                    <label for="exampleFormControlSelect1">Chọn Trạng Thái</label>
+                        <select class="form-control" id="status" name="status">
+                            <option>Chọn Trạng Thái</option>
+                            <?php
+                            function getStatus($status)
+                            {
+                                $status_text = '';
+                                switch ($status)
+                                {
+                                    case 0: $status_text = 'Đang chuẩn bị hàng'; break;
+                                    case 1: $status_text = 'Đang giao hàng'; break;
+                                    case 2: $status_text = 'Đã giao hàng'; break;
+                                    case 3: $status_text = 'Đã hủy đơn hàng'; break;
+                                    default: $status_text = 'Không rõ'; break;
+                                }
+                                return $status_text;
+                            }
+                                    echo '<option selected value="' . $status . '">' . getStatus($status) . '</option>';
+            
+                                    echo '<option value="0">' . getStatus(0) . '</option>';
+                                    echo '<option value="1">' . getStatus(1) . '</option>';
+                                    echo '<option value="2">' . getStatus(2) . '</option>';
+                                    echo '<option value="3">' . getStatus(3) . '</option>';
+                            ?>  
+                        </select>
+                    </div>
 
                     </div>
 

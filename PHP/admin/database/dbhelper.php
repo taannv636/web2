@@ -89,3 +89,34 @@ function generateID($ID, $TABLE, $SAMPLE) {
 
     return $newID;
 }
+
+function checkExistence($sample, $id, $table) {
+    // Escape any special characters to prevent SQL injection
+    $conn = new mysqli('localhost', 'root', '', 'asm_php1');
+   // $conn = new mysqli($servername, $username, $password, $database);
+
+    $category_id = mysqli_real_escape_string($conn, $sample);
+    $id = mysqli_real_escape_string($conn, $id);
+    $table = mysqli_real_escape_string($conn, $table);
+
+    // Query to check existence
+    $sql_check_existence = "SELECT COUNT(*) AS count FROM $table WHERE $id = '$category_id'";
+
+    // Execute the query
+    $result_check_existence = $conn->query($sql_check_existence);
+
+    // Check if result is not empty and count > 0
+    if ($result_check_existence && $result_check_existence->num_rows > 0) {
+        $row = $result_check_existence->fetch_assoc();
+        if ($row['count'] > 0) {
+            echo "<script>alert('ID tồn tại');</script>";
+            return true; // ID exists
+        } else {
+            echo "<script>alert('ID không tồn tại');</script>";
+            return false; // ID does not exist
+        }
+    } else {
+        echo "<script>alert('Có lỗi xảy ra khi kiểm tra ID');</script>";
+        return false; // Error occurred while checking ID existence
+    }
+}

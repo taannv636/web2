@@ -228,37 +228,27 @@ if (isset($_GET['id'])) {
                     <div class="form-group">
                     <label for="exampleFormControlSelect1">Chọn Trạng Thái</label>
                         <select class="form-control" id="status" name="status">
-                        <option>Chọn trạng thái</option>
+                            <option>Chọn Trạng Thái</option>
                             <?php
-                            //show string in combobox
-                    $sql = 'SELECT DISTINCT status FROM product';
-                    $statusList = executeResult($sql);
-                foreach ($statusList as $item) {
-                    $status_text = '';
-                    switch ($item['status']) {
-                        case 0:
-                            $status_text = 'Ngừng kinh doanh';
-                            break;
-                        case 1:
-                            $status_text = 'Còn kinh doanh';
-                            break;
-                        case 2:
-                            $status_text = 'Tạm ngừng kinh doanh';
-                            break;
-                        default:
-                            $status_text = 'Không xác định';
-                            break;
-                    }
-
-                    $selected = ($item['status'] == $status) ? 'selected' : '';
-
-                    echo '<option value="' . $item['status'] . '" ' . $selected . '>' . $status_text . '</option>';
-
-                    //insert value tiny int into databse
-
-                }
-                ?>
-             </select>
+                            function getStatus($status)
+                            {
+                                $status_text = '';
+                                switch ($status)
+                                {
+                                    case 0: $status_text = 'Ngừng kinh doanh'; break;
+                                    case 1: $status_text = 'Còn kinh doanh'; break;
+                                    case 2: $status_text = 'Tạm ngừng kinh doanh'; break;
+                                    default: $status_text = 'Không rõ'; break;
+                                }
+                                return $status_text;
+                            }
+                                    echo '<option selected value="' . $status . '">' . getStatus($status) . '</option>';
+            
+                                    echo '<option value="0">' . getStatus(0) . '</option>';
+                                    echo '<option value="1">' . getStatus(1) . '</option>';
+                                    echo '<option value="2">' . getStatus(2) . '</option>';
+                            ?>  
+                        </select>
                     </div>
                 
                     <div class="form-group">
