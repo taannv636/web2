@@ -76,6 +76,23 @@ require_once('../database/dbhelper.php');
                     }
 
                     try {
+                        function getStatus($stt)
+                        {
+                            $status_text = '';
+                            switch ($stt) {
+                                case 0:
+                                    $status_text = 'Cấm';
+                                    break;
+                                case 1:
+                                    $status_text = 'Hoạt động';
+                                    break;
+                                default:
+                                    $status_text = 'Không xác định';
+                                    break;
+                            }
+                            return $status_text;
+                        }
+
                         if (isset($_GET['keyword'])) {
                             $keyword = $_GET['keyword'];
                             $sql = "SELECT * FROM user WHERE hoten LIKE '%$keyword%'";
@@ -102,14 +119,14 @@ require_once('../database/dbhelper.php');
                     <td>' . $item['hoten'] . '</td>
                     <td>' . $item['phone'] . '</td>
                     <td>' . $item['email'] . '</td>
-                    <td>' . $item['status'] . '</td>
+                    <td>' . getStatus($item['status']) . '</td>
                     <td>
                         <a href="add.php?id_user=' . $item['id_user'] . '">
                             <button class=" btn btn-warning">Sửa</button> 
                         </a> 
                     </td>
                     <td>            
-                    <button class="btn btn-danger" onclick="deleteUser(' . $item['id_user'] . ')">Xoá</button>
+                    <button class="btn btn-danger" onclick="deleteUser(\'' . $item['id_user'] . '\')">Xoá</button>
                     </td>
                 </tr>';
                         }

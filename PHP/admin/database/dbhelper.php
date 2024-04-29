@@ -1,6 +1,7 @@
 <?php
 require_once('config.php');
 
+/*
 function execute($sql)
 {
     // Open connection to database
@@ -18,6 +19,26 @@ function execute($sql)
     // Close connection
     mysqli_close($con);
 }
+*/
+function execute($sql)
+{
+    // Open connection to database
+    $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+
+    // Check connection
+    if (mysqli_connect_errno()) {
+        die("Failed to connect to MySQL: " . mysqli_connect_error());
+    }
+
+    // Execute SQL query
+    if (!mysqli_query($con, $sql)) {
+        die("Error executing SQL query: " . mysqli_error($con));
+    }
+
+    // Close connection
+    mysqli_close($con);
+}
+
 
 function executeResult($sql)
 {
