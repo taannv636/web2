@@ -69,7 +69,7 @@ require_once('database/dbhelper.php');
                         <?php
                         if (isset($_COOKIE['username'])) {
                             $username = $_COOKIE['username'];
-                            if ($username == 'AdminThanh' || $username == 'admin') {
+                            if ($username == 'Admin' || $username == 'admin') {
                                 echo '<a style="color:black;" href="">' . $_COOKIE['username'] . '</a>
                                 <div class="logout">
                                     <a href="admin/"><i class="fas fa-user-edit"></i>Admin</a> <br>
