@@ -228,26 +228,9 @@ if (isset($_GET['id'])) {
                     <div class="form-group">
                     <label for="exampleFormControlSelect1">Chọn Trạng Thái</label>
                         <select class="form-control" id="status" name="status">
-                            <option>Chọn Trạng Thái</option>
-                            <?php
-                            function getStatus($status)
-                            {
-                                $status_text = '';
-                                switch ($status)
-                                {
-                                    case 0: $status_text = 'Ngừng kinh doanh'; break;
-                                    case 1: $status_text = 'Còn kinh doanh'; break;
-                                    case 2: $status_text = 'Tạm ngừng kinh doanh'; break;
-                                    default: $status_text = 'Không rõ'; break;
-                                }
-                                return $status_text;
-                            }
-                                    echo '<option selected value="' . $status . '">' . getStatus($status) . '</option>';
-            
-                                    echo '<option value="0">' . getStatus(0) . '</option>';
-                                    echo '<option value="1">' . getStatus(1) . '</option>';
-                                    echo '<option value="2">' . getStatus(2) . '</option>';
-                            ?>  
+                            <option value="0" <?= $status == 0 ? 'selected' : '' ?>>Ngừng kinh doanh</option>
+                            <option value="1" <?= $status == 1 ? 'selected' : '' ?>>Tạm ngừng kinh doanh</option>
+                            <option value="2" <?= $status == 2 ? 'selected' : '' ?>>Còn kinh doanh</option>
                         </select>
                     </div>
                 

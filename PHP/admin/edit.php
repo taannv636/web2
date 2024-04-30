@@ -40,7 +40,7 @@ if (isset($_GET['order_id'])) {
     // Truy vấn thông tin đơn hàng theo id
     $sql = "SELECT orders.id AS id_order,
             user.hoten, user.email, user.address, user.phone,
-            orders.order_date, orders.payment, orders.status
+            orders.order_date,orders.delivery_date, orders.payment, orders.status
             FROM orders
             INNER JOIN user ON user.id_user = orders.id_user
             WHERE orders.id = '$order_id'"; // Sử dụng single quotes để bọc $order_id
@@ -54,6 +54,7 @@ if (isset($_GET['order_id'])) {
         $address = $order['address'];
         $phone = $order['phone'];
         $order_date = $order['order_date'];
+        $delivery_date = $order['delivery_date'];
         $payment = $order['payment'];
         $status = $order['status'];
     }
@@ -134,6 +135,11 @@ if (isset($_GET['order_id'])) {
                         <input type="text" class="form-control" id="order_date" name="order_date" value="<?= $order_date ?>" readonly>
                     </div>
                     
+                    <div class="form-group">
+                        <label for="name">Ngày giao hàng:</label>
+                        <input type="text" class="form-control" id="delivery_date" name="delivery_date" value="<?= $delivery_date ?>" readonly>
+                    </div>
+
 
                     <div class="form-group">
                         <label for="name">Hình thức trả tiền:</label>
@@ -161,30 +167,13 @@ if (isset($_GET['order_id'])) {
                     <div class="form-group">
                     <label for="exampleFormControlSelect1">Chọn Trạng Thái</label>
                         <select class="form-control" id="status" name="status">
-                            <option>Chọn Trạng Thái</option>
-                            <?php
-                            function getStatus($status)
-                            {
-                                $status_text = '';
-                                switch ($status)
-                                {
-                                    case 0: $status_text = 'Đang chuẩn bị hàng'; break;
-                                    case 1: $status_text = 'Đang giao hàng'; break;
-                                    case 2: $status_text = 'Đã giao hàng'; break;
-                                    case 3: $status_text = 'Đã hủy đơn hàng'; break;
-                                    default: $status_text = 'Không rõ'; break;
-                                }
-                                return $status_text;
-                            }
-                                    echo '<option selected value="' . $status . '">' . getStatus($status) . '</option>';
-            
-                                    echo '<option value="0">' . getStatus(0) . '</option>';
-                                    echo '<option value="1">' . getStatus(1) . '</option>';
-                                    echo '<option value="2">' . getStatus(2) . '</option>';
-                                    echo '<option value="3">' . getStatus(3) . '</option>';
-                            ?>  
+                            <option value="1" <?= $status == 1 ? 'selected' : '' ?>>Đang chuẩn bị hàng</option>
+                            <option value="2" <?= $status == 2 ? 'selected' : '' ?>>Đang giao hàng</option>
+                            <option value="3" <?= $status == 3 ? 'selected' : '' ?>>Đã giao hàng</option>
+                            <option value="4" <?= $status == 4 ? 'selected' : '' ?>>Đã hủy đơn hàng</option>
                         </select>
                     </div>
+
 
                     </div>
 
@@ -270,6 +259,8 @@ if (isset($_GET['order_id'])) {
 
                     $index = 1;
 
+                    $totalPrice = 0;
+
                     // Hiển thị danh sách sản phẩm
                     foreach ($productList as $item) {
                         echo '<tr>
@@ -283,6 +274,7 @@ if (isset($_GET['order_id'])) {
                             <td>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</td>
                             <td>' . $item['number'] . '</td>
                         </tr>';
+                        $totalPrice += $item['price'] * $item['number'];
                     }
                 }catch (Exception $e) {
                     die("Lỗi thực thi sql: " . $e->getMessage());
@@ -315,6 +307,10 @@ if (isset($_GET['order_id'])) {
             </tbody>
 
             </table>
+            <div id="totalPrice">
+                <?php echo 'Tổng giá: ' . number_format($totalPrice, 0, ',', '.') . ' VNĐ'; ?>
+            </div>
+
         </div>
 
         <ul class="pagination">
@@ -348,6 +344,9 @@ if (isset($_GET['order_id'])) {
         </ul>
     </div>
     </div>
+
+    
+
 </body>
 <style>
     .b-500 {

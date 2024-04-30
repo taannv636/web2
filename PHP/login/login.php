@@ -113,41 +113,56 @@ require_once('../database/dbhelper.php');
     require_once('../database/dbhelper.php');
 
     // Kiểm tra nếu người dùng đã submit form đăng nhập
-    if (isset($_POST["submit"]) && $_POST["username"] != '' && $_POST["password"] != '') {
+    if (isset($_POST["submit"]) && $_POST["username"] !== '' && $_POST["password"] !== '') {
+        $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+
         $username = $_POST["username"];
         $password = $_POST["password"];
-        // $password = md5($password);
-        $sql = "SELECT * FROM user WHERE hoten = '$username' AND password = '$password'";
-        execute($sql);
-        $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-        $user = mysqli_query($con, $sql);
-        if ($username == 'admin' && $password == '12345678') {
-            echo '<script language="javascript">
-            alert("Tài khoản và mật khẩu không chính xác !");
-            window.location = "login.php";
-         </script>';
-        } else {
-            // Nếu tài khoản tồn tại, kiểm tra trạng thái của tài khoản
+        // Tránh sử dụng câu lệnh trực tiếp với dữ liệu người dùng để tránh tấn công SQL injection
+        $stmt = $con->prepare("SELECT * FROM user WHERE hoten = ? AND password = ?");
+        $stmt->bind_param("ss", $username, $password);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+            $right = $user['right'];
             $status = $user['status'];
-            if ($status == 1) {
+
+            if ($right == 0) {
+                // Phân quyền cho trang admin
+                echo '<script language="javascript">
+                alert("Đăng nhập thành công vào trang admin!"); 
+                window.location = "../admin/index.php";
+                </script>';
+            } elseif ($status == 1) {
                 // Trạng thái cho phép đăng nhập
                 echo '<script language="javascript">
                 alert("Đăng nhập thành công!"); 
                 window.location = "../index.php";
-            </script>';
-            $username = trim(strip_tags($_POST['username']));
-            $password = trim(strip_tags($_POST['password']));
-            session_start();
-            setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
-            setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
-        } else {
-            echo '<script language="javascript">
-                alert("Tài khoản và mật khẩu không chính xác !");
+                </script>';
+                $username = trim(strip_tags($_POST['username']));
+                $password = trim(strip_tags($_POST['password']));
+                session_start();
+                setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
+                setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
+            } else {
+                // Tài khoản không có quyền hoặc bị khóa
+                echo '<script language="javascript">
+                alert("Tài khoản không có quyền hoặc bị khóa!");
                 window.location = "login.php";
-             </script>';
+                </script>';
+            }
+        } else {
+            // Tài khoản hoặc mật khẩu không chính xác
+            echo '<script language="javascript">
+            alert("Tài khoản hoặc mật khẩu không chính xác!");
+            window.location = "login.php";
+            </script>';
         }
+        $stmt->close();
+        $con->close();
     }
-}
     ?>
 </body>
 
