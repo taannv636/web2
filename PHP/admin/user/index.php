@@ -104,7 +104,7 @@ require_once('../database/dbhelper.php');
                     <td>' . $item['username'] . '</td>
                     <td>' . $item['phone'] . '</td>
                     <td>' . $item['email'] . '</td>
-                    <td>' . $item['trang_thai'] . '</td>
+                    <td style="color: ' . ($item['trang_thai'] == 1 ? 'green' : 'red') . ';">' . ($item['trang_thai'] == 1 ? 'Hoạt động' : 'Cấm') . '</td>
                     <td>
                         <a href="add.php?id_user=' . $item['id_user'] . '">
                             <button class=" btn btn-warning">Sửa</button> 
