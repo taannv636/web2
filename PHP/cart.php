@@ -1,30 +1,4 @@
-<?php
-require_once('database/dbhelper.php');
-require_once('database/delete_cart.php');
-require_once('utils/utility.php');
-// require_once('../database/config.php');
-// require_once('../database/dbhelper.php');
 
-// $cart = [];
-// if (isset($_COOKIE['cart'])) {
-//     $json = $_COOKIE['cart'];
-//     $cart = json_decode($json, true);
-// }
-// $idList = [];
-// foreach ($cart as $item) {
-//     $idList[] = $item['id'];
-// }
-// if (count($idList) > 0) {
-//     $idList = '\'' . implode(',', $idList) . '\'';
-//     //[2, 5, 6] => 2,5,6
-
-//     $sql = "select * from product where id in ($idList)";
-
-//     $cartList = executeResult($sql);
-// } else {
-//     $cartList = [];
-// }
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -102,11 +76,13 @@ require_once('utils/utility.php');
                                                 </td>
                                                 <td>' . $item['title'] . '</td>
                                                 <td class="b-500 red" >' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                                <td width="100px">' . $item['numbers'] . '</td>
+                                                <td width="100px" class="quantity">
+                                                    <input type="number" id="quantity" value="' . $item['numbers'] . '" min="1">
+                                                </td>
                                                 <td class="b-500 red" ><span class = "total_item">' . number_format($item['price'] * $item['numbers'], 0, ',', '.') . '</span><span> VNĐ</span></td>
                                                 <td>
-                                                    <a href = "delete_cart.php?id_user=<?php echo $id_user;?>">
-                                                        <button class="btn btn-danger">Xoá</button>
+                                                    <a>
+                                                    <button class="btn btn-danger delete-btn" data-user-id="' . $id_user . '" data-product-id="' . $item['id'] . '">Xoá</button>
                                                     </a>
                                                 </td>
                                             </tr>';
@@ -136,6 +112,31 @@ require_once('utils/utility.php');
         function checkLogin() {
 
         }
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                var userId = this.getAttribute('data-user-id');
+                var productId = this.getAttribute('data-product-id');
+                var cf = confirm(userId +" "+productId)
+                var confirmation = confirm("Bạn có chắc muốn xoá sản phẩm này?");
+                if (confirmation) {
+                    // Gửi request xóa bằng AJAX
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/delete_item.php', true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                            // Xử lý kết quả nếu cần
+                            // Ví dụ: cập nhật giao diện sau khi xóa 
+                            location.reload(); // Reload trang sau khi xóa
+
+                        }
+                    };
+                    xhr.send('userId=' + userId + '&productId=' + productId);
+                }
+            });
+        });
+
 
         function number_format_script(number, decimals, dec_point, thousands_sep) {
             // Chuyển đổi số thành chuỗi, nếu số này không phải là số thì trả về số ban đầu
@@ -206,6 +207,21 @@ require_once('utils/utility.php');
 
     .red {
         color: rgba(207, 16, 16, 0.815);
+    }
+
+    .quantity {
+
+        align-items: center;
+
+    }
+
+    .quantity input {
+        width: 100%;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin: 0 5px;
+        padding: 5px;
     }
 </style>
 
