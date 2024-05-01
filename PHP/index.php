@@ -168,6 +168,36 @@ require_once('database/dbhelper.php');
         </section>
     </div>
 </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "ArrowLeft") { // Nếu nhấn mũi tên trái
+                event.preventDefault(); // Ngăn chặn hành động mặc định của trình duyệt
+                navigateToPrevPage(); // Chuyển đến trang trước
+            } else if (event.key === "ArrowRight") { // Nếu nhấn mũi tên phải
+                event.preventDefault(); // Ngăn chặn hành động mặc định của trình duyệt
+                navigateToNextPage(); // Chuyển đến trang kế tiếp
+            }
+        });
+
+        function navigateToPrevPage() {
+            var currentPage = parseInt("<?php echo isset($_GET['page']) ? $_GET['page'] : 1 ?>");
+            if (currentPage > 1) {
+                window.location.href = "?page=" + (currentPage - 1);
+            }
+        }
+
+        function navigateToNextPage() {
+            var currentPage = parseInt("<?php echo isset($_GET['page']) ? $_GET['page'] : 1 ?>");
+            var totalPages = parseInt("<?php echo $current_page ?>"); // Số trang hiện có
+            if (currentPage < totalPages) {
+                window.location.href = "?page=" + (currentPage + 1);
+            }
+        }
+    });
+</script>
+
 <style>
     .pagination ul li a.active-page {
         color: yellow;
