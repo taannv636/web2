@@ -255,6 +255,32 @@
         }
     </style>
     <script>
+    // Hàm để tạo URL mới bao gồm các tham số tìm kiếm
+    function generateNewURL(currentPage) {
+        var url = 'thucdon.php?page=' + currentPage;
+
+        // Thêm các tham số tìm kiếm nếu có
+        var searchName = '<?php echo isset($_GET["search_name"]) ? $_GET["search_name"] : ""; ?>';
+        var searchPriceMin = '<?php echo isset($_GET["search_price_min"]) ? $_GET["search_price_min"] : ""; ?>';
+        var searchPriceMax = '<?php echo isset($_GET["search_price_max"]) ? $_GET["search_price_max"] : ""; ?>';
+        var idCategory = '<?php echo isset($_GET["id_category"]) ? $_GET["id_category"] : ""; ?>';
+
+        if (searchName !== '') {
+            url += '&search_name=' + encodeURIComponent(searchName);
+        }
+        if (searchPriceMin !== '') {
+            url += '&search_price_min=' + encodeURIComponent(searchPriceMin);
+        }
+        if (searchPriceMax !== '') {
+            url += '&search_price_max=' + encodeURIComponent(searchPriceMax);
+        }
+        if (idCategory !== '') {
+            url += '&id_category=' + encodeURIComponent(idCategory);
+        }
+
+        return url;
+    }
+
     document.addEventListener('keydown', function(event) {
         // Lấy số trang hiện tại và số trang tối đa
         var currentPage = <?php echo isset($_GET['page']) ? $_GET['page'] : 1; ?>;
@@ -265,7 +291,7 @@
             // Chỉ chuyển hướng nếu trang hiện tại lớn hơn 1
             if (currentPage > 1) {
                 // Trả về trang trước đó
-                history.back();
+                window.location.href = generateNewURL(currentPage - 1);
             }
         }
         // Kiểm tra nếu phím mũi tên phải được nhấn và không phải trong input field
@@ -273,7 +299,7 @@
             // Chỉ chuyển hướng nếu trang hiện tại nhỏ hơn hoặc bằng số trang tối đa
             if (currentPage < totalPages) {
                 // Chuyển hướng đến trang kế tiếp
-                window.location.href = '?page=' + (currentPage + 1);
+                window.location.href = generateNewURL(currentPage + 1);
             }
         }
     });
