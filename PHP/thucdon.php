@@ -254,4 +254,21 @@
             /* Màu nền hover */
         }
     </style>
+    <script>
+        document.addEventListener('keydown', function(event) {
+            // Kiểm tra nếu phím mũi tên trái được nhấn và không phải trong input field
+            if (event.keyCode === 37 && document.activeElement.tagName !== 'INPUT') {
+                // Trả về trang trước đó
+                history.back();
+            }
+            // Kiểm tra nếu phím mũi tên phải được nhấn và không phải trong input field
+            else if (event.keyCode === 39 && document.activeElement.tagName !== 'INPUT') {
+                // Lấy số trang hiện tại (nếu có)
+                var currentPage = <?php echo isset($_GET['page']) ? $_GET['page'] : 1; ?>;
+                // Chuyển hướng đến trang kế tiếp
+                window.location.href = '?page=' + (currentPage + 1);
+            }
+        });
+    </script>
+
     <?php require('layout/footer.php') ?>
