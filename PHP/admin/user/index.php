@@ -170,6 +170,32 @@ require_once('../database/dbhelper.php');
             })
         }
     </script>
+    <script>
+    document.addEventListener('keydown', function(event) {
+        // Lấy số trang hiện tại và số trang tối đa
+        var currentPage = <?php echo isset($_GET['page']) ? $_GET['page'] : 1; ?>;
+        var totalPages = <?php echo $total_pages; ?>;
+
+        // Kiểm tra nếu phím mũi tên trái được nhấn và không phải trong input field
+        if (event.keyCode === 37 && document.activeElement.tagName !== 'INPUT') {
+            // Chỉ chuyển hướng nếu trang hiện tại lớn hơn 1
+            if (currentPage > 1) {
+                // Trả về trang trước đó
+                window.location.href = '?page=' + (currentPage - 1);
+            }
+        }
+        // Kiểm tra nếu phím mũi tên phải được nhấn và không phải trong input field
+        else if (event.keyCode === 39 && document.activeElement.tagName !== 'INPUT') {
+            // Chỉ chuyển hướng nếu trang hiện tại nhỏ hơn hoặc bằng trang cuối cùng
+            if (currentPage < totalPages) {
+                // Chuyển hướng đến trang kế tiếp
+                window.location.href = '?page=' + (currentPage + 1);
+            }
+        }
+    });
+</script>
+
+
 </body>
 
 </html>
