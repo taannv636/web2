@@ -121,10 +121,10 @@ require_once('../database/dbhelper.php');
                                     $status_text = 'Ngừng kinh doanh';
                                     break;
                                 case 1:
-                                    $status_text = 'Còn kinh doanh';
+                                    $status_text = 'Tạm ngừng kinh doanh';
                                     break;
                                 case 2:
-                                    $status_text = 'Tạm ngừng kinh doanh';
+                                    $status_text = 'Còn kinh doanh';
                                     break;
                                 default:
                                     $status_text = 'Không xác định';

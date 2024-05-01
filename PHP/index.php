@@ -46,7 +46,9 @@ require_once('database/dbhelper.php');
                 <div class="product-recently">
                     <div class="row">
                         <?php
-                        $sql = 'SELECT * from product, order_details where order_details.id_product=product.id order by order_details.number DESC limit 4';
+                        $sql = 'SELECT * from product, order_details where order_details.id_product=product.id 
+                        order by order_details.number 
+                        DESC limit 4';
                         $productList = executeResult($sql);
                         $index = 1;
                         foreach ($productList as $item) {

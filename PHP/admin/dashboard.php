@@ -67,17 +67,23 @@
                                 }
                                 $limit = 10;
                                 $start = ($page - 1) * $limit;
+                                
+                                $sql = "SELECT orders.id AS order_id, 
+                                order_details.id_order AS order_detail_id, 
+                                user.hoten, user.address, user.phone, 
+                                product.price, orders.status, order_details.number,
+                                SUM(order_details.number * product.price) AS totalPrice
+                        FROM orders
+                        INNER JOIN order_details ON order_details.id_order = orders.id
+                        INNER JOIN user ON user.id_user = orders.id_user
+                        INNER JOIN product ON product.id = order_details.id_product
+                        GROUP BY order_detail_id
+                        ORDER BY orders.order_date DESC LIMIT $start, $limit";
+                
+                
+                      $order_details_List = executeResult($sql);
 
-                                $sql = "SELECT orders.id AS order_id, order_details.id_order AS order_detail_id, 
-                                user.hoten, user.address, user.phone, product.price, orders.status, order_details.number
-                                FROM orders
-                                INNER JOIN order_details ON order_details.id_order = orders.id
-                                INNER JOIN user ON user.id_user = orders.id_user
-                                INNER JOIN product ON product.id = order_details.id_product
-                                ORDER BY orders.order_date DESC LIMIT $start, $limit";
-                        
-                        $order_details_List = executeResult($sql);
-                        
+
                         $total = 0;
                         $count = 0;
                         
@@ -120,17 +126,16 @@
                                     return ''; // Trả về class mặc định nếu không có trạng thái nào khớp
                             }
                         }
-                         
-                        $totalPrice = 0;
+                                                 
                         foreach ($order_details_List as $item) {
-                            $totalPrice += $item['price'] * $item['number'];
+                           
                             echo '
                                 <tr style="text-align: center;">
                                     <td width="50px">' . (++$count) . '</td>
                                     <td style="text-align:center" id="id_order" value="' . $item['order_id'] . '">' . $item['order_id'] . '</td>
                                     <td>' . $item['hoten'] . '</td>
                                     <td width="100px">' . $item['address'] . '</td>
-                                    <td class="b-500 red">' . number_format($totalPrice, 0, ',', '.') . '<span> VNĐ</span></td>
+                                    <td class="b-500 red">' . number_format($item['totalPrice'], 0, ',', '.') . '<span> VNĐ</span></td>
                                     <td width="100px" style="color: ' . getStatusColorClass($item['status']) . '">' . getStatus($item['status']) . '</td>
                                     <td width="100px">
                                         <a href="edit.php?order_id=' . $item['order_id'] . '" class="btn btn-success">Edit</a>
@@ -138,6 +143,7 @@
                                 </tr>
                             ';
                         }
+                        
                         
                             } catch (Exception $e) {
                                 die("Lỗi thực thi sql: " . $e->getMessage());
