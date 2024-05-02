@@ -110,11 +110,10 @@ function generateID($ID, $TABLE, $SAMPLE) {
 
     return $newID;
 }
-
 function checkExistence($sample, $id, $table) {
     // Escape any special characters to prevent SQL injection
     $conn = new mysqli('localhost', 'root', '', 'asm_php1');
-   // $conn = new mysqli($servername, $username, $password, $database);
+    // $conn = new mysqli($servername, $username, $password, $database);
 
     $category_id = mysqli_real_escape_string($conn, $sample);
     $id = mysqli_real_escape_string($conn, $id);
@@ -130,14 +129,11 @@ function checkExistence($sample, $id, $table) {
     if ($result_check_existence && $result_check_existence->num_rows > 0) {
         $row = $result_check_existence->fetch_assoc();
         if ($row['count'] > 0) {
-            echo "<script>alert('ID tồn tại');</script>";
             return true; // ID exists
         } else {
-            echo "<script>alert('ID không tồn tại');</script>";
             return false; // ID does not exist
         }
     } else {
-        echo "<script>alert('Có lỗi xảy ra khi kiểm tra ID');</script>";
         return false; // Error occurred while checking ID existence
     }
 }
