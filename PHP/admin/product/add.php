@@ -110,17 +110,33 @@ if (!empty($_POST['title'])) {
     if (!empty($title)) {
         // Lưu vào DB
         if ($id == '') {
-            // Thêm danh mục
+            // Thêm sản phẩm
             $id = generateId('id','product','SP');
             $sql = 'INSERT INTO product(id, title, thumbnail, price, number , id_category , status, content ) 
             VALUES ("' . $id . '","' . $title . '","' . $target_file . '","' . $price . '","' . $number . '",
             "' . $id_category . '","' . $status . '","' . $content . '")';     
     }
         else {
-            // Sửa danh mục
-            $sql = 'UPDATE product SET title="' . $title . '", thumbnail="' . $target_file . '", price="' . $price . '", number="' . $number . '",
+            //Sừa sản phẩm
+            // Kiểm tra xem có hình ảnh mới được tải lên hay không
+            if (!empty($_FILES['thumbnail']['name'])) {
+                // Nếu có hình ảnh mới, thực hiện cập nhật
+                $sql = 'UPDATE product SET title="' . $title . '", thumbnail="' . $target_file . '", 
+                price="' . $price . '", number="' . $number . '", id_category="' . $id_category . '", status="' . $status . '", content="' . $content . '" 
+                WHERE id = "' . $id . '"';
+            } else {
+                // Nếu không có hình ảnh mới, chỉ cập nhật các trường dữ liệu khác
+                $sql = 'UPDATE product SET title="' . $title . '", price="' . $price . '", number="' . $number . '",
+                 id_category="' . $id_category . '", status="' . $status . '", content="' . $content . '"
+                WHERE id = "' . $id . '"';
+            }
+
+            /*
+$sql = 'UPDATE product SET title="' . $title . '", thumbnail="' . $target_file . '", price="' . $price . '", number="' . $number . '",
             id_category="' . $id_category . '", status="' . $status . '", content="' . $content . '"
                 WHERE id = "' . $id . '"';  
+            */
+           
         }
         execute($sql);
         header('Location: index.php');
