@@ -52,6 +52,8 @@ require_once('database/dbhelper.php');
                         $productList = executeResult($sql);
                         $index = 1;
                         foreach ($productList as $item) {
+                            if ($item['status'] != 0)
+                            {
                             echo '
                                 <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
@@ -76,6 +78,7 @@ require_once('database/dbhelper.php');
                                 </div>
                                 ';
                         }
+                    }
                         ?>
                     </div>
                 </div>
@@ -104,6 +107,8 @@ require_once('database/dbhelper.php');
 
                             $index = 1;
                             foreach ($productList as $item) {
+                                if ($item['status'] != 0)
+                                {
                                 echo '
                                 <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
@@ -128,6 +133,7 @@ require_once('database/dbhelper.php');
                                 </div>
                                 ';
                             }
+                        }
                         } catch (Exception $e) {
                             die("Lỗi thực thi sql: " . $e->getMessage());
                         }
