@@ -66,28 +66,27 @@ require_once('database/dbhelper.php');
                         </div> -->
                     </div>
                     <div class="login">
-                         <?php
-                        if (isset($_COOKIE['username'])) {
-                            $username = $_COOKIE['username'];
-                            if ($username == 'admin' || $username == '12345678') {
-                                echo '<a style="color:black;" href="">' . $_COOKIE['username'] . '</a>
-                                <div class="logout">
-                                    <a href="admin/"><i class="fas fa-user-edit"></i>Admin</a> <br>
-                                    <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
-                                </div>';
-                            } else {
-                                echo '<a style="color:black;" href="">' . $_COOKIE['username'] . '</a>
-                                <div class="logout">
-                                    <a href="login/changePass.php"><i class="fas fa-exchange-alt"></i>Đổi mật khẩu</a> <br>
-                                    <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
-                                </div>';
-                            }
+                    <?php
+                    if (isset($_COOKIE['username'])) {
+                        $username = $_COOKIE['username'];
+                        if ($username == 'admin' || $username == '12345678') {
+                            echo '<a style="color:black;" href="">' . $_COOKIE['username'] . '</a>
+                            <div class="logout">
+                                <a href="admin/"><i class="fas fa-user-edit"></i>Admin</a> <br>
+                                <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
+                            </div>';
                         } else {
-                            echo '<a href="login/login.php">Đăng nhập</a>';
+                            echo '<a style="color:black;" href="">' . $_COOKIE['username'] . '</a>
+                            <div class="logout">
+                                <a href="login/changePass.php"><i class="fas fa-exchange-alt"></i>Đổi mật khẩu</a> <br>
+                                <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
+                            </div>';
                         }
-                        ?>
-                    </div>
-
+                    } else {
+                        echo '<a href="login/login.php">Đăng nhập</a>';
+                    }
+                    ?>
+                </div>
                 </section>
             </div>
         </header>
