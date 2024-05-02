@@ -70,7 +70,7 @@ if (isset($_GET['id'])) {
                                     function updatePrice() {
                                         var price = document.getElementById('price').innerText; // giá tiền
                                         var num = document.querySelector('#num').value; // số lượng
-                                        if (num > <?= $product['status'] ?>)
+                                        if (num > <?= $product['number'] ?>)
                                         {
                                             alert('Số lượng vượt quá số lượng tồn kho');
                                             document.getElementById('num').value = 1;
