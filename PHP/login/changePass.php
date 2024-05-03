@@ -137,7 +137,7 @@ require_once('../database/dbhelper.php');
                 } else {
                     if (isset($_COOKIE['username'])) {
                         $username = $_COOKIE['username'];
-                        $sql = "UPDATE user SET password = '$passwordnew' WHERE hoten = '$username'";
+                        $sql = "UPDATE user SET password = '$passwordnew' WHERE username = '$username'";
                         execute($sql);
                         echo $username;
                         echo $passwordnew;
