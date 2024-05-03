@@ -1,7 +1,7 @@
 <?php
 require_once('../database/dbhelper.php');
 
-$id_user = $hoten = $sex = $birthday = $email = $address = $phone = $password = $right = $status = "";
+$id_user = $hoten = $sex = $birthday = $email = $address = $phone = $username = $password = $right = $status = "";
 
 // Check if the user is accessing the page to update an existing user
 if (isset($_GET['id_user'])) {
@@ -15,6 +15,7 @@ if (isset($_GET['id_user'])) {
         $email = $user['email'];
         $address = $user['address'];
         $phone = $user['phone'];
+        $username = $user['username'];
         $password = $user['password'];
         $right = $user['right'];
         $status = $user['status'];
@@ -30,27 +31,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $address = $_POST['address'];
     $phone = $_POST['phone'];
+    $username = $_POST['username']; // Add this line for username
     $password = $_POST['password'];
-   // $right = $_POST['right'];
     $status = $_POST['status'];
 
     // Validate form data
-    if (!empty($hoten) && !empty($password) && !empty($phone) && !empty($email)) {
+    if (!empty($hoten) && !empty($password) && !empty($phone) && !empty($email) && !empty($username)) { // Add $username to validation
+
         // Construct SQL query
         if (!empty($id_user)) {
             // Update existing user
             $sql = 'UPDATE user SET hoten="' . $hoten . '", sex="' . $sex . '" , birthday="' . $birthday . '",
-             email="' . $email . '",address="' . $address .'",phone="' . $phone . '",password="' . $password . '",
-            status="' . $status . '"
+             email="' . $email . '",address="' . $address .'",phone="' . $phone . '", username="' . $username . '",
+             password="' . $password . '", status="' . $status . '"
             WHERE id_user="' . $id_user . '"';
 
         } else {
             // Insert new user
             $right = 1;
             $id_user = generateID('id_user','user','KH');
-            $sql = 'INSERT INTO user (id_user, hoten, sex, birthday, email, address, phone, password, `right`, status) 
+            $sql = 'INSERT INTO user (id_user, hoten, sex, birthday, email, address, phone, username, password, `right`, status) 
             VALUES ("' . $id_user . '", "' . $hoten . '", "' . $sex . '", "' . $birthday . '", "' . $email . '",
-            "' . $address . '", "' . $phone . '", "' . $password . '", "' . $right . '", "' . $status . '")';
+            "' . $address . '", "' . $phone . '", "' . $username . '", "' . $password . '", "' . $right . '", "' . $status . '")';
 
         }
 
@@ -136,11 +138,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input required="true" type="text" class="form-control" id="phone" name="phone" value="<?= $phone ?>">
                     </div>
                     <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input required="true" type="text" class="form-control" id="username" name="username" value="<?= $username ?>">
+                    </div>
+
+                    <div class="form-group">
                         <label for="password">Mật Khẩu:</label>
                         <input required="true" type="password" class="form-control" id="password" name="password" value="<?= $password ?>">
                     </div>
-                    
-                    
                     <div class="form-group">
                         <label for="trang_thai">Trạng Thái:</label>
                         <select class="form-control" id="status" name="status">

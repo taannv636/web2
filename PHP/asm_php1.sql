@@ -95,19 +95,19 @@ INSERT INTO `cart` (`id_user`, `id_product`, `number`, `status`) VALUES
 --
 
 CREATE TABLE `category` (
-  `id` varchar(50) NOT NULL,
-  `name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` int(10) NOT NULL,
+  `name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `category`
+-- Đang đổ dữ liệu cho bảng `category`
 --
 
 INSERT INTO `category` (`id`, `name`) VALUES
-('DMSP001', 'Trà sữa'),
-('DMSP002', 'Cà phê'),
-('DMSP003', 'Bánh mì'),
-('DMSP004', 'Bánh ngọt');
+(1, 'Trà sữa'),
+(2, 'Món ăn nhẹ'),
+(3, 'Bánh mì'),
+(4, 'Cà phê');
 
 -- --------------------------------------------------------
 
@@ -213,7 +213,7 @@ CREATE TABLE `product` (
   `thumbnail` varchar(500) DEFAULT NULL,
   `price` float NOT NULL,
   `number` int(11) NOT NULL,
-  `id_category` varchar(50) NOT NULL,
+  `id_category` int(10) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `content` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -223,33 +223,33 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `title`, `thumbnail`, `price`, `number`, `id_category`, `status`, `content`) VALUES
-('SP001', 'BÁNH SÔ-CÔ-LA', 'uploads/SOCOLAHL.png', 25000, 34, 'DMSP004', 0, '<p style=\"margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 44px; padding: 0px;\"><span style=\"color: rgb(0, 0, 0);\">Thức uống chinh phục những thực khách khó tính! Sự kết hợp độc đáo giữa trà Ô long, hạt sen thơm bùi và củ năng giòn tan. Thêm vào chút sữa sẽ để vị thêm ngọt ngào.</span><br></p>'),
-('SP002', 'Trà Sen Vàng', 'uploads/TRASENVANG.png', 35000, 39, 'DMSP001', 2, '<font color=\"#000000\">Thức uống chinh phục những thực khách khó tính! Sự kết hợp độc đáo giữa trà Ô long, hạt sen thơm bùi và củ năng giòn tan. Thêm vào chút sữa sẽ để vị thêm ngọt ngào.</font><br>'),
-('SP003', 'Bánh Mì Thịt Nướng', 'uploads/BMTHITNUONG.png', 25000, 30, 'DMSP003', 2, 'Đặc sản của Việt Nam! Bánh mì giòn với nhân thịt nướng, rau thơm và gia vị đậm đà, hòa quyện trong lớp nước sốt tuyệt hảo.'),
-('SP004', 'BÁNH MOUSSE ĐÀO', 'uploads/MOUSSEDAO.png', 35000, 10, 'DMSP004', 1, '<span style=\"color: rgb(83, 56, 44); font-family: \"Open Sans\", sans-serif; font-size: 15px; text-align: justify;\">Một sự kết hợp khéo léo giữa kem và lớp bánh mềm, được phủ lên trên vài lát đào ngon tuyệt.</span><br>'),
-('SP005', 'Trà sữa trân trâu đen', 'uploads/Trà-sữa-Trân-châu-đen-1.png', 50000, 10, 'DMSP001', 1, '<p><span style=\"color: rgb(0, 0, 0); font-family: \" times=\"\" new=\"\" roman\";=\"\" font-size:=\"\" 20px;=\"\" font-weight:=\"\" 700;=\"\" text-align:=\"\" center;\"=\"\">Trà sữa trân trâu đường đen</span><br></p>'),
-('SP006', 'Trà sữa Matcha', 'uploads/TRATHANHDAO.png', 25000, 46, 'DMSP001', 1, '<p>Trà sữa Matcha<br></p>'),
-('SP007', 'Cafe Phin Đen Nóng', 'uploads/AMERICANO.png', 50000, 44, 'DMSP002', 1, '<p><font color=\"#53382c\">Dành cho những tín đồ cà phê đích thực! Hương vị cà phê truyền thống được phối trộn độc đáo tại Highlands. Cà phê đậm đà pha từ Phin, cho thêm 1 thìa đường, mang đến vị cà phê đậm đà chất Phin.</font><br></p>'),
-('SP008', 'Bạc Xỉu Đá', 'uploads/Trà-sữa-Trân-châu-đen-1.png', 30000, 15, 'DMSP002', 2, '<p>Nếu Phin Sữa Đá dành cho các bạn đam mê vị đậm đà, thì Bạc Xỉu Đá là một sự lựa chọn nhẹ “đô\" cà phê nhưng vẫn thơm ngon, chất lừ không kém!<br></p>'),
-('SP009', 'BÁNH CHUỐI', 'uploads/BANHCHUOI.jpg', 19000, 20, 'DMSP004', 1, '<span style=\"color: rgb(83, 56, 44); font-family: \"Open Sans\", sans-serif; font-size: 15px; text-align: justify;\">Bánh chuối truyền thống, sự kết hợp của 100% chuối tươi và nước cốt dừa Việt Nam.</span><br>'),
-('SP010', 'Bánh Mousse Cacao', 'uploads/MOUSSECACAO.png', 35000, 5, 'DMSP004', 2, '<span style=\"color: rgb(83, 56, 44); font-family: \" open=\"\" sans\",=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" text-align:=\"\" justify;\"=\"\">Bánh Mousse Ca Cao, là sự kết hợp giữa ca-cao Việt Nam đậm đà cùng kem tươi.</span><br>'),
-('SP011', 'Bánh Mì Xíu Mại', 'uploads/BMXIUMAI.png', 20000, 30, 'DMSP003', 1, 'Bánh mì Việt Nam giòn thơm, với nhân thịt viên hấp dẫn, phủ thêm một lớp nước sốt cà chua ngọt, cùng với rau tươi và gia vị đậm đà.'),
-('SP012', 'Bánh Caramel Phô Mai', 'uploads/CARAMELPHOMAI.jpg', 35000, 10, 'DMSP004', 1, 'Ngon khó cưỡng! Bánh phô mai thơm béo được phủ bằng lớp caramel ngọt ngào.'),
-('SP013', 'Trà Thạch Đào', 'uploads/TRATHANHDAO.png', 50000, 10, 'DMSP001', 0, '<p><span style=\"color: rgb(0, 0, 0); font-size: 1rem;\">Vị trà đậm đà kết hợp cùng những miếng đào thơm ngon mọng nước cùng thạch đào giòn dai. Thêm vào ít sữa để gia tăng vị béo</span><br></p><p><br></p>'),
-('SP014', 'Trà Thạch Vải', 'uploads/TRATHACHVAI_1.png', 50000, 46, 'DMSP001', 1, '<p>Một sự kết hợp thú vị giữa trà đen, những quả vải thơm ngon và thạch giòn khó cưỡng, mang đến thức uống tuyệt hảo!<br></p>'),
-('SP015', 'Trà Đào', 'uploads/TRATHANHDAO (1).png', 50000, 44, 'DMSP001', 1, '<p><span style=\"color: rgb(83, 56, 44); font-family: \" open=\"\" sans\",=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" text-align:=\"\" justify;\"=\"\">Một sự kết hợp thú vị giữa trà đen, những quả vải thơm ngon và thạch giòn khó cưỡng, mang đến thức uống tuyệt hảo!</span><br></p>'),
-('SP016', 'Cà Phê Đá', 'uploads/CFD.png', 30000, 15, 'DMSP002', 0, '<p>Dành cho những tín đồ cà phê đích thực! Hương vị cà phê truyền thống được phối trộn độc đáo tại Highlands. Cà phê đậm đà pha hoàn toàn từ Phin, cho thêm 1 thìa đường, một ít đá viên mát lạnh, tạo nên Phin Đen Đá mang vị cà phê đậm đà chất Phin.<br></p>'),
-('SP017', 'Bánh Tiramisu', 'uploads/TIRAMISU.jpg', 35000, 100, 'DMSP004', 1, '<p>Tiramisu thơm béo, làm từ ca-cao Việt Nam đậm đà, kết hợp với phô mai ít béo, vani và chút rum nhẹ nhàng.<br></p>'),
-('SP018', 'Chả Lụa Xá Xíu', 'uploads/BMCHALUAXAXIU.png', 20000, 90, 'DMSP003', 1, '<p>Bánh mì Việt Nam giòn thơm với chả lụa và thịt xá xíu thơm ngon, kết hợp cùng rau và gia vị, hòa quyện cùng nước sốt độc đáo.<br></p>'),
-('SP019', 'Gà Xé Tương Ớt', 'uploads/BMGAXE.png', 19000, 20, 'DMSP003', 1, '<p>Bánh mì Việt Nam giòn thơm với nhân gà xé, rau, gia vị hòa quyện cùng nước sốt đặc biệt.<br></p>'),
-('SP020', 'Cafe Phindi Hồng Trà', 'uploads/270_crop_PHINDI_Hong_Tra.png', 35000, 100, 'DMSP002', 1, '<p>PhinDi Kem Sữa - Cà phê Phin thế hệ mới với chất Phin êm hơn, lần đầu tiên kết hợp cùng Hồng Trà mang đến hương vị quyện êm, phiên bản giới hạn chỉ trong mùa lễ hội 2020!<br></p>'),
-('SP021', 'Cafe Phindi Kem Sữa', 'uploads/270_crop_phindi_kem_sua_new.png', 35000, 90, 'DMSP002', 2, '<p>PhinDi Kem Sữa - Cà phê Phin thế hệ mới với chất Phin êm hơn, kết hợp cùng Kem Sữa béo ngậy mang đến hương vị mới lạ, không thể hấp dẫn hơn!<br></p>'),
-('SP022', 'Pepsi', '', 15000, 102, 'DMSP001', 1, ''),
-('SP023', 'Sprite', '', 15000, 171, 'DMSP001', 1, ''),
-('SP024', 'Fanta', '', 15000, 193, 'DMSP001', 1, ''),
-('SP025', 'Nước ép cà rốt', '', 20000, 74, 'DMSP001', 1, ''),
-('SP026', 'Nước ép dưa hấu', '', 20000, 76, 'DMSP004', 1, ''),
-('SP027', 'Bánh mì cheese', 'uploads/', 40000, 34, 'DMSP002', 1, '');
+('SP001', 'BÁNH SÔ-CÔ-LA', 'uploads/SOCOLAHL.png', 25000, 34, 4, 0, '<p style=\"margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 44px; padding: 0px;\"><span style=\"color: rgb(0, 0, 0);\">Thức uống chinh phục những thực khách khó tính! Sự kết hợp độc đáo giữa trà Ô long, hạt sen thơm bùi và củ năng giòn tan. Thêm vào chút sữa sẽ để vị thêm ngọt ngào.</span><br></p>'),
+('SP002', 'Trà Sen Vàng', 'uploads/TRASENVANG.png', 35000, 39, 1, 2, '<font color=\"#000000\">Thức uống chinh phục những thực khách khó tính! Sự kết hợp độc đáo giữa trà Ô long, hạt sen thơm bùi và củ năng giòn tan. Thêm vào chút sữa sẽ để vị thêm ngọt ngào.</font><br>'),
+('SP003', 'Bánh Mì Thịt Nướng', 'uploads/BMTHITNUONG.png', 25000, 30, 3, 2, 'Đặc sản của Việt Nam! Bánh mì giòn với nhân thịt nướng, rau thơm và gia vị đậm đà, hòa quyện trong lớp nước sốt tuyệt hảo.'),
+('SP004', 'BÁNH MOUSSE ĐÀO', 'uploads/MOUSSEDAO.png', 35000, 10, 4, 1, '<span style=\"color: rgb(83, 56, 44); font-family: \"Open Sans\", sans-serif; font-size: 15px; text-align: justify;\">Một sự kết hợp khéo léo giữa kem và lớp bánh mềm, được phủ lên trên vài lát đào ngon tuyệt.</span><br>'),
+('SP005', 'Trà sữa trân trâu đen', 'uploads/Trà-sữa-Trân-châu-đen-1.png', 50000, 10, 1, 1, '<p><span style=\"color: rgb(0, 0, 0); font-family: \" times=\"\" new=\"\" roman\";=\"\" font-size:=\"\" 20px;=\"\" font-weight:=\"\" 700;=\"\" text-align:=\"\" center;\"=\"\">Trà sữa trân trâu đường đen</span><br></p>'),
+('SP006', 'Trà sữa Matcha', 'uploads/TRATHANHDAO.png', 25000, 46, 1, 1, '<p>Trà sữa Matcha<br></p>'),
+('SP007', 'Cafe Phin Đen Nóng', 'uploads/AMERICANO.png', 50000, 44, 2, 1, '<p><font color=\"#53382c\">Dành cho những tín đồ cà phê đích thực! Hương vị cà phê truyền thống được phối trộn độc đáo tại Highlands. Cà phê đậm đà pha từ Phin, cho thêm 1 thìa đường, mang đến vị cà phê đậm đà chất Phin.</font><br></p>'),
+('SP008', 'Bạc Xỉu Đá', 'uploads/Trà-sữa-Trân-châu-đen-1.png', 30000, 15, 2, 2, '<p>Nếu Phin Sữa Đá dành cho các bạn đam mê vị đậm đà, thì Bạc Xỉu Đá là một sự lựa chọn nhẹ “đô\" cà phê nhưng vẫn thơm ngon, chất lừ không kém!<br></p>'),
+('SP009', 'BÁNH CHUỐI', 'uploads/BANHCHUOI.jpg', 19000, 20, 4, 1, '<span style=\"color: rgb(83, 56, 44); font-family: \"Open Sans\", sans-serif; font-size: 15px; text-align: justify;\">Bánh chuối truyền thống, sự kết hợp của 100% chuối tươi và nước cốt dừa Việt Nam.</span><br>'),
+('SP010', 'Bánh Mousse Cacao', 'uploads/MOUSSECACAO.png', 35000, 5, 4, 2, '<span style=\"color: rgb(83, 56, 44); font-family: \" open=\"\" sans\",=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" text-align:=\"\" justify;\"=\"\">Bánh Mousse Ca Cao, là sự kết hợp giữa ca-cao Việt Nam đậm đà cùng kem tươi.</span><br>'),
+('SP011', 'Bánh Mì Xíu Mại', 'uploads/BMXIUMAI.png', 20000, 30, 3, 1, 'Bánh mì Việt Nam giòn thơm, với nhân thịt viên hấp dẫn, phủ thêm một lớp nước sốt cà chua ngọt, cùng với rau tươi và gia vị đậm đà.'),
+('SP012', 'Bánh Caramel Phô Mai', 'uploads/CARAMELPHOMAI.jpg', 35000, 10, 4, 1, 'Ngon khó cưỡng! Bánh phô mai thơm béo được phủ bằng lớp caramel ngọt ngào.'),
+('SP013', 'Trà Thạch Đào', 'uploads/TRATHANHDAO.png', 50000, 10, 1, 0, '<p><span style=\"color: rgb(0, 0, 0); font-size: 1rem;\">Vị trà đậm đà kết hợp cùng những miếng đào thơm ngon mọng nước cùng thạch đào giòn dai. Thêm vào ít sữa để gia tăng vị béo</span><br></p><p><br></p>'),
+('SP014', 'Trà Thạch Vải', 'uploads/TRATHACHVAI_1.png', 50000, 46, 1, 1, '<p>Một sự kết hợp thú vị giữa trà đen, những quả vải thơm ngon và thạch giòn khó cưỡng, mang đến thức uống tuyệt hảo!<br></p>'),
+('SP015', 'Trà Đào', 'uploads/TRATHANHDAO (1).png', 50000, 44, 1, 1, '<p><span style=\"color: rgb(83, 56, 44); font-family: \" open=\"\" sans\",=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" text-align:=\"\" justify;\"=\"\">Một sự kết hợp thú vị giữa trà đen, những quả vải thơm ngon và thạch giòn khó cưỡng, mang đến thức uống tuyệt hảo!</span><br></p>'),
+('SP016', 'Cà Phê Đá', 'uploads/CFD.png', 30000, 15, 2, 0, '<p>Dành cho những tín đồ cà phê đích thực! Hương vị cà phê truyền thống được phối trộn độc đáo tại Highlands. Cà phê đậm đà pha hoàn toàn từ Phin, cho thêm 1 thìa đường, một ít đá viên mát lạnh, tạo nên Phin Đen Đá mang vị cà phê đậm đà chất Phin.<br></p>'),
+('SP017', 'Bánh Tiramisu', 'uploads/TIRAMISU.jpg', 35000, 100, 4, 1, '<p>Tiramisu thơm béo, làm từ ca-cao Việt Nam đậm đà, kết hợp với phô mai ít béo, vani và chút rum nhẹ nhàng.<br></p>'),
+('SP018', 'Chả Lụa Xá Xíu', 'uploads/BMCHALUAXAXIU.png', 20000, 90, 3, 1, '<p>Bánh mì Việt Nam giòn thơm với chả lụa và thịt xá xíu thơm ngon, kết hợp cùng rau và gia vị, hòa quyện cùng nước sốt độc đáo.<br></p>'),
+('SP019', 'Gà Xé Tương Ớt', 'uploads/BMGAXE.png', 19000, 20, 3, 1, '<p>Bánh mì Việt Nam giòn thơm với nhân gà xé, rau, gia vị hòa quyện cùng nước sốt đặc biệt.<br></p>'),
+('SP020', 'Cafe Phindi Hồng Trà', 'uploads/270_crop_PHINDI_Hong_Tra.png', 35000, 100, 2, 1, '<p>PhinDi Kem Sữa - Cà phê Phin thế hệ mới với chất Phin êm hơn, lần đầu tiên kết hợp cùng Hồng Trà mang đến hương vị quyện êm, phiên bản giới hạn chỉ trong mùa lễ hội 2020!<br></p>'),
+('SP021', 'Cafe Phindi Kem Sữa', 'uploads/270_crop_phindi_kem_sua_new.png', 35000, 90, 2, 2, '<p>PhinDi Kem Sữa - Cà phê Phin thế hệ mới với chất Phin êm hơn, kết hợp cùng Kem Sữa béo ngậy mang đến hương vị mới lạ, không thể hấp dẫn hơn!<br></p>'),
+('SP022', 'Pepsi', '', 15000, 102, 1, 1, ''),
+('SP023', 'Sprite', '', 15000, 171, 1, 1, ''),
+('SP024', 'Fanta', '', 15000, 193, 1, 1, ''),
+('SP025', 'Nước ép cà rốt', '', 20000, 74, 1, 1, ''),
+('SP026', 'Nước ép dưa hấu', '', 20000, 76, 4, 1, ''),
+('SP027', 'Bánh mì cheese', 'uploads/', 40000, 34, 2, 1, '');
 
 -- --------------------------------------------------------
 
@@ -265,6 +265,7 @@ CREATE TABLE `user` (
   `email` varchar(100) NOT NULL,
   `address` varchar(255) NOT NULL,
   `phone` varchar(10) NOT NULL,
+  `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `right` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL
@@ -274,55 +275,49 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id_user`, `hoten`, `sex`, `birthday`, `email`, `address`, `phone`, `password`, `right`, `status`) VALUES
-('KH0000', 'admin', 0, '2000-03-31', 'phatnguyen98@gmail.com', '10 Đường 13, Phường 4, Quận 8, Thành Phố Hồ Chí Minh', '0581151429', '12345678', 0, 1),
-('KH0001', 'Lê Thị Ngọc Ánh', 0, '2000-03-31', 'lethingocanh@gmail.com', '10 Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0581151429', '12345678', 0, 1),
-('KH0002', 'Lê Văn Bắc', 1, '2000-07-23', 'levanbac@gmail.com', '22 Đường Lê Lai, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0363037771', '12345678', 1, 0),
-('KH0003', 'Bùi Thị Ngọc Dung', 1, '2000-10-20', 'buithingocdung@gmail.com', '33 Đường Hai Bà Trưng, Phường Cầu Kho, Quận 1, Thành Phố Hồ Chí Minh', '0577929217', '12', 1, 1),
-('KH0004', 'Vũ Thị Dung', 0, '2000-06-10', 'vuthidung@gmail.com', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0372723280', '12345678', 1, 1),
-('KH0005', 'Đinh Đăng Điện', 1, '2000-09-03', 'dinhdangdien@gmail.com', '55 Đường Lê Thánh Tôn, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0857519139', '03092000', 1, 1),
-('KH0006', 'Nguyễn Anh Đức', 1, '2000-09-05', 'nguyenanhduc@gmail.com', '66 Đường Đông Du, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0214068953', '05092000', 1, 1),
-('KH0007', 'Dương Minh Hải', 1, '2000-04-01', 'duongminhhai@gmail.com', '77 Đường Phan Đình Phùng, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0471415644', '01042000', 1, 1),
-('KH0008', 'Trần Thị Hạnh', 0, '2000-12-16', 'tranthihanh@gmail.com', '88 Đường Võ Văn Tần, Phường 3, Quận 3, Thành Phố Hồ Chí Minh', '0908011088', '16122000', 1, 1),
-('KH0009', 'Nguyễn Thị Hiền', 0, '2000-09-15', 'nguyenthihien@gmail.com', '99 Đường 3 Tháng 2, Phường 11, Quận 10, Thành Phố Hồ Chí Minh', '0644962027', '15092000', 1, 1),
-('KH0010', 'Đồng Thị Hà Linh', 0, '2000-09-02', 'dongthihalinh@gmail.com', '100 Đường Nguyễn Trãi, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0562133662', '02092000', 1, 1),
-('KH0011', 'Nguyễn Thùy Linh', 0, '2000-10-19', 'nguyenthuylinh@gmail.com', '111 Đường Huỳnh Thúc Kháng, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0513279946', '19102000', 1, 1),
-('KH0012', 'Trần Ngọc Linh', 1, '2000-08-20', 'tranngoclinh@gmail.com', '122 Đường Trần Hưng Đạo, Phường Phan Chu Trinh, Quận 1, Thành Phố Hồ Chí Minh', '0194294893', '20082000', 1, 1),
-('KH0013', 'Phạm Hồng Lộc', 0, '1999-11-16', 'phamhongloc@gmail.com', '133 Đường Phó Đức Chính, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0212295130', '16111999', 1, 1),
-('KH0014', 'Nguyễn Khánh Ly', 0, '2000-09-02', 'nguyenkhanhly@gmail.com', '144 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0984577447', '02092000', 1, 1),
-('KH0015', 'Trần Bích Ngân', 0, '1999-05-28', 'tranbichngan@gmail.com', '155 Đường Nguyễn Công Trứ, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0624408370', '28051999', 1, 1),
-('KH0016', 'Đỗ Thị Bích Ngọc', 0, '2000-10-25', 'dothibichngoc@gmail.com', '166 Đường Nguyễn Thị Minh Khai, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0404239114', '25102000', 1, 1),
-('KH0017', 'Phạm Hồng Ngọc', 1, '1999-11-10', 'phamhongngoc@gmail.com', '177 Đường Phan Kế Bính, Phường Đa Kao, Quận 1, Thành Phố Hồ Chí Minh', '0551977851', '10111999', 1, 1),
-('KH0018', 'Dương Hà Bảo Phương', 0, '2000-01-14', 'duonghabaophuong@gmail.com', '188 Đường Nguyễn Du, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0658071059', '14012000', 1, 1),
-('KH0019', 'Nguyễn Thanh Tú', 0, '2000-06-13', 'nguyenthanhtu@gmail.com', '199 Đường Tôn Thất Thuyết, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0494331134', '13062000', 1, 1),
-('KH0020', 'Phạm Thị Thanh Thảo', 0, '2000-01-29', 'phamthithanhthao@gmail.com', '200 Đường Nguyễn Cư Trinh, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh', '0480787840', '29012000', 1, 1),
-('KH0021', 'Nguyễn Minh Trang', 0, '2000-12-20', 'nguyenminhtrang@gmail.com', '211 Đường Đồng Khởi, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0940691706', '20122000', 1, 1),
-('KH0022', 'Vũ Thị Thùy Dung', 0, '1999-09-19', 'vuthithuydung@gmail.com', '222 Đường Mạc Thị Bưởi, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0642231529', '19091999', 1, 1),
-('KH0023', 'Đoàn Thị Sen', 0, '1999-04-05', 'doanthisen@gmail.com', '233 Đường Nguyễn Thị Minh Khai, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0925170996', '05041999', 1, 1),
-('KH0024', 'Nguyễn Minh Anh', 0, '2000-10-12', 'nguyenminhanh@gmail.com', '244 Đường Lê Thị Riêng, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0204044268', '12102000', 1, 1),
-('KH0025', 'Hà Thị Hồng Chuyên', 0, '2000-03-19', 'hathihongchuyen@gmail.com', '255 Đường Lê Lai, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0666645233', '19032000', 1, 1),
-('KH0026', 'Lê Phương Dung', 0, '2000-12-21', 'lephuongdung@gmail.com', '266 Đường Phạm Viết Chánh, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh', '0891128380', '21122000', 1, 1),
-('KH0027', 'Nguyễn Minh Dũng', 1, '2000-05-20', 'nguyenminhdung@gmail.com', '277 Đường Nguyễn Bỉnh Khiêm, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0389519161', '20052000', 1, 1),
-('KH0028', 'Lê Thị Hoài', 0, '2000-01-04', 'lethihoai@gmail.com', '288 Đường Lê Thánh Tôn, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0574067640', '04012000', 1, 1),
-('KH0029', 'Phạm Thị Thu Huyền', 0, '2000-06-10', 'phamthithuhuyen@gmail.com', '299 Đường Nguyễn Thị Minh Khai, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0777503270', '10062000', 1, 1),
-('KH0030', 'Nguyễn Thị Minh Ngọc', 0, '2000-07-05', 'nguyenthiminhngoc@gmail.com', '300 Đường Hai Bà Trưng, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0928432540', '05072000', 1, 1),
-('KH0031', 'Nguyễn Thị Nhã', 0, '2000-01-06', 'nguyenthinha@gmail.com', '311 Đường Trần Hưng Đạo, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0995832523', '06012000', 1, 1),
-('KH0032', 'Nguyễn Phương Thảo', 0, '1999-09-24', 'nguyenphuongthao@gmail.com', '322 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0338558498', '24091999', 1, 1),
-('KH0033', 'Vũ Thế Nam', 1, '1999-04-23', 'vuthenam@gmail.com', '333 Đường Nguyễn Cư Trinh, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh', '0954888359', '23041999', 1, 1),
-('KH0034', 'Nguyễn Đoàn Trung Hiếu', 1, '2001-04-04', 'nguyendoantrunghieu@gmail.com', '344 Đường Nguyễn Thị Minh Khai, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0737297182', '04042001', 1, 1),
-('KH0035', 'Zhang Kun', 1, '1995-05-03', 'zhangkun@gmail.com', '355 Đường Nguyễn Văn Trỗi, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0814810290', '03051995', 1, 1),
-('KH0036', 'Vũ Thị Vy', 0, '1998-01-24', 'vuthivy@gmail.com', '10 Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0930046551', '24011998', 1, 0),
-('KH0037', 'Đoàn Thị Ngọc Anh', 0, '1999-08-27', 'doanthingocanh@gmail.com', '22 Đường Lê Lợi, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0414077877', '27081999', 1, 1),
-('KH0038', 'Trần Thị Ngọc Ánh', 0, '1999-05-02', 'tranthingocanh@gmail.com', '33 Đường Hai Bà Trưng, Phường Cầu Kho, Quận 1, Thành Phố Hồ Chí Minh', '0797017273', '02051999', 1, 1),
-('KH0039', 'Hoàng Thị Hiền', 0, '1999-08-21', 'hoangthihien@gmail.com', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0170695526', '21081999', 1, 1),
-('KH0040', 'Nguyễn Thị Hồng Huế', 0, '1999-09-12', 'nguyenthihonghue@gmail.com', '55 Đường Lê Thánh Tôn, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0328465919', '12091999', 1, 1),
-('KH0041', 'Nguyễn Thị Thu Hương', 0, '1999-01-11', 'nguyenthithuhuong@gmail.com', '66 Đường Đông Du, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0460821297', '11011999', 1, 1),
-('KH0042', 'Bùi Thị Yến Linh', 0, '1999-11-23', 'buithiyenlinh@gmail.com', '77 Đường Phan Đình Phùng, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0245096099', '23111999', 1, 1),
-('KH0043', 'Lê Thùy Linh', 0, '1999-08-19', 'lethuylinh@gmail.com', '88 Đường Võ Văn Tần, Phường 3, Quận 3, Thành Phố Hồ Chí Minh', '0842561157', '19081999', 1, 1),
-('KH0044', 'Lê Thị Minh Nguyệt', 0, '1999-03-10', 'lethiminhnguyet@gmail.com', '99 Đường 3 Tháng 2, Phường 11, Quận 10, Thành Phố Hồ Chí Minh', '0131896701', '10031999', 1, 1),
-('KH0045', 'Lê Khánh Tú', 0, '1999-03-28', 'lekhanhtu@gmail.com', '100 Đường Nguyễn Trãi, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0611128223', '28031999', 1, 1),
-('KH0046', 'Nguyễn Thảo Vy', 1, '1999-07-04', 'nguyenthaovy@gmail.com', '111 Đường Huỳnh Thúc Kháng, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0655554714', '04071999', 1, 0),
-('KH0047', 'Nguyễn Trung Sơn', 0, '2024-04-12', 'phat298@gmail.com', '32 Nguyễn Huệ, Phường Bến Nghé, Q1, TPHCM', '12345678', '1234', 1, 1);
+INSERT INTO `user` (`id_user`, `hoten`, `sex`, `birthday`, `email`, `address`, `phone`, `username`, `password`, `right`, `status`) VALUES
+('KH0000', 'admin', 0, '2000-03-31', 'phatnguyen98@gmail.com', '10 Đường 13, Phường 4, Quận 8, Thành Phố Hồ Chí Minh', '0581151429', 'admin', '12345678', 0, 1),
+('KH0001', 'Lê Thị Ngọc Ánh', 0, '2000-03-31', 'lethingocanh@gmail.com', '10 Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0581151429', 'lethingocanh', '12345678', 0, 1),
+('KH0002', 'Lê Văn Bắc', 1, '2000-07-23', 'levanbac@gmail.com', '22 Đường Lê Lai, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0363037771', 'levanbac', '12345678', 1, 0),
+('KH0003', 'Bùi Thị Ngọc Dung', 1, '2000-10-20', 'buithingocdung@gmail.com', '33 Đường Hai Bà Trưng, Phường Cầu Kho, Quận 1, Thành Phố Hồ Chí Minh', '0577929217', 'buithingocdung', '12', 1, 1),
+('KH0004', 'Vũ Thị Dung', 0, '2000-06-10', 'vuthidung@gmail.com', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0372723280', 'vuthidung', '12345678', 1, 1),
+('KH0005', 'Đinh Đăng Điện', 1, '2000-09-03', 'dinhdangdien@gmail.com', '55 Đường Lê Thánh Tôn, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0857519139', 'dinhdangdien', '03092000', 1, 1),
+('KH0006', 'Nguyễn Anh Đức', 1, '2000-09-05', 'nguyenanhduc@gmail.com', '66 Đường Đông Du, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0214068953', 'nguyenanhduc', '05092000', 1, 1),
+('KH0007', 'Dương Minh Hải', 1, '2000-04-01', 'duongminhhai@gmail.com', '77 Đường Phan Đình Phùng, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0471415644', 'duongminhhai', '01042000', 1, 1),
+('KH0008', 'Trần Thị Hạnh', 0, '2000-12-16', 'tranthihanh@gmail.com', '88 Đường Võ Văn Tần, Phường 3, Quận 3, Thành Phố Hồ Chí Minh', '0908011088', 'tranthihanh', '16122000', 1, 1),
+('KH0009', 'Nguyễn Thị Hiền', 0, '2000-09-15', 'nguyenthihien@gmail.com', '99 Đường 3 Tháng 2, Phường 11, Quận 10, Thành Phố Hồ Chí Minh', '0644962027', 'nguyenthihien', '15092000', 1, 1),
+('KH0010', 'Đồng Thị Hà Linh', 0, '2000-09-02', 'dongthihalinh@gmail.com', '100 Đường Nguyễn Trãi, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0562133662', 'dongthihalinh', '02092000', 1, 1),
+('KH0011', 'Nguyễn Thùy Linh', 0, '2000-10-19', 'nguyenthuylinh@gmail.com', '111 Đường Huỳnh Thúc Kháng, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0513279946', 'nguyenthuylinh', '19102000', 1, 1),
+('KH0012', 'Trần Ngọc Linh', 1, '2000-08-20', 'tranngoclinh@gmail.com', '122 Đường Trần Hưng Đạo, Phường Phan Chu Trinh, Quận 1, Thành Phố Hồ Chí Minh', '0194294893', 'tranngoclinh', '20082000', 1, 1),
+('KH0013', 'Phạm Hồng Lộc', 0, '1999-11-16', 'phamhongloc@gmail.com', '133 Đường Phó Đức Chính, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0212295130', 'phamhongloc', '16111999', 1, 1),
+('KH0014', 'Nguyễn Khánh Ly', 0, '2000-09-02', 'nguyenkhanhly@gmail.com', '144 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0984577447', 'nguyenkhanhly', '02092000', 1, 1),
+('KH0015', 'Trần Bích Ngân', 0, '1999-05-28', 'tranbichngan@gmail.com', '155 Đường Nguyễn Công Trứ, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0624408370', 'tranbichngan', '28051999', 1, 1),
+('KH0016', 'Đỗ Thị Bích Ngọc', 0, '2000-10-25', 'dothibichngoc@gmail.com', '166 Đường Nguyễn Thị Minh Khai, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0404239114', 'dothibichngoc', '25102000', 1, 1),
+('KH0017', 'Phạm Hồng Ngọc', 1, '1999-11-10', 'phamhongngoc@gmail.com', '177 Đường Phan Kế Bính, Phường Đa Kao, Quận 1, Thành Phố Hồ Chí Minh', '0551977851', 'phamhongngoc', '10111999', 1, 1),
+('KH0018', 'Dương Hà Bảo Phương', 0, '2000-01-14', 'duonghabaophuong@gmail.com', '188 Đường Nguyễn Du, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0658071059', 'duonghabaophuong', '14012000', 1, 1),
+('KH0019', 'Nguyễn Thanh Tú', 0, '2000-06-13', 'nguyenthanhtu@gmail.com', '199 Đường Tôn Thất Thuyết, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0494331134', 'nguyenthanhtu', '13062000', 1, 1),
+('KH0020', 'Phạm Thị Thanh Thảo', 0, '2000-01-29', 'phamthithanhthao@gmail.com', '200 Đường Nguyễn Cư Trinh, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh', '0480787840', 'phamthithanhthao', '29012000', 1, 1),
+('KH0021', 'Nguyễn Minh Trang', 0, '2000-12-20', 'nguyenminhtrang@gmail.com', '211 Đường Đồng Khởi, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0940691706', 'nguyenminhtrang', '20122000', 1, 1),
+('KH0022', 'Vũ Thị Thùy Dung', 0, '1999-09-19', 'vuthithuydung@gmail.com', '222 Đường Mạc Thị Bưởi, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0642231529', 'vuthithuydung', '19091999', 1, 1),
+('KH0023', 'Đoàn Thị Sen', 0, '1999-04-05', 'doanthisen@gmail.com', '233 Đường Nguyễn Thị Minh Khai, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0925170996', 'doanthisen', '05041999', 1, 1),
+('KH0024', 'Nguyễn Minh Anh', 0, '2000-10-12', 'nguyenminhanh@gmail.com', '244 Đường Lê Thị Riêng, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0204044268', 'nguyenminhanh', '12102000', 1, 1),
+('KH0025', 'Hà Thị Hồng Chuyên', 0, '2000-03-19', 'hathihongchuyen@gmail.com', '255 Đường Lê Lai, Phường Phạm Ngũ Lão, Quận 1, Thành Phố Hồ Chí Minh', '0666645233', 'hathihongchuyen', '19032000', 1, 1),
+('KH0026', 'Lê Phương Dung', 0, '2000-12-21', 'lephuongdung@gmail.com', '266 Đường Phạm Viết Chánh, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh', '0891128380', 'lephuongdung', '21122000', 1, 1),
+('KH0027', 'Nguyễn Minh Dũng', 1, '2000-05-20', 'nguyenminhdung@gmail.com', '277 Đường Nguyễn Bỉnh Khiêm, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0389519161', 'nguyenminhdung', '20052000', 1, 1),
+('KH0028', 'Lê Thị Hoài', 0, '2000-01-04', 'lethihoai@gmail.com', '288 Đường Lê Thánh Tôn, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0574067640', 'lethihoai', '04012000', 1, 1),
+('KH0029', 'Phạm Thị Thu Huyền', 0, '2000-06-10', 'phamthithuhuyen@gmail.com', '299 Đường Đồng Khởi, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0231701800', 'phamthithuhuyen', '10062000', 1, 1),
+('KH0030', 'Nguyễn Thị Lan', 0, '2000-09-29', 'nguyenthilan@gmail.com', '300 Đường Nguyễn Thị Minh Khai, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh', '0710141127', 'nguyenthilan', '29092000', 1, 1),
+('KH0031', 'Lê Thị Ngọc Loan', 0, '2000-10-08', 'lethingocloan@gmail.com', '311 Đường Lê Lợi, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0559928317', 'lethingocloan', '08102000', 1, 1),
+('KH0032', 'Lê Thị Thanh Lâm', 0, '2000-05-21', 'lethithanhlam@gmail.com', '322 Đường Lê Đại Hành, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0561266694', 'lethithanhlam', '21052000', 1, 1),
+('KH0033', 'Lê Thị Ngọc Lan', 0, '2000-02-17', 'lethingoclan@gmail.com', '333 Đường Phạm Viết Chánh, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0513386578', 'lethingoclan', '17022000', 1, 1),
+('KH0034', 'Lê Thị Thùy Linh', 0, '2000-08-28', 'lethithuylinh@gmail.com', '344 Đường Nguyễn Bỉnh Khiêm, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0393353031', 'lethithuylinh', '28082000', 1, 1),
+('KH0035', 'Lê Thị Ngọc Mai', 0, '2000-06-02', 'lethingocmai@gmail.com', '355 Đường Phó Đức Chính, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0224575132', 'lethingocmai', '02062000', 1, 1),
+('KH0036', 'Phạm Thị Thùy Trang', 0, '2000-03-11', 'phamthithuytrang@gmail.com', '366 Đường Nguyễn Cư Trinh, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh', '0957881478', 'phamthithuytrang', '11032000', 1, 1),
+('KH0037', 'Lê Thị Thùy Trang', 0, '2000-11-25', 'lethithuytrang@gmail.com', '377 Đường Lê Thị Riêng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0211727739', 'lethithuytrang', '25112000', 1, 1),
+('KH0038', 'Lê Thị Phương Trinh', 0, '2000-05-23', 'lethiphuongtrinh@gmail.com', '388 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0664559846', 'lethiphuongtrinh', '23052000', 1, 1),
+('KH0039', 'Lê Thị Bích Trâm', 0, '2000-08-07', 'lethibichtram@gmail.com', '399 Đường Đinh Tiên Hoàng, Phường Đa Kao, Quận 1, Thành Phố Hồ Chí Minh', '0412651974', 'lethibichtram', '07082000', 1, 1),
+('KH0040', 'Lê Thị Thanh Trúc', 0, '2000-04-14', 'lethithanhtruc@gmail.com', '400 Đường Đinh Công Tráng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0640663244', 'lethithanhtruc', '14042000', 1, 1);
+
 
 --
 -- Indexes for dumped tables

@@ -46,19 +46,24 @@
                     break;
                 default:
                     // Hiển thị phần title và product-recently
-                    if (isset($_GET['id'])) {
-                        $id = trim(strip_tags($_GET['id']));
+                    if (isset($_GET['id_category'])) {
+                        $id_category = trim(strip_tags($_GET['id_category']));
                     } else {
-                        $id = 0;
+                        $id_category = 0;
                     }
             ?>
                     <section class="recently">
                         <div class="title">
                             <?php
-                            $sql = 'SELECT * FROM category WHERE id ="' . $id . '"';
-                            $name = executeResult($sql);
-                            foreach ($name as $ten) {
-                                echo '<h1>' . $ten['name'] . '</h1>';
+                            // Nếu id_category được chọn, hiển thị tên category
+                            if (!empty($id_category)) {
+                                $sql = "SELECT * FROM category WHERE id=$id_category";
+                                $name = executeResult($sql);
+                                foreach ($name as $ten) {
+                                    echo '<h1>' . $ten['name'] . '</h1>';
+                                }
+                            } else {
+                                echo '<h1>Tất cả sản phẩm</h1>';
                             }
                             ?>
                         </div>
@@ -73,12 +78,36 @@
 
                                 // Tạo query dựa trên id_category, search terms, and price range
                                 $query_condition = "";
-                                if (isset($_GET['id_category'])) {
-                                    $id_category = trim(strip_tags($_GET['id_category']));
-                                    $query_condition = "WHERE id_category = ' . $id_category .'";
-                                } elseif (isset($_GET['search'])) {
-                                    $search = $_GET['search'];
-                                    $query_condition = "WHERE title LIKE '%$search%'";
+
+                                if (isset($_GET['search_name']) && !empty($_GET['search_name'])) {
+                                    $search_name = trim(strip_tags($_GET['search_name']));
+                                    $query_condition .= " title LIKE '%$search_name%'";
+                                }
+
+                                $price_condition = ""; // Initialize price condition
+
+                                if (isset($_GET['search_price_min']) && !empty($_GET['search_price_min'])) {
+                                    $price_min = trim(strip_tags($_GET['search_price_min']));
+                                    $price_condition .= " price >= $price_min";
+                                }
+
+                                if (isset($_GET['search_price_max']) && !empty($_GET['search_price_max'])) {
+                                    $price_max = trim(strip_tags($_GET['search_price_max']));
+                                    $price_condition .= (empty($price_condition) ? "" : " AND ") . " price <= $price_max";
+                                }
+
+                                // Combine query conditions
+                                if (!empty($query_condition)) {
+                                    $query_condition = "WHERE $query_condition";
+                                }
+
+                                if (!empty($price_condition)) {
+                                    $query_condition .= (empty($query_condition) ? "WHERE " : " AND ") . $price_condition;
+                                }
+
+                                // Add category filter if applicable
+                                if (!empty($id_category)) {
+                                    $query_condition .= (empty($query_condition) ? "WHERE " : " AND ") . " id_category = $id_category";
                                 }
 
                                 // Thêm limit và offset vào query để lấy sản phẩm cho trang hiện tại
@@ -87,8 +116,6 @@
 
                                 // Hiển thị sản phẩm
                                 foreach ($productList as $item) {
-                                    if ($item['status'] != 0)
-                                    {
                                     echo '
                                         <div class="col">
                                             <a href="details.php?id=' . $item['id'] . '">
@@ -113,7 +140,6 @@
                                         </div>
                                     ';
                                 }
-                            }
                                 ?>
                             </div>
 
@@ -146,29 +172,7 @@
                             <div class="pagination">
                                 <ul>
                                     <?php
-                                    // Tạo query dựa trên id_category hoặc search
-                                    $query_condition = "";
-                                    if (isset($_GET['id_category'])) {
-                                        $id_category = trim(strip_tags($_GET['id_category']));
-                                        $query_condition = "WHERE id_category = ' . $id_category . '";
-                                    } elseif (isset($_GET['search'])) {
-                                        $search = $_GET['search'];
-                                        $query_condition = "WHERE title LIKE '%$search%'";
-                                    }
-
-                                    // Lấy tổng số lượng sản phẩm dựa trên điều kiện query
-                                    $sql = "SELECT COUNT(*) AS total FROM `product` $query_condition";
-                                    $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-                                    $result = mysqli_query($conn, $sql);
-                                    $row = mysqli_fetch_assoc($result);
-                                    $total_products = $row['total'];
-
-                                    // Tính số trang cần hiển thị dựa trên số lượng sản phẩm và số sản phẩm mỗi trang (8 sản phẩm/trang)
-                                    $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-                                    $products_per_page = 8;
-                                    $total_pages = ceil($total_products / $products_per_page);
-
-                                    // Hiển thị nút Previous (Trang trước)
+                                    // Nếu không phải trang đầu tiên thì hiển thị nút Prev
                                     if ($current_page > 1) {
                                         $prev_page = $current_page - 1;
                                         echo '<li><a href="?page=' . $prev_page . $additional_params . '">Prev</a></li>';
@@ -250,4 +254,56 @@
             /* Màu nền hover */
         }
     </style>
+    <script>
+    // Hàm để tạo URL mới bao gồm các tham số tìm kiếm
+    function generateNewURL(currentPage) {
+        var url = 'thucdon.php?page=' + currentPage;
+
+        // Thêm các tham số tìm kiếm nếu có
+        var searchName = '<?php echo isset($_GET["search_name"]) ? $_GET["search_name"] : ""; ?>';
+        var searchPriceMin = '<?php echo isset($_GET["search_price_min"]) ? $_GET["search_price_min"] : ""; ?>';
+        var searchPriceMax = '<?php echo isset($_GET["search_price_max"]) ? $_GET["search_price_max"] : ""; ?>';
+        var idCategory = '<?php echo isset($_GET["id_category"]) ? $_GET["id_category"] : ""; ?>';
+
+        if (searchName !== '') {
+            url += '&search_name=' + encodeURIComponent(searchName);
+        }
+        if (searchPriceMin !== '') {
+            url += '&search_price_min=' + encodeURIComponent(searchPriceMin);
+        }
+        if (searchPriceMax !== '') {
+            url += '&search_price_max=' + encodeURIComponent(searchPriceMax);
+        }
+        if (idCategory !== '') {
+            url += '&id_category=' + encodeURIComponent(idCategory);
+        }
+
+        return url;
+    }
+
+    document.addEventListener('keydown', function(event) {
+        // Lấy số trang hiện tại và số trang tối đa
+        var currentPage = <?php echo isset($_GET['page']) ? $_GET['page'] : 1; ?>;
+        var totalPages = <?php echo $total_pages; ?>;
+
+        // Kiểm tra nếu phím mũi tên trái được nhấn và không phải trong input field
+        if (event.keyCode === 37 && document.activeElement.tagName !== 'INPUT') {
+            // Chỉ chuyển hướng nếu trang hiện tại lớn hơn 1
+            if (currentPage > 1) {
+                // Trả về trang trước đó
+                window.location.href = generateNewURL(currentPage - 1);
+            }
+        }
+        // Kiểm tra nếu phím mũi tên phải được nhấn và không phải trong input field
+        else if (event.keyCode === 39 && document.activeElement.tagName !== 'INPUT') {
+            // Chỉ chuyển hướng nếu trang hiện tại nhỏ hơn hoặc bằng số trang tối đa
+            if (currentPage < totalPages) {
+                // Chuyển hướng đến trang kế tiếp
+                window.location.href = generateNewURL(currentPage + 1);
+            }
+        }
+    });
+</script>
+
+
     <?php require('layout/footer.php') ?>

@@ -1,20 +1,96 @@
 <?php
 require_once('../database/dbhelper.php');
 
+// Initialize $start with a default value
+$start = 0;
+$keyword = ''; // Initialize $keyword
+
+if (isset($_GET['page'])) {
+    $pg = $_GET['page'];
+} else {
+    $pg = 1;
+}
+
+try {
+    function getStatus($stt)
+    {
+        $status_class = '';
+        $status_text = '';
+
+        switch ($stt) {
+            case 0:
+                $status_class = 'text-danger';
+                $status_text = 'Cấm';
+                break;
+            case 1:
+                $status_class = 'text-success';
+                $status_text = 'Hoạt động';
+                break;
+            default:
+                $status_class = 'text-warning';
+                $status_text = 'Không xác định';
+                break;
+        }
+        return '<span class="' . $status_class . '">' . $status_text . '</span>';
+    }
+
+    $limit = 5;
+    if (isset($_GET['keyword'])) {
+        $keyword = $_GET['keyword'];
+        // Count total search results
+        $sqlCount = "SELECT COUNT(*) as total FROM user WHERE hoten LIKE '%$keyword%' OR hoten LIKE '%$keyword%'";
+        $resultCount = executeSingleResult($sqlCount);
+        $totalRecords = $resultCount['total'];
+
+        // Calculate total pages
+        $totalPages = ceil($totalRecords / $limit);
+
+        // Calculate start offset
+        $start = ($pg - 1) * $limit;
+
+        // Fetch search results for the current page
+        $sql = "SELECT * FROM user WHERE hoten LIKE '%$keyword%' OR hoten LIKE '%$keyword%' LIMIT $start, $limit";
+    } else {
+        // Fetch all users without search keyword
+        $sqlCount = "SELECT COUNT(*) as total FROM user";
+        $resultCount = executeSingleResult($sqlCount);
+        $totalRecords = $resultCount['total'];
+
+        // Calculate total pages
+        $totalPages = ceil($totalRecords / $limit);
+
+        $start = ($pg - 1) * $limit;
+        $sql = "SELECT * FROM user LIMIT $start, $limit";
+    }
+
+    $userList = executeResult($sql);
+} catch (Exception $e) {
+    die("Lỗi thực thi sql: " . $e->getMessage());
+}
 ?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>Quản Lý Người Dùng</title>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <!-- Latest compiled JavaScrseipt -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <style>
+        .text-danger {
+            color: red;
+        }
+
+        .text-success {
+            color: green;
+        }
+
+        .text-warning {
+            color: yellow;
+        }
+    </style>
 </head>
 
 <body>
@@ -35,7 +111,7 @@ require_once('../database/dbhelper.php');
             <a class="nav-link active" href="../user/">Quản lý người dùng</a>
         </li>
         <li class="nav-item">
-                    <a class="nav-link" href="../../index.php" style="font-weight: bold; color: red">Đăng xuất</a>
+            <a class="nav-link" href="../../index.php" style="font-weight: bold; color: red">Đăng xuất</a>
         </li>
     </ul>
     <div class="container">
@@ -60,6 +136,7 @@ require_once('../database/dbhelper.php');
                         <td width="70px">STT</td>
                         <td>ID</td>
                         <td>Họ tên</td>
+                        <td>Username</td>
                         <td>SĐT</td>
                         <td>Email</td>
                         <td>Trạng thái</td>
@@ -69,72 +146,26 @@ require_once('../database/dbhelper.php');
                 </thead>
                 <tbody>
                     <?php
-                    // Lấy danh sách Sản Phẩm
-                    if (!isset($_GET['page'])) {
-                        $pg = 1;
-                        //echo 'Bạn đang ở trang: 1';
-                    } else {
-                        $pg = $_GET['page'];
-                        //echo 'Bạn đang ở trang: ' . $pg;
-                    }
-
-                    try {
-                        function getStatus($stt)
-                        {
-                            $status_text = '';
-                            switch ($stt) {
-                                case 0:
-                                    $status_text = 'Cấm';
-                                    break;
-                                case 1:
-                                    $status_text = 'Hoạt động';
-                                    break;
-                                default:
-                                    $status_text = 'Không xác định';
-                                    break;
-                            }
-                            return $status_text;
-                        }
-
-                        if (isset($_GET['keyword'])) {
-                            $keyword = $_GET['keyword'];
-                            $sql = "SELECT * FROM user WHERE hoten LIKE '%$keyword%'";
-                        } else {
-                            if (isset($_GET['page'])) {
-                                $page = $_GET['page'];
-                            } else {
-                                $page = 1;
-                            }
-                            $limit = 5;
-                            $start = ($page - 1) * $limit;
-                            $sql = "SELECT * FROM user limit $start,$limit";
-                        }
-
-                        executeResult($sql);
-                        $userList = executeResult($sql);
-
-                        $index = 1;
-                        foreach ($userList as $item) {
-                            echo '  <tr>
-                    <td>' . ($index++) . '</td>
-                    
-                    <td>' . $item['id_user'] . '</td>
-                    <td>' . $item['hoten'] . '</td>
-                    <td>' . $item['phone'] . '</td>
-                    <td>' . $item['email'] . '</td>
-                    <td>' . getStatus($item['status']) . '</td>
-                    <td>
-                        <a href="add.php?id_user=' . $item['id_user'] . '">
-                            <button class=" btn btn-warning">Sửa</button> 
-                        </a> 
-                    </td>
-                    <td>            
-                    <button class="btn btn-danger" onclick="deleteUser(\'' . $item['id_user'] . '\')">Xoá</button>
-                    </td>
-                </tr>';
-                        }
-                    } catch (Exception $e) {
-                        die("Lỗi thực thi sql: " . $e->getMessage());
+                    $index = $start + 1;
+                    foreach ($userList as $item) {
+                        echo '
+                            <tr>
+                                <td>' . ($index++) . '</td>
+                                <td>' . $item['id_user'] . '</td>
+                                <td>' . $item['hoten'] . '</td>
+                                <td>' . $item['username'] . '</td>
+                                <td>' . $item['phone'] . '</td>
+                                <td>' . $item['email'] . '</td>
+                                <td>' . getStatus($item['status']) . '</td>
+                                <td>
+                                    <a href="add.php?id_user=' . $item['id_user'] . '">
+                                        <button class=" btn btn-warning">Sửa</button> 
+                                    </a> 
+                                </td>
+                                <td>            
+                                    <button class="btn btn-danger" onclick="deleteUser(\'' . $item['id_user'] . '\')">Xoá</button>
+                                </td>
+                            </tr>';
                     }
                     ?>
                 </tbody>
@@ -143,32 +174,24 @@ require_once('../database/dbhelper.php');
 
         <ul class="pagination">
             <?php
-            $sql = "SELECT * FROM `user`";
-            $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result)) {
-                $numrow = mysqli_num_rows($result);
-                $current_page = ceil($numrow / 5);
-                // echo $current_page;
-            }
-            for ($i = 1; $i <= $current_page; $i++) {
-                // Nếu là trang hiện tại thì hiển thị thẻ span
-                // ngược lại hiển thị thẻ a
-                if ($i == $pg) {
-                    echo '
-        <li class="page-item active"><a class="page-link" style="color: yellow; font-weight: bold;" href="?page=' . $i . '">' . $i . '</a></li>';
-                } else {
-                    echo '
-            <li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>
-                    ';
+            if (isset($totalPages)) {
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    if ($i == $pg) {
+                        echo '
+                            <li class="page-item active">
+                                <a class="page-link" style="color: yellow; font-weight: bold;" href="?keyword=' . urlencode($keyword) . '&page=' . $i . '">' . $i . '</a>
+                            </li>';
+                    } else {
+                        echo '
+                            <li class="page-item">
+                                <a class="page-link" href="?keyword=' . urlencode($keyword) . '&page=' . $i . '">' . $i . '</a>
+                            </li>';
+                    }
                 }
             }
             ?>
         </ul>
     </div>
-
-    </div>
-
 
     <script type="text/javascript">
         function deleteUser(id_user) {
@@ -178,7 +201,6 @@ require_once('../database/dbhelper.php');
             }
 
             console.log(id_user)
-            //ajax - lenh post
             $.post('ajax.php', {
                 'id_user': id_user,
                 'action': 'delete'
@@ -188,6 +210,23 @@ require_once('../database/dbhelper.php');
             })
         }
     </script>
+    <script type="text/javascript">
+        document.addEventListener('keydown', function(event) {
+            if (event.keyCode == 37) { // Mũi tên trái
+                var currentPage = parseInt("<?php echo $pg; ?>");
+                if (currentPage > 1) {
+                    window.location.href = '?keyword=' + encodeURIComponent("<?php echo $keyword; ?>") + '&page=' + (currentPage - 1);
+                }
+            } else if (event.keyCode == 39) { // Mũi tên phải
+                var currentPage = parseInt("<?php echo $pg; ?>");
+                var totalPages = parseInt("<?php echo $totalPages; ?>");
+                if (currentPage < totalPages) {
+                    window.location.href = '?keyword=' + encodeURIComponent("<?php echo $keyword; ?>") + '&page=' + (currentPage + 1);
+                }
+            }
+        });
+    </script>
+
 </body>
 
 </html>

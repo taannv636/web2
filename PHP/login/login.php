@@ -119,7 +119,7 @@ if (isset($_POST["submit"]) && $_POST["username"] !== '' && $_POST["password"] !
     $username = $_POST["username"];
     $password = $_POST["password"];
     // Tránh sử dụng câu lệnh trực tiếp với dữ liệu người dùng để tránh tấn công SQL injection
-    $stmt = $con->prepare("SELECT * FROM user WHERE hoten = ? AND password = ?");
+    $stmt = $con->prepare("SELECT * FROM user WHERE username = ? AND password = ?");
     $stmt->bind_param("ss", $username, $password);
     $stmt->execute();
     $result = $stmt->get_result();
