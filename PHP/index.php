@@ -13,26 +13,6 @@ require_once('database/dbhelper.php');
                     <input name="search" type="text" placeholder="Tìm món hoặc thức ăn">
                 </form>
             </section>
-            <section class="main-layout">
-                <div class="row">
-                    <?php
-                    $sql = 'select * from category';
-                    $categoryList = executeResult($sql);
-                    $index = 1;
-                    foreach ($categoryList as $item) {
-                        echo '
-                                    <div class="box">
-                                        <a href="thucdon.php?id=' . $item['id'] . '">
-                                            <p>' . $item['name'] . '</p>
-                                            <div class="bg"></div>
-                                            <img src="images/bg/gantoi.jpeg" alt="">
-                                        </a>
-                                    </div>
-                                    ';
-                    }
-                    ?>
-                </div>
-            </section>
         </div>
         <div class="bg-grey">
 

@@ -8,6 +8,7 @@
                         <?php
                         $sql = 'select * from product where id_category=1';
                         // $sql = 'select * from category';
+
                         $productList = executeResult($sql);
                         // $categoryList = executeResult($sql);
                         $index = 1;
