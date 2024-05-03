@@ -70,7 +70,8 @@ require_once('utils/utility.php');
                                 $username = $_COOKIE['username'];
                                 $sql = "SELECT orders.order_date as order_date, orders.id as id, orders.status as order_status 
                                 FROM user JOIN orders ON user.id_user = orders.id_user 
-                                WHERE user.username = '$username'";
+                                WHERE user.username = '$username'
+                                ORDER BY orders.order_date DESC";
                                 $result = executeResult($sql);
                                 foreach ($result as $row) {
                                     $total = 0;
@@ -85,8 +86,10 @@ require_once('utils/utility.php');
                                                 
                                     $id_orders = $row['id'];
                                     $sql_product = "SELECT product.thumbnail as thumbnail, product.title as title, order_details.number as numbers, 
-                                    product.price as price FROM order_details JOIN product ON order_details.id_product = product.id 
-                                    WHERE order_details.id_order = '$id_orders'";
+                                    product.price as price
+                                    FROM order_details JOIN product ON order_details.id_product = product.id 
+                                    WHERE order_details.id_order = '$id_orders'
+                                    ";
 
                                     $result_product = executeResult($sql_product);
                                     foreach ($result_product as $row_product) {
