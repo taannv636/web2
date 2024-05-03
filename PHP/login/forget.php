@@ -33,7 +33,10 @@ require_once('../database/dbhelper.php');
                                     echo '<li><a href="../thucdon.php?id_category=' . $item['id'] . '">' . $item['name'] . '</a></li>';
                                 }
                                 ?>
-                               
+                                <!-- <li><a href="thucdon.php?page=trasua">Trà sữa</a></li>
+                                <li><a href="thucdon.php?page=monannhe">Món ăn nhẹ</a></li>
+                                <li><a href="thucdon.php?page=banhmi">Bánh mì</a></li>
+                                <li><a href="thucdon.php?page=caphe">Cà phê</a></li> -->
                             </ul>
                         </li>
                         <li><a href="../about.php">Về chúng tôi</a></li>
@@ -78,18 +81,14 @@ require_once('../database/dbhelper.php');
         <h2 style="text-align: center;">Quên mật khẩu</h2>
         <div class="container">
             <form method="POST" action="">
-                <!--
                 <div class="form-group">
                     <label>Tên của bạn:</label>
                     <input class="form-control" type="text" name="name" required="required" />
                 </div>
-                    -->
                 <div class="form-group">
                     <label>Gmail của bạn:</label>
                     <input class="form-control" type="email" name="email" required="required" />
                 </div>
-
-                <!--
                 <div class="form-group">
                     <label>Số điện thoại:</label>
                     <input class="form-control" type="text" name="subject" required="required" />
@@ -98,9 +97,7 @@ require_once('../database/dbhelper.php');
                     <label>Lý do:</label>
                     <textarea class="form-control" name="message" id="" cols="30" rows="4"></textarea>
                 </div>
-                    -->
                 <button name="send" class="btn btn-primary">Khôi phục</button>
-                    
                 <?php
                 $previous = "javascript:history.go(-1)";
                 if (isset($_SERVER['HTTP_REFERER'])) {
@@ -109,20 +106,18 @@ require_once('../database/dbhelper.php');
                 ?>
                 <a href="<?= $previous ?>" class="btn btn-warning">Quay lại</a>
             </form>
-            </div>
-
+        </div>
         <?php
-        /*
         //nhúng thư viện vào để dùng
         require "../PHPMailer-master/src/PHPMailer.php";
         require "../PHPMailer-master/src/SMTP.php";
         require '../PHPMailer-master/src/Exception.php';
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-          //  $name = $_POST['name']; // lấy ra tên của bạn
+            $name = $_POST['name']; // lấy ra tên của bạn
             $email = $_POST['email']; // Email cần gửi đến
-          //  $subject = $_POST['subject']; // Tiêu đề email
-          //  $message = $_POST['message']; // Nội dung email
+            $subject = $_POST['subject']; // Tiêu đề email
+            $message = $_POST['message']; // Nội dung email
             $mail = new PHPMailer\PHPMailer\PHPMailer(true);  //true: cho phép các trường hợp ngoại lệ
 
 
@@ -131,7 +126,7 @@ require_once('../database/dbhelper.php');
             $numrows_email = $kq->rowCount();
             if ($numrows_email == 1) {
                 foreach ($kq as $item) {
-                    $message = 'Xin chào ' . '<strong>' . $item['username'] . '</strong>' . '<br>Mật khẩu của bạn là: ' . '<strong>' . $item['password'] . '</strong>';
+                    $message = 'Xin chào ' . '<strong>' . $item['hoten'] . '</strong>' . '<br>Mật khẩu của bạn là: ' . '<strong>' . $item['password'] . '</strong>';
                 }
             } else {
                 echo '<script language="javascript">
@@ -178,78 +173,7 @@ require_once('../database/dbhelper.php');
                 echo 'Mail không gửi được. Lỗi: ', $mail->ErrorInfo;
             }
         }
-        */
-
-        use PHPMailer\PHPMailer\PHPMailer;
-        use PHPMailer\PHPMailer\Exception;
-
-        require 'vendor/autoload.php';
-
-        session_start();
-
-        // Hàm tạo mã OTP ngẫu nhiên
-        function generateOTP($length = 6) {
-            $characters = '0123456789';
-            $otp = '';
-            for ($i = 0; $i < $length; $i++) {
-                $otp .= $characters[rand(0, strlen($characters) - 1)];
-            }
-            return $otp;
-        }
-        
-       // Hàm gửi OTP qua email
-function sendOTP($otp) {
-    $mail = new PHPMailer(true);
-    try {
-        // Cấu hình SMTP
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.example.com'; // SMTP server
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'your_email@example.com'; // SMTP username
-        $mail->Password   = 'your_password'; // SMTP password
-        $mail->SMTPSecure = 'tls';
-        $mail->Port       = 587;
-
-        // Thiết lập thông tin người gửi và người nhận
-        $mail->setFrom('your_email@example.com', 'Your Name');
-        $mail->addAddress('recipient@example.com', 'Recipient Name');
-
-        // Thiết lập tiêu đề và nội dung email
-        $mail->isHTML(true);
-        $mail->Subject = 'Mã OTP';
-        $mail->Body    = 'Mã OTP của bạn là: ' . $otp;
-
-        // Gửi email
-        $mail->send();
-
-        // Lưu mã OTP vào session
-        $_SESSION['otp'] = $otp;
-
-        return true;
-    } catch (Exception $e) {
-        // Nếu gửi email không thành công, bạn có thể xử lý ở đây, ví dụ: log lỗi, hiển thị thông báo cho người dùng, vv.
-        return false;
-    }
-}
-        
-        // Kiểm tra nếu người dùng đã gửi OTP và nếu đúng thì chuyển hướng sang trang tạo mật khẩu mới
-        if (isset($_POST['submit_otp'])) {
-            if ($_POST['otp'] == $_SESSION['otp']) {
-                header('Location: create_password.php');
-                exit;
-            } else {
-                $error = "Mã OTP không đúng. Vui lòng thử lại!";
-            }
-        }
-        
-        // Xử lý khi người dùng nhấn nút "Khôi phục"
-        if (isset($_POST['recover'])) {
-            $otp = generateOTP();
-            sendOTP($otp);
-        }
         ?>
-
-
     </div>
 </body>
 

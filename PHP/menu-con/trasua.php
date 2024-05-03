@@ -6,8 +6,9 @@
                 <div class="product-recently">
                     <div class="row">
                         <?php
-                        $sql = 'select * from product where id_category=DMSP001';
-                        // $sql = 'select * from category';
+                        $id_category = "DMSP001";
+                $sql = "SELECT * FROM product WHERE id_category=' . $id_category . '";
+                // $sql = 'select * from category';
                         $productList = executeResult($sql);
                         // $categoryList = executeResult($sql);
                         $index = 1;

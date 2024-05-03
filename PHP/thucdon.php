@@ -66,24 +66,25 @@
                             <div class="row">
                                 <?php
                                 // Kiểm tra xem trang đang ở đâu (nếu có)
-                                $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+                        $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 
-                                // Tính toán offset dựa trên số trang hiện tại và số sản phẩm mỗi trang (8 sản phẩm/trang)
-                                $offset = ($current_page - 1) * 8;
+                        // Tính toán offset dựa trên số trang hiện tại và số sản phẩm mỗi trang (8 sản phẩm/trang)
+                        $offset = ($current_page - 1) * 8;
 
-                                // Tạo query dựa trên id_category, search terms, and price range
-                                $query_condition = "";
-                                if (isset($_GET['id_category'])) {
-                                    $id_category = trim(strip_tags($_GET['id_category']));
-                                    $query_condition = "WHERE id_category = ' . $id_category .'";
-                                } elseif (isset($_GET['search'])) {
-                                    $search = $_GET['search'];
-                                    $query_condition = "WHERE title LIKE '%$search%'";
-                                }
+                        // Tạo query dựa trên id_category, search terms, and price range
+                        $query_condition = "";
+                        if (isset($_GET['id_category'])) {
+                            $id_category = trim(strip_tags($_GET['id_category']));
+                            $query_condition = "WHERE id_category = '$id_category'";
+                        } elseif (isset($_GET['search'])) {
+                            $search = $_GET['search'];
+                            $query_condition = "WHERE title LIKE N'%$search%'";
+                        }
 
-                                // Thêm limit và offset vào query để lấy sản phẩm cho trang hiện tại
-                                $sql = "SELECT * FROM product $query_condition LIMIT 8 OFFSET $offset";
-                                $productList = executeResult($sql);
+                        // Thêm limit và offset vào query để lấy sản phẩm cho trang hiện tại
+                        $sql = "SELECT * FROM product $query_condition LIMIT 8 OFFSET $offset";
+                        $productList = executeResult($sql);
+
 
                                 // Hiển thị sản phẩm
                                 foreach ($productList as $item) {
@@ -118,6 +119,15 @@
                             </div>
 
                             <?php
+                             $query_condition = "";
+                             if (isset($_GET['id_category'])) {
+                                 $id_category = trim(strip_tags($_GET['id_category']));
+                                 $query_condition = "WHERE id_category = ' . $id_category . '";
+                             } elseif (isset($_GET['search'])) {
+                                 $search = $_GET['search'];
+                                 $query_condition = "WHERE title LIKE N'%$search%'";
+                             }
+
                             // Tính tổng số sản phẩm
                             $query_total = "SELECT COUNT(id) AS total FROM product $query_condition";
                             $result_total = executeResult($query_total);
@@ -153,7 +163,7 @@
                                         $query_condition = "WHERE id_category = ' . $id_category . '";
                                     } elseif (isset($_GET['search'])) {
                                         $search = $_GET['search'];
-                                        $query_condition = "WHERE title LIKE '%$search%'";
+                                        $query_condition = "WHERE title LIKE N'%$search%'";
                                     }
 
                                     // Lấy tổng số lượng sản phẩm dựa trên điều kiện query

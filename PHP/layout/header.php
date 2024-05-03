@@ -34,7 +34,7 @@ require_once('database/dbhelper.php');
                                 $result = executeResult($sql);
                                 foreach ($result as $item) {
                                     echo '<li><a href="thucdon.php?id_category=' . $item['id'] . '">' . $item['name'] . '</a></li>';
-                                }
+                                }                                
                                 ?>
                                 <!-- <li><a href="thucdon.php?page=trasua">Trà sữa</a></li>
                                 <li><a href="thucdon.php?page=monannhe">Món ăn nhẹ</a></li>
