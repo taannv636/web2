@@ -19,9 +19,14 @@ if (!empty($_POST)) {
     $note = $_POST['note'];
     $orderDate = date('Y-m-d H:i:s');
 
+    $sql = "SELECT id_user FROM user 
+    WHERE email = '$email'";
+    $id_user = executeResult($sql);
+
     // thêm vào order 
-    $sql = "INSERT INTO orders(fullname,email, phone_number,address, note, order_date) 
-    values ('$fullname','$email','$phone_number','$address','$note','$orderDate')";
+    $id = generateID('id', 'orders','HD');
+    $sql = "INSERT INTO orders (id, id_user,order_date, delivery_date, payment, status) 
+    values ('$id','$id_user','$orderDate','$address','$note')";
     execute($sql);
 
     $sql = "SELECT * FROM orders WHERE order_date = '$orderDate'";
@@ -47,11 +52,11 @@ if (!empty($_POST)) {
         $idList[] = $item['id'];
     }
     if (count($idList) > 0) {
-        $idList = implode(',', $idList); // chuyeern
-        //[2, 5, 6] => 2,5,6
-
-        $sql = "SELECT * FROM product where id in ($idList)";
-        $cartList = executeResult($sql);
+        $idList = "'" . implode("','", $idList) . "'"; // transform
+        //['SP001', 'SP002', 'SP003'] => 'SP001', 'SP002', 'SP003'
+        
+        $sql = "SELECT * FROM product WHERE id IN ($idList)";
+        $cartList = executeResult($sql);    
     } else {
         $cartList = [];
     }

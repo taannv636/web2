@@ -2,6 +2,8 @@
 require_once('database/dbhelper.php');
 require_once('utils/utility.php');
 require_once('api/checkout-form.php');
+require_once('layout/header.php');
+
 $cart = [];
 if (isset($_COOKIE['cart'])) {
     $json = $_COOKIE['cart'];
@@ -12,21 +14,32 @@ foreach ($cart as $item) {
     $idList[] = $item['id'];
 }
 if (count($idList) > 0) {
-    $idList = implode(',', $idList); // chuyeern
-    //[2, 5, 6] => 2,5,6
+    $idList = "'" . implode("','", $idList) . "'"; // transform
+    //['SP001', 'SP002', 'SP003'] => 'SP001', 'SP002', 'SP003'
+    
+    $sql = "SELECT * FROM product WHERE id IN ($idList)";
+    $cartList = executeResult($sql);    
 
-    $sql = "select * from product where id in ($idList)";
-    $cartList = executeResult($sql);
 } else {
     $cartList = [];
 }
+
+if (isset($_COOKIE['username']))
+{
+    $username = $_COOKIE['username'];
+    $sql = 'SELECT * FROM user WHERE username= "' . $username . '"';
+    $user = executeSingleResult($sql);
+}
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" <!-- Latest compiled and minified CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -42,7 +55,7 @@ if (count($idList) > 0) {
 <?php
     if (!isset($_COOKIE['username'])) {
         echo '<script>
-            alert("Vui lòng đăng nhập để tiếng hành mua hàng");
+            alert("Vui lòng đăng nhập để tiến hành mua hàng");
             window.location="login/login.php";
         </script>';   
     }
@@ -78,19 +91,19 @@ if (count($idList) > 0) {
                                 <h4 style="padding: 2rem 0; border-bottom:1px solid black;">Nhập thông tin mua hàng </h4>
                                 <div class="form-group">
                                     <label for="usr">Họ và tên:</label>
-                                    <input required="true" type="text" class="form-control" id="usr" name="fullname">
+                                    <input required="true" type="text" class="form-control" id="usr" name="fullname" value="<?= $user['hoten'] ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email:</label>
-                                    <input required="true" type="email" class="form-control" id="email" name="email">
+                                    <input type="email" class="form-control" id="email" name="email" value="<?= $user['email'] ?>" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="phone_number">Số điện thoại:</label>
-                                    <input required="true" type="text" class="form-control" id="phone_number" name="phone_number">
+                                    <input required="true" type="text" class="form-control" id="phone_number" name="phone_number" value="<?= $user['phone'] ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="address">Địa chỉ:</label>
-                                    <input required="true" type="text" class="form-control" id="address" name="address">
+                                    <input required="true" type="text" class="form-control" id="address" name="address" value="<?= $user['address'] ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="note">Ghi chú:</label>
@@ -118,6 +131,7 @@ if (count($idList) > 0) {
                                         $total = 0;
                                         foreach ($cartList as $item) {
                                             $num = 0;
+                                            $total = 0;
                                             foreach ($cart as $value) {
                                                 if ($value['id'] == $item['id']) {
                                                     $num = $value['num'];

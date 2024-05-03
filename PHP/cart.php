@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" <!-- Latest compiled and minified CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -55,7 +55,7 @@
                                 <?php
                                 if (isset($_COOKIE['username'])) {
                                     $username = $_COOKIE['username'];
-                                    $sql_id = "SELECT * FROM user WHERE email = '$username'";
+                                    $sql_id = "SELECT * FROM user WHERE username = '$username'";
                                     $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
                                     $result_id = mysqli_query($con, $sql_id);
 
@@ -75,7 +75,7 @@
                                                     <img src="admin/product/' . $item['thumbnail'] . '" alt="" style="width: 50px">
                                                 </td>
                                                 <td>' . $item['title'] . '</td>
-                                                <td class="b-500 red" >' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
+                                                <td class="b-500 red" id="price">' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
                                                 <td width="100px" class="quantity">
                                                     <input type="number" id="quantity" value="' . $item['numbers'] . '" min="1">
                                                 </td>
@@ -89,6 +89,24 @@
                                     }
                                 }
                                 ?>
+                                <script>
+                                    function updatePrice() {
+                                        var price = document.getElementById('price').innerText; // giá tiền
+                                        var num = document.querySelector('#quantity').value; // số lượng
+                                        if (num > <?= $result['number'] ?>)
+                                        {
+                                            alert('Số lượng vượt quá số lượng tồn kho');
+                                            document.getElementById('quantity').value = 1;
+                                            num = 1;
+                                        }
+
+                                        var gia1 = document.querySelector('.gia').innerText;
+                                        var gia = price.match(/\d/g);
+                                        gia = gia.join("");
+                                        var tong = gia1 * num;
+                                        document.getElementById('price').innerHTML = tong.toLocaleString();  
+                                    }
+                                    </script>
                             </tbody>
                         </table>
                         <p>Tổng đơn hàng: <span class="red bold" id="total"><?= number_format(0, 0, ',', '.') ?><span> VNĐ</span></span></p>

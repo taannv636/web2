@@ -56,9 +56,9 @@ if (isset($_GET['id'])) {
 
                                 <p class="price">Giá: <span id="price"><?= number_format($product['price'], 0, ',', '.') ?></span><span> VNĐ</span><span class="gia none"><?= $product['price'] ?></span></p>
                                 <!-- <a class="add-cart" href="" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</a> -->
-                                <button class="add-cart" onclick="addToCart(<?= '$id' ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
+                                <button class="add-cart" onclick="addToCart('<?= $id ?>')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                 <!-- <a class="buy-now" href="checkout.php" >Mua ngay</a> -->
-                                <button class="buy-now" onclick="buyNow(<?= '$id' ?>)">Mua ngay</button>
+                                <button class="buy-now" onclick="buyNow('<?= $id ?>')">Mua ngay</button>
 
                                 <div id="alertNotSell" style="font-weight: bold; color: red"></div>
                                 <div id="productNumber" style="font-weight: bold; color: red">Số lượng còn lại: <?= $product['number'] ?></div>
