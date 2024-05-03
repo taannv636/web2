@@ -92,13 +92,35 @@ require_once('../database/dbhelper.php');
       <form action="reg.php" method="POST">
         <h1 style="text-align: center;">Đăng ký hệ thống</h1>
         <div class="form-group">
-          <label for="">Họ và tên:</label>
-          <input type="text" name="name" class="form-control" placeholder="Họ và tên" required="required">
-        </div>
         <div class="form-group">
-          <label for="">Tài khoản:</label>
-          <input type="text" name="username" class="form-control" placeholder="Tài khoản" required="required">
-        </div>
+                        <label for="hoten">Họ và Tên:</label>
+                        <input required="true" type="text" class="form-control" id="hoten" name="hoten" placeholder="Họ tên">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Giới tính:</label><br>
+                        <input type="radio" id="male" name="sex" value="0" checked>
+                        <label for="male">Nam</label><br>
+                        <input type="radio" id="female" name="sex" value="1">
+                        <label for="female">Nữ</label><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Ngày sinh:</label>
+                        <input required="true" type="date" class="form-control" id="birthday" name="birthday" placeholder="Ngày sinh">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input required="true" type="email" class="form-control" id="email" name="email" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Địa chỉ:</label>
+                        <input type="text" class="form-control" id="address" name="address" placeholder="Địa chỉ">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Số Điện Thoại:</label>
+                        <input required="true" type="text" class="form-control" id="phone" name="phone" placeholder="Số điện thoại">
+                    </div>
+                 
         <div class="form-group">
           <label for="">Mật khẩu:</label>
           <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required="required">
@@ -107,18 +129,9 @@ require_once('../database/dbhelper.php');
           <label for="">Nhập lại mật khẩu:</label>
           <input type="password" name="repassword" class="form-control" placeholder="Nhập lại mật khẩu" required="required">
         </div>
-        <div class="form-group">
-          <label for="">Số điện thoại:</label>
-          <input type="text" name="phone" class="form-control" placeholder="Số điện thoại" required="required">
-        </div>
-        <div class="form-group">
-          <label for="">Email:</label>
-          <input type="email" name="email" class="form-control" placeholder="Email" required="required">
-        </div>
-        <!-- <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div> -->
+        
+        
+
         <div class="form-group">
           <input type="submit" name="submit" class="btn btn-primary" value="Đăng ký">
           <p style="padding-top: 1rem;">Bạn đã có tài khoản? <a href="login.php">Đăng nhập</a></p>
@@ -128,50 +141,64 @@ require_once('../database/dbhelper.php');
   </div>
 
   <?php
-  require_once('../database/config.php');
-  require_once('../database/dbhelper.php');
-  if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['submit']) && $_POST['name'] != "" && $_POST['username'] != "" && $_POST['password'] != "" && $_POST['phone'] != "" && $_POST['email'] != "") {
-      $name = $_POST['name'];
-      $username = $_POST['username'];
-      $pass = $_POST['password'];
-      $repass = $_POST['repassword'];
-      $phone = $_POST['phone'];
-      $email = $_POST['email'];
-      $trang_thai = 1;
-      //kiểm tra trùng paswword không
-      if ($pass != $repass) {
+require_once('../database/config.php');
+require_once('../database/dbhelper.php');
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    if (isset($_POST['submit']) && $_POST['hoten'] != ""  
+    && $_POST['password'] != "" && $_POST['phone'] != "" && $_POST['email'] != "") {
+        $hoten = $_POST['hoten'];
+        $sex = $_POST['sex'];
+        $birthday = $_POST['birthday'];
+        $email = $_POST['email'];
+        $address = $_POST['address'];
+        $phone = $_POST['phone'];
+
+        $pass = $_POST['password'];
+        $repass = $_POST['repassword'];        
+        // Kiểm tra trùng password
+        if ($pass != $repass) {
+            echo '<script language="javascript">
+                        alert("Mật khẩu không trùng khớp, vui lòng nhập lại!");
+                        window.location = "reg.php";
+                  </script>';
+            die();
+        }
+        
+        // Kiểm tra username hoặc email đã được sử dụng chưa
+        $sql = "SELECT * FROM user WHERE hoten = '$username' OR email = '$email'";
+        $result = executeSingleResult($sql);
+        if ($result) {
+            echo '<script language="javascript">
+                     alert("Tài khoản hoặc Email đã được sử dụng!");
+                     window.location = "reg.php";
+                 </script>';
+            die();
+        }
+        
+        // Thực hiện thêm mới người dùng vào CSDL
+        $status = 1;
+        $right = 1;
+            $id_user = generateID('id_user','user','KH');
+            $sql = 'INSERT INTO user (id_user, hoten, sex, birthday, email, address, phone, password, `right`, status) 
+            VALUES ("' . $id_user . '", "' . $hoten . '", "' . $sex . '", "' . $birthday . '", "' . $email . '",
+            "' . $address . '", "' . $phone . '", "' . $pass . '", "' . $right . '", "' . $status . '")';
+
+        execute($sql);
+        
         echo '<script language="javascript">
-                    alert("Nhập không trùng mật khẩu, vui lòng đăng ký lại!");
-                    window.location = "reg.php";
+                  alert("Bạn đã đăng ký thành công!");
+                  window.location = "login.php";
               </script>';
-        die();
-      }
-      //kiểm tra username
-      $sql = "SELECT * FROM user where username = '$username' OR email='$email'";
-      $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-      $result = mysqli_query($conn, $sql);
-      if (mysqli_num_rows($result) > 0) {
-        echo '<script language="javascript">
-                 alert("Tài khoản hoặc Email đã được sử dụng!");
-                 window.location = "reg.php";
-             </script>';
-        die();
-      }
-      $sql = 'INSERT INTO user(hoten,username,password,phone,email,trang_thai) values ("' . $name . '","' . $username . '","' . $pass . '","' . $phone . '","' . $email . '","' . $trang_thai . '")';
-      execute($sql);
-      echo '<script language="javascript">
-                alert("Bạn đăng ký thành công!");
-                window.location = "login.php";
-             </script>';
     } else {
-      echo '<script language="javascript">
-    alert("hãy nhập đủ thông tin!");
-    window.location = "reg.php";
-    </script>';
+        echo '<script language="javascript">
+                  alert("Vui lòng nhập đầy đủ thông tin!");
+                  window.location = "reg.php";
+              </script>';
     }
-  }
-  ?>
+}
+?>
+
 
 </body>
 

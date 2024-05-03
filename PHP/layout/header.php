@@ -34,7 +34,7 @@ require_once('database/dbhelper.php');
                                 $result = executeResult($sql);
                                 foreach ($result as $item) {
                                     echo '<li><a href="thucdon.php?id_category=' . $item['id'] . '">' . $item['name'] . '</a></li>';
-                                }
+                                }                                
                                 ?>
                                 <!-- <li><a href="thucdon.php?page=trasua">Trà sữa</a></li>
                                 <li><a href="thucdon.php?page=monannhe">Món ăn nhẹ</a></li>
@@ -85,25 +85,17 @@ require_once('database/dbhelper.php');
                                     <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
                                 </div>';
                             } else {
-                                $sql = "SELECT * FROM user WHERE email = '$username'";
-                                $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-                                $result = mysqli_query($con, $sql);
-                                // Lấy dữ liệu từ kết quả truy vấn
-                                $user = mysqli_fetch_assoc($result);
-                                //Thay $_COOKIE['username'] bằng user['hoten']
-                                echo '<a style="color:black;" href="">' . $user['hoten'] . '</a>
+                                echo '<a style="color:black;" href="">' . $_COOKIE['username'] . '</a>
                             <div class="logout">
                                 <a href="login/changePass.php"><i class="fas fa-exchange-alt"></i>Đổi mật khẩu</a> <br>
                                 <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
-                            </div>
-                            ';
-                            }
-                        } else {
-                            echo '<a href="login/login.php"">Đăng nhập</a>';
+                            </div>';
                         }
-
-                        ?>
-                    </div>
+                    } else {
+                        echo '<a href="login/login.php">Đăng nhập</a>';
+                    }
+                    ?>
+                </div>
                 </section>
             </div>
         </header>

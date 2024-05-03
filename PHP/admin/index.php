@@ -39,6 +39,9 @@
                 <li class="nav-item ">
                     <a class="nav-link " href="user/">Quản lý người dùng</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../index.php" style="font-weight: bold; color: red">Đăng xuất</a>
+                </li>
             </ul>
         </header>
         <div class="container">

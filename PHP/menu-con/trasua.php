@@ -8,12 +8,15 @@
                         <?php
                         $sql = 'select * from product where id_category=1';
                         // $sql = 'select * from category';
+
                         $productList = executeResult($sql);
                         // $categoryList = executeResult($sql);
                         $index = 1;
 
 
                         foreach ($productList as $item) {
+                            if ($item['status'] != 0)
+                            {
                             echo '
                                 <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
@@ -38,6 +41,7 @@
                                 </div>
                                 ';
                         }
+                    }
                         ?>
                     </div>
                 </div>
