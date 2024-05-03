@@ -39,7 +39,7 @@ if (isset($_GET['order_id'])) {
     $order_id = $_GET['order_id'];
     // Truy vấn thông tin đơn hàng theo id
     $sql = "SELECT orders.id AS id_order,
-            user.hoten, user.email, user.address, user.phone,
+            orders.hoten, user.email, orders.address, orders.phone,
             orders.order_date,orders.delivery_date, orders.payment, orders.status
             FROM orders
             INNER JOIN user ON user.id_user = orders.id_user
@@ -64,7 +64,7 @@ if (isset($_GET['order_id'])) {
 <html>
 
 <head>
-    <title>Giỏ hàng</title>
+    <title>Đơn hàng</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!-- jQuery library -->
@@ -92,7 +92,7 @@ if (isset($_GET['order_id'])) {
             <a class="nav-link" href="product/">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item ">
-            <a class="nav-link active" href="dashboard.php">Quản lý giỏ hàng</a>
+            <a class="nav-link active" href="dashboard.php">Quản lý đơn hàng</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="user/">Quản lý người dùng</a>

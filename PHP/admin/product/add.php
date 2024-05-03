@@ -2,6 +2,7 @@
 require_once('../database/dbhelper.php');
 
 $id = $title = $price = $number = $thumbnail = $content = $id_category = $status ="";
+
 if (!empty($_POST['title'])) {
     if (isset($_POST['title'])) {
         $title = $_POST['title'];
