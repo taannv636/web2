@@ -201,7 +201,9 @@ if (isset($_GET['order_id'])) {
             });
         })
     </script>
-    
+     <div class="panel-heading">
+                <h2 class="text-center">Đơn Hàng</h2>
+            </div>
         <table class="table table-bordered table-hover">
                 <thead>
                     <tr style="font-weight: 500;">
