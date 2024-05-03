@@ -167,10 +167,10 @@ if (isset($_GET['order_id'])) {
                     <div class="form-group">
                     <label for="exampleFormControlSelect1">Chọn Trạng Thái</label>
                         <select class="form-control" id="status" name="status">
-                            <option value="1" <?= $status == 1 ? 'selected' : '' ?>>Đang chuẩn bị hàng</option>
-                            <option value="2" <?= $status == 2 ? 'selected' : '' ?>>Đang giao hàng</option>
-                            <option value="3" <?= $status == 3 ? 'selected' : '' ?>>Đã giao hàng</option>
-                            <option value="4" <?= $status == 4 ? 'selected' : '' ?>>Đã hủy đơn hàng</option>
+                            <option value="1" <?= $status == 0 ? 'selected' : '' ?>>Đang chuẩn bị hàng</option>
+                            <option value="2" <?= $status == 1 ? 'selected' : '' ?>>Đang giao hàng</option>
+                            <option value="3" <?= $status == 2 ? 'selected' : '' ?>>Đã giao hàng</option>
+                            <option value="4" <?= $status == 3 ? 'selected' : '' ?>>Đã hủy đơn hàng</option>
                         </select>
                     </div>
 

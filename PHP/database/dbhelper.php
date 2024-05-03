@@ -59,34 +59,34 @@ function executeSingleResult($sql)
 
 
 
-// function generateID($ID, $TABLE, $SAMPLE) {
-//     // Kết nối đến cơ sở dữ liệu
-//     $dsn = "mysql:host=localhost;dbname=asm_php1;charset=utf8mb4";
-//     $username = "root";
-//     $password = "";
+function generateID($ID, $TABLE, $SAMPLE) {
+    // Kết nối đến cơ sở dữ liệu
+    $dsn = "mysql:host=localhost;dbname=asm_php1;charset=utf8mb4";
+    $username = "root";
+    $password = "";
 
-//     try {
-//         $db = new PDO($dsn, $username, $password);
-//     } catch (PDOException $e) {
-//         // Xử lý lỗi kết nối
-//         echo "Kết nối đến cơ sở dữ liệu thất bại: " . $e->getMessage();
-//         return false;
-//     }
+    try {
+        $db = new PDO($dsn, $username, $password);
+    } catch (PDOException $e) {
+        // Xử lý lỗi kết nối
+        echo "Kết nối đến cơ sở dữ liệu thất bại: " . $e->getMessage();
+        return false;
+    }
 
-//     // Tìm ID cuối cùng trong bảng
-//     $query = "SELECT MAX($ID) AS max_id FROM $TABLE";
-//     $statement = $db->prepare($query);
-//     $statement->execute();
-//     $result = $statement->fetch(PDO::FETCH_ASSOC);
-//     $maxID = $result['max_id'];
+    // Tìm ID cuối cùng trong bảng
+    $query = "SELECT MAX($ID) AS max_id FROM $TABLE";
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    $maxID = $result['max_id'];
 
-//     // Trích xuất số từ ID cuối cùng
-//     $number = preg_replace('/[^0-9]/', '', $maxID);
-//     $prefix = preg_replace('/[0-9]/', '', $maxID);
+    // Trích xuất số từ ID cuối cùng
+    $number = preg_replace('/[^0-9]/', '', $maxID);
+    $prefix = preg_replace('/[0-9]/', '', $maxID);
 
-//     // Tăng số lên 1 và tạo ID mới
-//     $newNumber = $number + 1;
-//     $newID = $prefix . str_pad($newNumber, strlen($number), '0', STR_PAD_LEFT);
+    // Tăng số lên 1 và tạo ID mới
+    $newNumber = $number + 1;
+    $newID = $prefix . str_pad($newNumber, strlen($number), '0', STR_PAD_LEFT);
 
-//     return $newID;
-// }
+    return $newID;
+}

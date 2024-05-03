@@ -63,13 +63,13 @@ $order_details_List = executeResult($sql);
 function getStatus($status)
 {
     switch ($status) {
-        case 1:
+        case 0:
             return 'Đang chuẩn bị hàng';
-        case 2:
+        case 1:
             return 'Đang giao hàng';
-        case 3:
+        case 2:
             return 'Đã giao hàng';
-        case 4:
+        case 3:
             return 'Đã hủy đơn hàng';
         default:
             return 'Không xác định';
@@ -80,13 +80,13 @@ function getStatus($status)
 function getStatusColorClass($status)
 {
     switch ($status) {
-        case 1:
+        case 0:
             return 'brown';
-        case 2:
+        case 1:
             return 'blue';
-        case 3:
+        case 2:
             return 'green';
-        case 4:
+        case 3:
             return 'red';
         default:
             return ''; // Default class if status does not match

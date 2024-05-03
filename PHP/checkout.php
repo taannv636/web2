@@ -105,9 +105,13 @@ if (isset($_COOKIE['username']))
                                     <label for="address">Địa chỉ:</label>
                                     <input required="true" type="text" class="form-control" id="address" name="address" value="<?= $user['address'] ?>">
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="note">Ghi chú:</label>
-                                    <textarea class="form-control" rows="3" name="note" id="note"></textarea>
+                                    <label for="payment">Hình thức thanh toán:</label><br>
+                                    <input type="radio" id="male" name="payment" value="0" checked>
+                                    <label for="cash">Trả tiền mặt</label><br>
+                                    <input type="radio" id="female" name="payment" value="1">
+                                    <label for="banking">Chuyển khoản</label><br>
                                 </div>
 
                             </div>
