@@ -84,20 +84,42 @@ require_once('../database/dbhelper.php');
     </div>
     </div>
     <script type="text/javascript">
-		function deleteCategory(id) {
-			var option = confirm('Bạn có chắc chắn muốn xoá danh mục này không?')
-			if(!option) {
-				return;
-			}
-			console.log(id)
-			$.post('ajax.php', {
-				'id': id,
-				'action': 'delete'
-			}, function(data) {
-				location.reload()
-			})
-		}
-	</script>
+    function deleteCategory(id) {
+        var option = confirm('Bạn có chắc chắn muốn xoá danh mục này không?');
+        if (!option) {
+            return;
+        }
+        // Sử dụng Ajax để kiểm tra xem có sản phẩm nào liên kết với danh mục này không
+        $.ajax({
+            url: 'ajax.php',
+            method: 'POST',
+            data: {
+                'id': id,
+                'action': 'checkExistence'
+            },
+            success: function(data) {
+                if (data === 'true') {
+                    var option1 = confirm('Đã có sản phẩm được tạo với danh mục này. \n Không được xóa.');
+                    console.log(option1);
+                    if (!option1) {
+                        return;
+                    }
+                } else {
+                    console.log(id);
+                    // Tiến hành xóa danh mục nếu không có sản phẩm nào liên kết
+                    $.post('ajax.php', {
+                        'id': id,
+                        'action': 'delete'
+                    }, function(data) {
+                        location.reload();
+                    });
+                }
+            }
+        });
+    }
+</script>
+
+
 </body>
 
 </html>
