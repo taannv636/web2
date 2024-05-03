@@ -201,15 +201,33 @@ require_once('../database/dbhelper.php');
                 return;
             }
 
-            console.log(id)
-            //ajax - lenh post
-            $.post('ajax.php', {
+            $.ajax({
+            url: 'ajax.php',
+            method: 'POST',
+            data: {
                 'id': id,
-                'action': 'delete'
-            }, function(data) {
-                location.reload()
-            })
-        }
+                'action': 'checkExistence'
+            },
+            success: function(data) {
+                if (data === 'true') {
+                    var option1 = confirm('Đã có đơn hàng được mua với sản phẩm này. \n Không được xóa.');
+                    console.log(option1);
+                    if (!option1) {
+                        return;
+                    }
+                } else {
+                    console.log(id);
+                    // Tiến hành xóa danh mục nếu không có sản phẩm nào liên kết
+                    $.post('ajax.php', {
+                        'id': id,
+                        'action': 'delete'
+                    }, function(data) {
+                        location.reload();
+                    });
+                }
+            }
+        });
+    }
     </script>
 </body>
 
