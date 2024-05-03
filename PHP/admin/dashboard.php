@@ -18,8 +18,10 @@ if (!empty($_GET['delivery_date'])) {
     $params[] = "orders.delivery_date = '" . $_GET['delivery_date'] . "'";
 }
 if (!empty($_GET['address'])) {
-    $params[] = "user.address LIKE '%" . $_GET['address'] . "%'";
+    $address = $_GET['address'];
+    $params[] = "LOWER(orders.address) LIKE '%" . strtolower($address) . "%'";
 }
+
 
 // Handle date range
 if (!empty($_GET['start_date']) && !empty($_GET['end_date'])) {
@@ -36,7 +38,7 @@ if (!empty($params)) {
 // SQL query to fetch orders
 $sql = "SELECT orders.id AS order_id, 
                 order_details.id_order AS order_detail_id, 
-                user.hoten, user.address, user.phone, 
+                orders.hoten, orders.address, orders.phone, 
                 product.price, orders.status, order_details.number,
                 SUM(order_details.number * product.price) AS totalPrice
         FROM orders
