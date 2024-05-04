@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 30, 2024 at 01:32 PM
+-- Generation Time: May 03, 2024 at 07:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -34,60 +34,6 @@ CREATE TABLE `cart` (
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`id_user`, `id_product`, `number`, `status`) VALUES
-('KH0001', 'SP002', 7, 1),
-('KH0001', 'SP008', 5, 1),
-('KH0001', 'SP015', 5, 1),
-('KH0001', 'SP020', 10, 1),
-('KH0002', 'SP022', 1, 1),
-('KH0003', 'SP003', 10, 1),
-('KH0003', 'SP015', 9, 1),
-('KH0003', 'SP024', 9, 1),
-('KH0004', 'SP003', 1, 1),
-('KH0005', 'SP010', 9, 1),
-('KH0006', 'SP009', 2, 1),
-('KH0006', 'SP014', 8, 1),
-('KH0007', 'SP008', 2, 1),
-('KH0007', 'SP013', 2, 1),
-('KH0007', 'SP022', 2, 1),
-('KH0008', 'SP018', 3, 1),
-('KH0009', 'SP024', 5, 1),
-('KH0010', 'SP002', 10, 1),
-('KH0010', 'SP007', 5, 1),
-('KH0010', 'SP008', 7, 1),
-('KH0010', 'SP013', 5, 1),
-('KH0010', 'SP019', 5, 1),
-('KH0011', 'SP001', 1, 1),
-('KH0012', 'SP020', 5, 1),
-('KH0013', 'SP020', 2, 1),
-('KH0014', 'SP015', 10, 1),
-('KH0015', 'SP015', 10, 1),
-('KH0016', 'SP024', 6, 1),
-('KH0017', 'SP018', 3, 1),
-('KH0018', 'SP012', 7, 1),
-('KH0019', 'SP012', 5, 1),
-('KH0020', 'SP018', 9, 1),
-('KH0021', 'SP003', 4, 1),
-('KH0022', 'SP009', 3, 1),
-('KH0023', 'SP010', 8, 1),
-('KH0024', 'SP023', 8, 1),
-('KH0025', 'SP023', 9, 1),
-('KH0026', 'SP026', 2, 1),
-('KH0027', 'SP015', 10, 1),
-('KH0028', 'SP005', 4, 1),
-('KH0029', 'SP022', 8, 1),
-('KH0030', 'SP020', 2, 1),
-('KH0031', 'SP020', 4, 1),
-('KH0032', 'SP013', 2, 1),
-('KH0033', 'SP016', 9, 1),
-('KH0034', 'SP025', 10, 1),
-('KH0035', 'SP023', 3, 1),
-('KH0036', 'SP023', 8, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -97,10 +43,10 @@ INSERT INTO `cart` (`id_user`, `id_product`, `number`, `status`) VALUES
 CREATE TABLE `category` (
   `id` int(10) NOT NULL,
   `name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `category`
+-- Dumping data for table `category`
 --
 
 INSERT INTO `category` (`id`, `name`) VALUES
@@ -129,6 +75,9 @@ CREATE TABLE `new_address` (
 CREATE TABLE `orders` (
   `id` varchar(50) NOT NULL,
   `id_user` varchar(50) NOT NULL,
+  `hoten` varchar(30) NOT NULL,
+  `phone` varchar(12) NOT NULL,
+  `address` text NOT NULL,
   `order_date` datetime NOT NULL,
   `delivery_date` datetime DEFAULT NULL,
   `payment` tinyint(1) NOT NULL,
@@ -139,27 +88,27 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `id_user`, `order_date`, `delivery_date`, `payment`, `status`) VALUES
-('HD0001', 'KH0001', '2024-03-01 10:00:00', '2024-12-01 12:00:00', 1, 1),
-('HD0002', 'KH0002', '2024-03-02 10:00:00', '2024-12-01 12:00:00', 0, 2),
-('HD0003', 'KH0003', '2024-03-03 10:00:00', '2024-12-01 12:00:00', 0, 3),
-('HD0004', 'KH0004', '2024-03-04 10:00:00', '2024-12-01 12:00:00', 1, 4),
-('HD0005', 'KH0005', '2024-03-05 10:00:00', '2024-12-01 12:00:00', 1, 1),
-('HD0006', 'KH0006', '2024-03-06 10:00:00', '2024-12-01 12:00:00', 1, 2),
-('HD0007', 'KH0007', '2024-03-07 10:00:00', '2024-12-01 12:00:00', 1, 1),
-('HD0008', 'KH0008', '2024-03-08 10:00:00', '2024-12-01 12:00:00', 1, 4),
-('HD0009', 'KH0009', '2024-03-09 10:00:00', '2024-12-01 12:00:00', 0, 1),
-('HD0010', 'KH0010', '2024-03-10 10:00:00', '2024-12-01 12:00:00', 1, 3),
-('HD0011', 'KH0011', '2024-03-11 10:00:00', '2024-12-01 12:00:00', 1, 2),
-('HD0012', 'KH0012', '2024-03-12 10:00:00', '2024-12-01 12:00:00', 1, 1),
-('HD0013', 'KH0013', '2024-03-13 10:00:00', '2024-12-01 12:00:00', 1, 3),
-('HD0014', 'KH0014', '2024-03-14 10:00:00', '2024-12-01 12:00:00', 1, 4),
-('HD0015', 'KH0015', '2024-03-15 10:00:00', '2024-12-01 12:00:00', 1, 1),
-('HD0016', 'KH0016', '2024-03-16 10:00:00', '2024-12-01 12:00:00', 1, 4),
-('HD0017', 'KH0017', '2024-03-17 10:00:00', '2024-12-01 12:00:00', 1, 3),
-('HD0018', 'KH0018', '2024-03-18 10:00:00', '2024-12-01 12:00:00', 0, 1),
-('HD0019', 'KH0019', '2024-03-19 10:00:00', '2024-12-01 12:00:00', 0, 2),
-('HD0020', 'KH0020', '2024-03-20 10:00:00', '2024-12-01 12:00:00', 1, 3);
+INSERT INTO `orders` (`id`, `id_user`, `hoten`, `phone`, `address`, `order_date`, `delivery_date`, `payment`, `status`) VALUES
+('HD0001', 'KH0001', 'Trần Trừng Trị', '0214068953', '366 Đường Nguyễn Cư Trinh, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh', '2024-03-01 10:00:00', '2024-12-01 12:00:00', 1, 1),
+('HD0002', 'KH0002', 'Trần Trừng Trị', '0908011088', '388 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '2024-03-02 10:00:00', '2024-12-01 12:00:00', 0, 2),
+('HD0003', 'KH0003', 'Trần Trừng Trị', '0214068953', '34 Đường Bình Phú, huyện Càng Long, xã Nhị Long, tỉnh Trà Vinh', '2024-03-03 10:00:00', '2024-12-01 12:00:00', 0, 3),
+('HD0004', 'KH0004', 'Vũ Thị Dung', '0908011088', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-04 10:00:00', '2024-12-01 12:00:00', 1, 4),
+('HD0005', 'KH0005', 'Đinh Đăng Điện', '0214068953', '34 quốc lộ 1A, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-05 10:00:00', '2024-12-01 12:00:00', 1, 1),
+('HD0006', 'KH0006', 'Dương Minh Hải', '0471415644', '366 Đường Tạ Quang Bửu, Phường 4, Quận 8, Thành Phố Hồ Chí Minh', '2024-03-06 10:00:00', '2024-12-01 12:00:00', 1, 2),
+('HD0007', 'KH0007', 'Dương Minh Hải', '0471415644', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-07 10:00:00', '2024-12-01 12:00:00', 1, 1),
+('HD0008', 'KH0008', 'Trần Thị Hạnh', '0640663244', '34 Đường Bình Phú, huyện Càng Long, xã Nhị Long, tỉnh Trà Vinh', '2024-03-08 10:00:00', '2024-12-01 12:00:00', 1, 4),
+('HD0009', 'KH0009', 'Vũ Thị Dung', '0471415644', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-09 10:00:00', '2024-12-01 12:00:00', 0, 1),
+('HD0010', 'KH0010', 'Trần Thị Hạnh', '0908011088', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-10 10:00:00', '2024-12-01 12:00:00', 1, 3),
+('HD0011', 'KH0011', 'Trần Thị Hạnh', '0640663244', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-11 10:00:00', '2024-12-01 12:00:00', 1, 2),
+('HD0012', 'KH0012', 'Đinh Đăng Điện', '0957881478', '388 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '2024-03-12 10:00:00', '2024-12-01 12:00:00', 1, 1),
+('HD0013', 'KH0013', 'Dương Minh Hải', '0471415644', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-13 10:00:00', '2024-12-01 12:00:00', 1, 3),
+('HD0014', 'KH0014', 'Vũ Thị Dung', '0640663244', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-14 10:00:00', '2024-12-01 12:00:00', 1, 4),
+('HD0015', 'KH0015', 'Đinh Đăng Điện', '0957881478', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-15 10:00:00', '2024-12-01 12:00:00', 1, 1),
+('HD0016', 'KH0016', 'Đinh Đăng Điện', '0908011088', '34 Đường Bình Phú, huyện Càng Long, xã Nhị Long, tỉnh Trà Vinh', '2024-03-16 10:00:00', '2024-12-01 12:00:00', 1, 4),
+('HD0017', 'KH0017', 'Trần Trừng Trị', '0640663244', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-17 10:00:00', '2024-12-01 12:00:00', 1, 3),
+('HD0018', 'KH0018', 'Trần Trừng Trị', '0957881478', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-18 10:00:00', '2024-12-01 12:00:00', 0, 1),
+('HD0019', 'KH0019', 'Trần Trừng Trị', '0471415644', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-19 10:00:00', '2024-12-01 12:00:00', 0, 1),
+('HD0020', 'KH0020', 'Trần Trừng Trị', '0908011088', '388 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '2024-03-20 10:00:00', '2024-12-01 12:00:00', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -241,7 +190,7 @@ INSERT INTO `product` (`id`, `title`, `thumbnail`, `price`, `number`, `id_catego
 ('SP016', 'Cà Phê Đá', 'uploads/CFD.png', 30000, 15, 2, 0, '<p>Dành cho những tín đồ cà phê đích thực! Hương vị cà phê truyền thống được phối trộn độc đáo tại Highlands. Cà phê đậm đà pha hoàn toàn từ Phin, cho thêm 1 thìa đường, một ít đá viên mát lạnh, tạo nên Phin Đen Đá mang vị cà phê đậm đà chất Phin.<br></p>'),
 ('SP017', 'Bánh Tiramisu', 'uploads/TIRAMISU.jpg', 35000, 100, 4, 1, '<p>Tiramisu thơm béo, làm từ ca-cao Việt Nam đậm đà, kết hợp với phô mai ít béo, vani và chút rum nhẹ nhàng.<br></p>'),
 ('SP018', 'Chả Lụa Xá Xíu', 'uploads/BMCHALUAXAXIU.png', 20000, 90, 3, 1, '<p>Bánh mì Việt Nam giòn thơm với chả lụa và thịt xá xíu thơm ngon, kết hợp cùng rau và gia vị, hòa quyện cùng nước sốt độc đáo.<br></p>'),
-('SP019', 'Gà Xé Tương Ớt', 'uploads/BMGAXE.png', 19000, 20, 3, 1, '<p>Bánh mì Việt Nam giòn thơm với nhân gà xé, rau, gia vị hòa quyện cùng nước sốt đặc biệt.<br></p>'),
+('SP019', 'Gà Xé Tương Ớt', 'uploads/BMGAXE.png', 19000, 20, 3, 2, '<p>Bánh mì Việt Nam giòn thơm với nhân gà xé, rau, gia vị hòa quyện cùng nước sốt đặc biệt.<br></p>'),
 ('SP020', 'Cafe Phindi Hồng Trà', 'uploads/270_crop_PHINDI_Hong_Tra.png', 35000, 100, 2, 1, '<p>PhinDi Kem Sữa - Cà phê Phin thế hệ mới với chất Phin êm hơn, lần đầu tiên kết hợp cùng Hồng Trà mang đến hương vị quyện êm, phiên bản giới hạn chỉ trong mùa lễ hội 2020!<br></p>'),
 ('SP021', 'Cafe Phindi Kem Sữa', 'uploads/270_crop_phindi_kem_sua_new.png', 35000, 90, 2, 2, '<p>PhinDi Kem Sữa - Cà phê Phin thế hệ mới với chất Phin êm hơn, kết hợp cùng Kem Sữa béo ngậy mang đến hương vị mới lạ, không thể hấp dẫn hơn!<br></p>'),
 ('SP022', 'Pepsi', '', 15000, 102, 1, 1, ''),
@@ -279,7 +228,7 @@ INSERT INTO `user` (`id_user`, `hoten`, `sex`, `birthday`, `email`, `address`, `
 ('KH0000', 'admin', 0, '2000-03-31', 'phatnguyen98@gmail.com', '10 Đường 13, Phường 4, Quận 8, Thành Phố Hồ Chí Minh', '0581151429', 'admin', '12345678', 0, 1),
 ('KH0001', 'Lê Thị Ngọc Ánh', 0, '2000-03-31', 'lethingocanh@gmail.com', '10 Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0581151429', 'lethingocanh', '12345678', 0, 1),
 ('KH0002', 'Lê Văn Bắc', 1, '2000-07-23', 'levanbac@gmail.com', '22 Đường Lê Lai, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0363037771', 'levanbac', '12345678', 1, 0),
-('KH0003', 'Bùi Thị Ngọc Dung', 1, '2000-10-20', 'buithingocdung@gmail.com', '33 Đường Hai Bà Trưng, Phường Cầu Kho, Quận 1, Thành Phố Hồ Chí Minh', '0577929217', 'buithingocdung', '12', 1, 1),
+('KH0003', 'Bùi Thị Ngọc Dung', 1, '2000-10-20', 'buithingocdung@gmail.com', '33 Đường Hai Bà Trưng, Phường Cầu Kho, Quận 1, Thành Phố Hồ Chí Minh', '0577929217', 'buithingocdung', '123', 1, 1),
 ('KH0004', 'Vũ Thị Dung', 0, '2000-06-10', 'vuthidung@gmail.com', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0372723280', 'vuthidung', '12345678', 1, 1),
 ('KH0005', 'Đinh Đăng Điện', 1, '2000-09-03', 'dinhdangdien@gmail.com', '55 Đường Lê Thánh Tôn, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0857519139', 'dinhdangdien', '03092000', 1, 1),
 ('KH0006', 'Nguyễn Anh Đức', 1, '2000-09-05', 'nguyenanhduc@gmail.com', '66 Đường Đông Du, Phường Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '0214068953', 'nguyenanhduc', '05092000', 1, 1),
@@ -316,8 +265,8 @@ INSERT INTO `user` (`id_user`, `hoten`, `sex`, `birthday`, `email`, `address`, `
 ('KH0037', 'Lê Thị Thùy Trang', 0, '2000-11-25', 'lethithuytrang@gmail.com', '377 Đường Lê Thị Riêng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0211727739', 'lethithuytrang', '25112000', 1, 1),
 ('KH0038', 'Lê Thị Phương Trinh', 0, '2000-05-23', 'lethiphuongtrinh@gmail.com', '388 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '0664559846', 'lethiphuongtrinh', '23052000', 1, 1),
 ('KH0039', 'Lê Thị Bích Trâm', 0, '2000-08-07', 'lethibichtram@gmail.com', '399 Đường Đinh Tiên Hoàng, Phường Đa Kao, Quận 1, Thành Phố Hồ Chí Minh', '0412651974', 'lethibichtram', '07082000', 1, 1),
-('KH0040', 'Lê Thị Thanh Trúc', 0, '2000-04-14', 'lethithanhtruc@gmail.com', '400 Đường Đinh Công Tráng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0640663244', 'lethithanhtruc', '14042000', 1, 1);
-
+('KH0040', 'Lê Thị Thanh Trúc', 0, '2000-04-14', 'lethithanhtruc@gmail.com', '400 Đường Đinh Công Tráng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '0640663244', 'lethithanhtruc', '14042000', 1, 1),
+('KH0041', 'Nguyễn Hoàng Phát', 0, '2024-05-07', 'phathcm03@gmail.com', '32 Nguyễn Huệ, Phường Bến Nghé, Q1, TPHCM', '123456789', 'nguyenhoangphat', '12', 1, 1);
 
 --
 -- Indexes for dumped tables
