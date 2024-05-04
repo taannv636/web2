@@ -34,7 +34,7 @@ require_once('database/dbhelper.php');
                                 $result = executeResult($sql);
                                 foreach ($result as $item) {
                                     echo '<li><a href="thucdon.php?id_category=' . $item['id'] . '">' . $item['name'] . '</a></li>';
-                                }                                
+                                }
                                 ?>
                                 <!-- <li><a href="thucdon.php?page=trasua">Trà sữa</a></li>
                                 <li><a href="thucdon.php?page=monannhe">Món ăn nhẹ</a></li>
@@ -50,26 +50,18 @@ require_once('database/dbhelper.php');
                     <div class="cart">
                         <a href="cart.php"><img src="images/icon/cart.svg" alt=""></a>
                         <?php
-                        //Viết lại
-                        $count = 0;
-                        if (isset($_COOKIE['username'])) {
-                            $username = $_COOKIE['username'];
-                            $sql = "SELECT * FROM cart JOIN user ON cart.id_user = user.id_user WHERE user.email = '$username'";
-                            $result = executeResult($sql);
-                            $count = sizeof($result);
-                        }
+$count = 0;
+if (isset($_COOKIE['cart'])) {
+    $json = $_COOKIE['cart'];
+    $cart = json_decode($json, true);
+    foreach ($cart as $item) {
+        $count += $item['num']; // Tính tổng số sản phẩm
+    }
+}
+?>
 
-                        // $cart = [];
-                        // if (isset($_COOKIE['cart'])) {
-                        //     $json = $_COOKIE['cart'];
-                        //     $cart = json_decode($json, true);
-                        // }
-                        // $count = 0;
-                        // foreach ($cart as $item) {
-                        //     $count += $item['num']; // đếm tổng số item
-                        // }
-                        ?>
-                        <span><?= $count ?></span>
+<span><?php echo isset($_COOKIE['username']) ? $count : ''; ?></span>
+
                         <!-- <div class="history">
                             <a href="history.php"><i class="fas fa-history" style="font-size: 14px;"></i>Lịch sử</a>
                         </div> -->
@@ -90,12 +82,12 @@ require_once('database/dbhelper.php');
                                 <a href="login/changePass.php"><i class="fas fa-exchange-alt"></i>Đổi mật khẩu</a> <br>
                                 <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
                             </div>';
+                            }
+                        } else {
+                            echo '<a href="login/login.php">Đăng nhập</a>';
                         }
-                    } else {
-                        echo '<a href="login/login.php">Đăng nhập</a>';
-                    }
-                    ?>
-                </div>
+                        ?>
+                    </div>
                 </section>
             </div>
         </header>
