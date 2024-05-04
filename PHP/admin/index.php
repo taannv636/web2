@@ -124,7 +124,7 @@
                         </div>
                     </form>
 
-                    <?php // Xử lý khi nhấn nút "Thống kê"
+                    <?php
                     if (
                         $_SERVER["REQUEST_METHOD"] == "GET" &&
                         isset($_GET["start_date"]) &&
@@ -133,62 +133,68 @@
                         $start_date = $_GET["start_date"];
                         $end_date = $_GET["end_date"];
 
-                        // Truy vấn SQL để lấy dữ liệu khách hàng và tổng tiền mua hàng của họ trong khoảng thời gian đã chỉ định
-                        $sql = "SELECT user.id_user, user.hoten, user.phone, COUNT(*) AS num_orders, SUM(order_details.number * product.price) AS total_spent
-                FROM orders
-                INNER JOIN order_details ON order_details.id_order = orders.id
-                INNER JOIN user ON user.id_user = orders.id_user
-                INNER JOIN product ON product.id = order_details.id_product
-                WHERE orders.delivery_date BETWEEN '$start_date' AND '$end_date'
-                GROUP BY user.id_user
-                ORDER BY total_spent DESC
-                LIMIT 5";
+                        if ($start_date <= $end_date) {
 
-                        $top_customers = executeResult($sql);
+                            $sql = "SELECT user.id_user, user.hoten, user.phone, COUNT(*) AS num_orders, SUM(order_details.number * product.price) AS total_spent
+            FROM orders
+            INNER JOIN order_details ON order_details.id_order = orders.id
+            INNER JOIN user ON user.id_user = orders.id_user
+            INNER JOIN product ON product.id = order_details.id_product
+            WHERE orders.delivery_date BETWEEN '$start_date' AND '$end_date'
+            GROUP BY user.id_user
+            ORDER BY total_spent DESC
+            LIMIT 5";
 
-                        // Hiển thị kết quả
-                        if ($top_customers) {
-                            echo '<div class="new-order">
-                    <table class="table">
-                        <tr class="bold">
-                            <td>STT</td>
-                            <td>Tên khách hàng</td>
-                            <td>Số lượng đơn</td>
-                            <td>Số điện thoại</td>
-                            <td>Tổng tiền mua hàng</td>
-                        </tr>';
-                            $count = 0;
-                            foreach ($top_customers as $customer) {
-                                $count++;
-                                echo '<tr>
-                        <td>' .
-                                    $count .
-                                    '</td>
-                        <td>' .
-                                    $customer["hoten"] .
-                                    '</td>
-                        <td>' .
-                                    $customer["num_orders"] .
-                                    '</td>
-                        <td>' .
-                                    $customer["phone"] .
-                                    '</td>
-                        <td>' .
-                                    number_format(
-                                        $customer["total_spent"],
-                                        0,
-                                        ",",
-                                        "."
-                                    ) .
-                                    ' VNĐ</td>
+                            $top_customers = executeResult($sql);
+
+                            // Hiển thị kết quả
+                            if ($top_customers) {
+                                echo '<div class="new-order">
+                <table class="table">
+                    <tr class="bold">
+                        <td>STT</td>
+                        <td>Tên khách hàng</td>
+                        <td>Số lượng đơn</td>
+                        <td>Số điện thoại</td>
+                        <td>Tổng tiền mua hàng</td>
                     </tr>';
+                                $count = 0;
+                                foreach ($top_customers as $customer) {
+                                    $count++;
+                                    echo '<tr>
+                    <td>' .
+                                        $count .
+                                        '</td>
+                    <td>' .
+                                        $customer["hoten"] .
+                                        '</td>
+                    <td>' .
+                                        $customer["num_orders"] .
+                                        '</td>
+                    <td>' .
+                                        $customer["phone"] .
+                                        '</td>
+                    <td>' .
+                                        number_format(
+                                            $customer["total_spent"],
+                                            0,
+                                            ",",
+                                            "."
+                                        ) .
+                                        ' VNĐ</td>
+                </tr>';
+                                }
+                                echo '</table>
+            </div>';
+                            } else {
+                                echo '<p style="color: blue">Không có dữ liệu thống kê cho khoảng thời gian này!!!</p>';
                             }
-                            echo '</table>
-                </div>';
                         } else {
-                            echo "<p>Không có dữ liệu thống kê cho khoảng thời gian này.</p>";
+                            echo '<p style="color: red">Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc!!!</p>';
                         }
-                    } ?>
+                    }
+                    ?>
+
                 </section>
 
                 <section class="dashboard">

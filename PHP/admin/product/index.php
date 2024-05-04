@@ -175,40 +175,45 @@ $productList = executeResult($sql);
 
     <!-- JavaScript function for deleting product -->
     <script type="text/javascript">
-        function deleteProduct(id) {
-            var option = confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?')
-            if (!option) {
-                return;
-            }
+    function deleteProduct(id) {
+        var option = confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?')
+        if (!option) {
+            return;
+        }
 
-            $.ajax({
-                url: 'ajax.php',
-                method: 'POST',
-                data: {
-                    'id': id,
-                    'action': 'checkExistence'
-                },
-                success: function(data) {
-                    if (data === 'true') {
-                        var option1 = confirm('Đã có đơn hàng được mua với sản phẩm này. \n Không được xóa.');
-                        console.log(option1);
-                        if (!option1) {
-                            return;
-                        }
-                    } else {
-                        console.log(id);
-                        // Tiến hành xóa danh mục nếu không có sản phẩm nào liên kết
+        $.ajax({
+            url: 'ajax.php',
+            method: 'POST',
+            data: {
+                'id': id,
+                'action': 'checkExistence'
+            },
+            success: function(data) {
+                if (data === 'true') {
+                    var option1 = confirm('Đã có đơn hàng được mua với sản phẩm này. \n Bạn có muốn đặt lại trạng thái của sản phẩm về "Ngừng kinh doanh" không?');
+                    if (option1) {
+                        // Change product status to 0 (stopped selling)
                         $.post('ajax.php', {
                             'id': id,
-                            'action': 'delete'
+                            'action': 'changeStatus'
                         }, function(data) {
                             location.reload();
                         });
                     }
+                } else {
+                    // Delete the product
+                    $.post('ajax.php', {
+                        'id': id,
+                        'action': 'delete'
+                    }, function(data) {
+                        location.reload();
+                    });
                 }
-            });
-        }
-    </script>
+            }
+        });
+    }
+</script>
+
 
 </body>
 

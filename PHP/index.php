@@ -2,19 +2,40 @@
 <?php
 require_once('database/config.php');
 require_once('database/dbhelper.php');
+
+// Thiết lập kết nối đến cơ sở dữ liệu
+$conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+
+// Kiểm tra kết nối
+if (!$conn) {
+    die("Kết nối đến cơ sở dữ liệu thất bại: " . mysqli_connect_error());
+}
+
+// Tính tổng số sản phẩm
+$sql_total_products = 'SELECT COUNT(*) as total FROM product';
+$result_total_products = mysqli_query($conn, $sql_total_products);
+$row_total_products = mysqli_fetch_assoc($result_total_products);
+$total_products = $row_total_products['total'];
+
+// Xác định trang hiện tại
+$current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+$limit = 8; // Số sản phẩm trên mỗi trang
+$total_pages = ceil($total_products / $limit); // Tính tổng số trang
+$start = ($current_page - 1) * $limit; // Vị trí bắt đầu lấy dữ liệu từ cơ sở dữ liệu
+
+// Lấy dữ liệu sản phẩm cho trang hiện tại
+$sql_product_list = "SELECT * FROM product LIMIT $start, $limit";
+$productList = executeResult($sql_product_list);
 ?>
-<!-- END HEADR -->
 <main>
     <div class="container">
         <div id="ant-layout">
-            <!--
             <section class="search-quan">
                 <i class="fas fa-search"></i>
                 <form action="thucdon.php" method="GET">
-                    <input name="search" type="text" placeholder="Tìm món hoặc thức ăn">
+                    <input name="search_name" type="text" placeholder="Tìm theo tên" value="<?php if (isset($_GET['search_name'])) echo $_GET['search_name']; ?>">
                 </form>
             </section>
--->
         </div>
         <div class="bg-grey">
 
@@ -28,69 +49,11 @@ require_once('database/dbhelper.php');
                 <div class="product-recently">
                     <div class="row">
                         <?php
-                        $sql = 'SELECT * from product, order_details where order_details.id_product=product.id 
-                        order by order_details.number 
-                        DESC limit 4';
-                        $productList = executeResult($sql);
-                        $index = 1;
-                        foreach ($productList as $item) {
-                            if ($item['status'] != 0)
-                            {
-                            echo '
-                                <div class="col">
-                                    <a href="details.php?id=' . $item['id'] . '">
-                                        <img class="thumbnail" src="admin/product/' . $item['thumbnail'] . '" alt="">
-                                        <div class="title">
-                                            <p>' . $item['title'] . '</p>
-                                        </div>
-                                        <div class="price">
-                                            <span>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</span>
-                                        </div>
-                                        <div class="more">
-                                            <div class="star">
-                                                <img src="images/icon/icon-star.svg" alt="">
-                                                <span>4.6</span>
-                                            </div>
-                                            <div class="time">
-                                                <img src="images/icon/icon-clock.svg" alt="">
-                                                <span>15 comment</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                ';
-                        }
-                    }
-                        ?>
-                    </div>
-                </div>
-            </section>
-            <!-- end Món ngon gần bạn -->
-
-            <section class="restaurants">
-                <div class="title">
-                    <h1>Thực đơn tại quán <span class="green"></span></h1>
-                </div>
-                <div class="product-restaurants">
-                    <div class="row">
-                        <?php
-                        try {
-                            if (isset($_GET['page'])) {
-                                $page = $_GET['page'];
-                            } else {
-                                $page = 1;
-                            }
-                            $limit = 8;
-                            $start = ($page - 1) * $limit;
-                            $sql = "SELECT * FROM product limit $start,$limit";
-                            executeResult($sql);
-                            // $sql = 'select * from product limit $star,$limit';
-                            $productList = executeResult($sql);
-
-                            $index = 1;
-                            foreach ($productList as $item) {
-                                if ($item['status'] != 0)
-                                {
+                        $sql_most_popular = 'SELECT * from product, order_details where order_details.id_product=product.id 
+                        order by order_details.number DESC limit 4';
+                        $productList_most_popular = executeResult($sql_most_popular);
+                        foreach ($productList_most_popular as $item) {
+                            if ($item['status'] != 0) {
                                 echo '
                                 <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
@@ -116,43 +79,69 @@ require_once('database/dbhelper.php');
                                 ';
                             }
                         }
-                        } catch (Exception $e) {
-                            die("Lỗi thực thi sql: " . $e->getMessage());
+                        ?>
+                    </div>
+                </div>
+            </section>
+            <!-- end Món ngon gần bạn -->
+
+            <section class="restaurants">
+                <div class="title">
+                    <h1>Thực đơn tại quán <span class="green"></span></h1>
+                </div>
+                <div class="product-restaurants">
+                    <div class="row">
+                        <?php
+                        foreach ($productList as $item) {
+                            if ($item['status'] != 0) {
+                                echo '
+                                <div class="col">
+                                    <a href="details.php?id=' . $item['id'] . '">
+                                        <img class="thumbnail" src="admin/product/' . $item['thumbnail'] . '" alt="">
+                                        <div class="title">
+                                            <p>' . $item['title'] . '</p>
+                                        </div>
+                                        <div class="price">
+                                            <span>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</span>
+                                        </div>
+                                        <div class="more">
+                                            <div class="star">
+                                                <img src="images/icon/icon-star.svg" alt="">
+                                                <span>4.6</span>
+                                            </div>
+                                            <div class="time">
+                                                <img src="images/icon/icon-clock.svg" alt="">
+                                                <span>15 comment</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                ';
+                            }
                         }
                         ?>
                     </div>
                     <div class="pagination">
                         <ul>
                             <?php
-                            $sql = 'SELECT * FROM product';
-                            $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-                            $result = mysqli_query($conn, $sql);
-                            if (mysqli_num_rows($result)) {
-                                $numrow = mysqli_num_rows($result);
-                                $current_page = ceil($numrow / 8);
-                                // Kiểm tra nếu có tham số trang được chuyển đến từ URL
-                                $page = isset($_GET['page']) ? $_GET['page'] : 1;
+                            if ($current_page > 1) {
+                                echo '<li><a href="?page=' . ($current_page - 1) . '">Previous</a></li>';
+                            }
 
-                                if ($page > 1) {
-                                    echo '<li><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+                            for ($i = 1; $i <= $total_pages; $i++) {
+                                if ($i == $current_page) {
+                                    echo '<li><a class="active-page">' . $i . '</a></li>';
+                                } else {
+                                    echo '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
                                 }
+                            }
 
-                                for ($i = 1; $i <= $current_page; $i++) {
-                                    if ($i == $page) {
-                                        echo '<li><a class="active-page">' . $i . '</a></li>';
-                                    } else {
-                                        echo '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
-                                    }
-                                }
-
-                                if ($page < $current_page) {
-                                    echo '<li><a href="?page=' . ($page + 1) . '">Next</a></li>';
-                                }
+                            if ($current_page < $total_pages) {
+                                echo '<li><a href="?page=' . ($current_page + 1) . '">Next</a></li>';
                             }
                             ?>
                         </ul>
                     </div>
-
                 </div>
             </section>
         </section>
@@ -162,14 +151,18 @@ require_once('database/dbhelper.php');
     .pagination ul li a.active-page {
         color: yellow;
     }
-    .bg-grey{
-        display: none;
+
+    .bg-grey {
+        visibility: hidden;
     }
 </style>
 <?php require_once('layout/footer.php'); ?>
 </div>
-
-
 </body>
 
 </html>
+
+<?php
+// Đóng kết nối đến cơ sở dữ liệu
+mysqli_close($conn);
+?>

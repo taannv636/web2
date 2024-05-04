@@ -14,7 +14,7 @@
             <section class="search-quan">
                 <i class="fas fa-search"></i>
                 <form action="thucdon.php" method="GET">
-                    <input name="search" type="text" placeholder="Tìm món hoặc thức ăn">
+                    <input name="search_name" type="text" placeholder="Tìm theo tên" value="<?php if (isset($_GET['search_name'])) echo $_GET['search_name']; ?>">
                 </form>
             </section>
             <section class="main">
@@ -52,8 +52,7 @@
                     <h3>Tôi có thể tìm thấy những nhà hàng, quán ăn nào trong khu vực của mình?</h3>
                     <p>Danh sách nhà hàng, quán ăn được sắp xếp dựa theo khoảng cách và thời gian giao hàng dự kiến từ Địa chỉ giao thức ăn đến vị trí của bạn.</p>
                 </div>
-                <iframe src="https://maps.goong.io/?pid=k6WwbVouE7g0sWicoGF65KGgPW-UYirgsaJvRJtfVLkNnUZ0kGOLzhLVv3J8Bp_sNV6jerpz7JcKlnRFoF696RWvfHeVTpfbUbNFdpNjk_oFiVZyVpXSDkwWhXnWTBOjT" width="550" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/jJoFCFcJHsI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://maps.goong.io/?pid=bexU1147vI0Nsy5W-ukd6vG-qqxcwRIm_ZLhAPPJHq3JryEcpv7y_fWmXfji-fo6JWq5YIr9End1syEhLvWyV9lrJIws" width="1100" height="500" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </section>
         </div>
     </div>

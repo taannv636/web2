@@ -177,7 +177,7 @@ header section.logo a img {
   top: 2.3rem;
   left: 0px;
   z-index: 10;
-  width: 150%;
+  width: 200px;
   border: 1px solid grey;
   border-radius: 5px;
   padding: 10px 0;
@@ -408,6 +408,8 @@ section.main section.restaurants .product-restaurants .row .col img {
 section.main section.restaurants .product-restaurants .row .col img.thumbnail {
   border: 1px solid rgb(76, 78, 85);
   transition: 0.1s;
+  width: 281px;
+  height: 281px;
 }
 section.main
   section.restaurants
