@@ -6,12 +6,15 @@ require_once('utils/utility.php');
 // Lấy id từ trang index.php truyền sang rồi hiển thị nó
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = 'SELECT * FROM product WHERE id ="' . $id . '"';
+    
+    // Truy vấn để lấy thông tin sản phẩm
+    $sql = 'SELECT * FROM product WHERE id = "' . $id . '"';
     $product = executeSingleResult($sql);
-    // Kiểm tra nếu ko có id sp đó thì trả về index.php
-    if ($product == null) {
-        header('Location: index.php');
-        die();
+
+    // Kiểm tra nếu sản phẩm không tồn tại hoặc có status bằng 0
+    if ($product == null || $product['status'] == 0) {
+        header('Location: product_deleted.php');
+        exit(); // Dừng việc thực thi mã ngay tại đây
     }
 }
 ?>
