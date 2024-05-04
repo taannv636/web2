@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2024 at 07:00 PM
+-- Generation Time: May 04, 2024 at 06:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,19 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `asm_php1`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cart`
---
-
-CREATE TABLE `cart` (
-  `id_user` varchar(50) NOT NULL,
-  `id_product` varchar(50) NOT NULL,
-  `number` int(11) NOT NULL,
-  `status` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -54,17 +41,6 @@ INSERT INTO `category` (`id`, `name`) VALUES
 (2, 'Món ăn nhẹ'),
 (3, 'Bánh mì'),
 (4, 'Cà phê');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `new_address`
---
-
-CREATE TABLE `new_address` (
-  `id_user` varchar(50) NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -92,23 +68,30 @@ INSERT INTO `orders` (`id`, `id_user`, `hoten`, `phone`, `address`, `order_date`
 ('HD0001', 'KH0001', 'Trần Trừng Trị', '0214068953', '366 Đường Nguyễn Cư Trinh, Phường Nguyễn Cư Trinh, Quận 1, Thành Phố Hồ Chí Minh', '2024-03-01 10:00:00', '2024-12-01 12:00:00', 1, 1),
 ('HD0002', 'KH0002', 'Trần Trừng Trị', '0908011088', '388 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '2024-03-02 10:00:00', '2024-12-01 12:00:00', 0, 2),
 ('HD0003', 'KH0003', 'Trần Trừng Trị', '0214068953', '34 Đường Bình Phú, huyện Càng Long, xã Nhị Long, tỉnh Trà Vinh', '2024-03-03 10:00:00', '2024-12-01 12:00:00', 0, 3),
-('HD0004', 'KH0004', 'Vũ Thị Dung', '0908011088', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-04 10:00:00', '2024-12-01 12:00:00', 1, 4),
+('HD0004', 'KH0004', 'Vũ Thị Dung', '0908011088', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-04 10:00:00', '2024-12-01 12:00:00', 1, 0),
 ('HD0005', 'KH0005', 'Đinh Đăng Điện', '0214068953', '34 quốc lộ 1A, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-05 10:00:00', '2024-12-01 12:00:00', 1, 1),
 ('HD0006', 'KH0006', 'Dương Minh Hải', '0471415644', '366 Đường Tạ Quang Bửu, Phường 4, Quận 8, Thành Phố Hồ Chí Minh', '2024-03-06 10:00:00', '2024-12-01 12:00:00', 1, 2),
 ('HD0007', 'KH0007', 'Dương Minh Hải', '0471415644', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-07 10:00:00', '2024-12-01 12:00:00', 1, 1),
-('HD0008', 'KH0008', 'Trần Thị Hạnh', '0640663244', '34 Đường Bình Phú, huyện Càng Long, xã Nhị Long, tỉnh Trà Vinh', '2024-03-08 10:00:00', '2024-12-01 12:00:00', 1, 4),
+('HD0008', 'KH0008', 'Trần Thị Hạnh', '0640663244', '34 Đường Bình Phú, huyện Càng Long, xã Nhị Long, tỉnh Trà Vinh', '2024-03-08 10:00:00', '2024-12-01 12:00:00', 1, 0),
 ('HD0009', 'KH0009', 'Vũ Thị Dung', '0471415644', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-09 10:00:00', '2024-12-01 12:00:00', 0, 1),
 ('HD0010', 'KH0010', 'Trần Thị Hạnh', '0908011088', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-10 10:00:00', '2024-12-01 12:00:00', 1, 3),
 ('HD0011', 'KH0011', 'Trần Thị Hạnh', '0640663244', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-11 10:00:00', '2024-12-01 12:00:00', 1, 2),
 ('HD0012', 'KH0012', 'Đinh Đăng Điện', '0957881478', '388 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '2024-03-12 10:00:00', '2024-12-01 12:00:00', 1, 1),
 ('HD0013', 'KH0013', 'Dương Minh Hải', '0471415644', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-13 10:00:00', '2024-12-01 12:00:00', 1, 3),
-('HD0014', 'KH0014', 'Vũ Thị Dung', '0640663244', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-14 10:00:00', '2024-12-01 12:00:00', 1, 4),
+('HD0014', 'KH0014', 'Vũ Thị Dung', '0640663244', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-14 10:00:00', '2024-12-01 12:00:00', 1, 0),
 ('HD0015', 'KH0015', 'Đinh Đăng Điện', '0957881478', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-15 10:00:00', '2024-12-01 12:00:00', 1, 1),
-('HD0016', 'KH0016', 'Đinh Đăng Điện', '0908011088', '34 Đường Bình Phú, huyện Càng Long, xã Nhị Long, tỉnh Trà Vinh', '2024-03-16 10:00:00', '2024-12-01 12:00:00', 1, 4),
+('HD0016', 'KH0016', 'Đinh Đăng Điện', '0908011088', '34 Đường Bình Phú, huyện Càng Long, xã Nhị Long, tỉnh Trà Vinh', '2024-03-16 10:00:00', '2024-12-01 12:00:00', 1, 0),
 ('HD0017', 'KH0017', 'Trần Trừng Trị', '0640663244', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-17 10:00:00', '2024-12-01 12:00:00', 1, 3),
 ('HD0018', 'KH0018', 'Trần Trừng Trị', '0957881478', '34 quốc lộ 50, xã Vĩnh Viễn, huyện Gò Công Tây, tỉnh Tiền Giang', '2024-03-18 10:00:00', '2024-12-01 12:00:00', 0, 1),
 ('HD0019', 'KH0019', 'Trần Trừng Trị', '0471415644', '123/34 Quốc lộ 60, xã Vân Lầu, huyện Mỏ Cày Nam, tỉnh Bến Tre', '2024-03-19 10:00:00', '2024-12-01 12:00:00', 0, 1),
-('HD0020', 'KH0020', 'Trần Trừng Trị', '0908011088', '388 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '2024-03-20 10:00:00', '2024-12-01 12:00:00', 1, 3);
+('HD0020', 'KH0020', 'Trần Trừng Trị', '0908011088', '388 Đường Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành Phố Hồ Chí Minh', '2024-03-20 10:00:00', '2024-12-01 12:00:00', 1, 3),
+('HD0021', 'KH0004', 'Vũ Thị Dung', '0372723280', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '2024-05-03 19:42:05', '2024-05-03 19:42:05', 0, 0),
+('HD0022', 'KH0004', 'Vũ Thị Dung', '0372723280', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '2024-05-03 19:46:39', '2024-05-03 19:46:39', 0, 0),
+('HD0023', 'KH0004', 'Vũ Thị Dung', '0372723280', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '2024-05-03 20:26:39', '2024-05-03 20:26:39', 0, 0),
+('HD0024', 'KH0004', 'Vũ Thị Dung', '0372723280', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '2024-05-03 20:27:56', '2024-05-03 20:27:56', 0, 0),
+('HD0025', 'KH0004', 'Vũ Thị Dung', '0372723280', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '2024-05-03 20:29:06', '2024-05-03 20:29:06', 0, 3),
+('HD0026', 'KH0004', 'Vũ Thị Dung', '0372723280', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '2024-05-04 02:54:35', '2024-05-04 02:54:35', 1, 1),
+('HD0027', 'KH0004', 'Vũ Thị Dung', '0372723280', '44 Đường Tôn Đức Thắng, Phường Nguyễn Thái Bình, Quận 1, Thành Phố Hồ Chí Minh', '2024-05-04 03:56:06', '2024-05-04 03:56:06', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -148,7 +131,16 @@ INSERT INTO `order_details` (`id_order`, `id_product`, `number`) VALUES
 ('HD0017', 'SP018', 8),
 ('HD0018', 'SP019', 10),
 ('HD0019', 'SP020', 2),
-('HD0020', 'SP021', 7);
+('HD0020', 'SP021', 7),
+('HD0021', 'SP019', 1),
+('HD0022', 'SP002', 1),
+('HD0022', 'SP003', 1),
+('HD0023', 'SP002', 4),
+('HD0024', 'SP003', 2),
+('HD0025', 'SP006', 1),
+('HD0026', 'SP008', 1),
+('HD0027', 'SP002', 5),
+('HD0027', 'SP019', 12);
 
 -- --------------------------------------------------------
 
@@ -176,21 +168,21 @@ INSERT INTO `product` (`id`, `title`, `thumbnail`, `price`, `number`, `id_catego
 ('SP002', 'Trà Sen Vàng', 'uploads/TRASENVANG.png', 35000, 39, 1, 2, '<font color=\"#000000\">Thức uống chinh phục những thực khách khó tính! Sự kết hợp độc đáo giữa trà Ô long, hạt sen thơm bùi và củ năng giòn tan. Thêm vào chút sữa sẽ để vị thêm ngọt ngào.</font><br>'),
 ('SP003', 'Bánh Mì Thịt Nướng', 'uploads/BMTHITNUONG.png', 25000, 30, 3, 2, 'Đặc sản của Việt Nam! Bánh mì giòn với nhân thịt nướng, rau thơm và gia vị đậm đà, hòa quyện trong lớp nước sốt tuyệt hảo.'),
 ('SP004', 'BÁNH MOUSSE ĐÀO', 'uploads/MOUSSEDAO.png', 35000, 10, 4, 1, '<span style=\"color: rgb(83, 56, 44); font-family: \"Open Sans\", sans-serif; font-size: 15px; text-align: justify;\">Một sự kết hợp khéo léo giữa kem và lớp bánh mềm, được phủ lên trên vài lát đào ngon tuyệt.</span><br>'),
-('SP005', 'Trà sữa trân trâu đen', 'uploads/Trà-sữa-Trân-châu-đen-1.png', 50000, 10, 1, 1, '<p><span style=\"color: rgb(0, 0, 0); font-family: \" times=\"\" new=\"\" roman\";=\"\" font-size:=\"\" 20px;=\"\" font-weight:=\"\" 700;=\"\" text-align:=\"\" center;\"=\"\">Trà sữa trân trâu đường đen</span><br></p>'),
-('SP006', 'Trà sữa Matcha', 'uploads/TRATHANHDAO.png', 25000, 46, 1, 1, '<p>Trà sữa Matcha<br></p>'),
+('SP005', 'Trà sữa trân trâu đen', 'uploads/Trà-sữa-Trân-châu-đen-1.png', 50000, 10, 1, 2, '<p><span style=\"color: rgb(0, 0, 0); font-family: \" times=\"\" new=\"\" roman\";=\"\" font-size:=\"\" 20px;=\"\" font-weight:=\"\" 700;=\"\" text-align:=\"\" center;\"=\"\">Trà sữa trân trâu đường đen</span><br></p>'),
+('SP006', 'Trà sữa Matcha', 'uploads/TRATHANHDAO.png', 25000, 46, 1, 2, '<p>Trà sữa Matcha<br></p>'),
 ('SP007', 'Cafe Phin Đen Nóng', 'uploads/AMERICANO.png', 50000, 44, 2, 1, '<p><font color=\"#53382c\">Dành cho những tín đồ cà phê đích thực! Hương vị cà phê truyền thống được phối trộn độc đáo tại Highlands. Cà phê đậm đà pha từ Phin, cho thêm 1 thìa đường, mang đến vị cà phê đậm đà chất Phin.</font><br></p>'),
 ('SP008', 'Bạc Xỉu Đá', 'uploads/Trà-sữa-Trân-châu-đen-1.png', 30000, 15, 2, 2, '<p>Nếu Phin Sữa Đá dành cho các bạn đam mê vị đậm đà, thì Bạc Xỉu Đá là một sự lựa chọn nhẹ “đô\" cà phê nhưng vẫn thơm ngon, chất lừ không kém!<br></p>'),
 ('SP009', 'BÁNH CHUỐI', 'uploads/BANHCHUOI.jpg', 19000, 20, 4, 1, '<span style=\"color: rgb(83, 56, 44); font-family: \"Open Sans\", sans-serif; font-size: 15px; text-align: justify;\">Bánh chuối truyền thống, sự kết hợp của 100% chuối tươi và nước cốt dừa Việt Nam.</span><br>'),
 ('SP010', 'Bánh Mousse Cacao', 'uploads/MOUSSECACAO.png', 35000, 5, 4, 2, '<span style=\"color: rgb(83, 56, 44); font-family: \" open=\"\" sans\",=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" text-align:=\"\" justify;\"=\"\">Bánh Mousse Ca Cao, là sự kết hợp giữa ca-cao Việt Nam đậm đà cùng kem tươi.</span><br>'),
-('SP011', 'Bánh Mì Xíu Mại', 'uploads/BMXIUMAI.png', 20000, 30, 3, 1, 'Bánh mì Việt Nam giòn thơm, với nhân thịt viên hấp dẫn, phủ thêm một lớp nước sốt cà chua ngọt, cùng với rau tươi và gia vị đậm đà.'),
+('SP011', 'Bánh Mì Xíu Mại', 'uploads/BMXIUMAI.png', 20000, 30, 3, 2, 'Bánh mì Việt Nam giòn thơm, với nhân thịt viên hấp dẫn, phủ thêm một lớp nước sốt cà chua ngọt, cùng với rau tươi và gia vị đậm đà.'),
 ('SP012', 'Bánh Caramel Phô Mai', 'uploads/CARAMELPHOMAI.jpg', 35000, 10, 4, 1, 'Ngon khó cưỡng! Bánh phô mai thơm béo được phủ bằng lớp caramel ngọt ngào.'),
 ('SP013', 'Trà Thạch Đào', 'uploads/TRATHANHDAO.png', 50000, 10, 1, 0, '<p><span style=\"color: rgb(0, 0, 0); font-size: 1rem;\">Vị trà đậm đà kết hợp cùng những miếng đào thơm ngon mọng nước cùng thạch đào giòn dai. Thêm vào ít sữa để gia tăng vị béo</span><br></p><p><br></p>'),
 ('SP014', 'Trà Thạch Vải', 'uploads/TRATHACHVAI_1.png', 50000, 46, 1, 1, '<p>Một sự kết hợp thú vị giữa trà đen, những quả vải thơm ngon và thạch giòn khó cưỡng, mang đến thức uống tuyệt hảo!<br></p>'),
 ('SP015', 'Trà Đào', 'uploads/TRATHANHDAO (1).png', 50000, 44, 1, 1, '<p><span style=\"color: rgb(83, 56, 44); font-family: \" open=\"\" sans\",=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" text-align:=\"\" justify;\"=\"\">Một sự kết hợp thú vị giữa trà đen, những quả vải thơm ngon và thạch giòn khó cưỡng, mang đến thức uống tuyệt hảo!</span><br></p>'),
 ('SP016', 'Cà Phê Đá', 'uploads/CFD.png', 30000, 15, 2, 0, '<p>Dành cho những tín đồ cà phê đích thực! Hương vị cà phê truyền thống được phối trộn độc đáo tại Highlands. Cà phê đậm đà pha hoàn toàn từ Phin, cho thêm 1 thìa đường, một ít đá viên mát lạnh, tạo nên Phin Đen Đá mang vị cà phê đậm đà chất Phin.<br></p>'),
-('SP017', 'Bánh Tiramisu', 'uploads/TIRAMISU.jpg', 35000, 100, 4, 1, '<p>Tiramisu thơm béo, làm từ ca-cao Việt Nam đậm đà, kết hợp với phô mai ít béo, vani và chút rum nhẹ nhàng.<br></p>'),
+('SP017', 'Bánh Tiramisu', 'uploads/TIRAMISU.jpg', 35000, 100, 4, 2, '<p>Tiramisu thơm béo, làm từ ca-cao Việt Nam đậm đà, kết hợp với phô mai ít béo, vani và chút rum nhẹ nhàng.<br></p>'),
 ('SP018', 'Chả Lụa Xá Xíu', 'uploads/BMCHALUAXAXIU.png', 20000, 90, 3, 1, '<p>Bánh mì Việt Nam giòn thơm với chả lụa và thịt xá xíu thơm ngon, kết hợp cùng rau và gia vị, hòa quyện cùng nước sốt độc đáo.<br></p>'),
-('SP019', 'Gà Xé Tương Ớt', 'uploads/BMGAXE.png', 19000, 20, 3, 2, '<p>Bánh mì Việt Nam giòn thơm với nhân gà xé, rau, gia vị hòa quyện cùng nước sốt đặc biệt.<br></p>'),
+('SP019', 'Gà Xé Tương Ớt', 'uploads/BMGAXE.png', 19000, 20, 3, 1, '<p>Bánh mì Việt Nam giòn thơm với nhân gà xé, rau, gia vị hòa quyện cùng nước sốt đặc biệt.<br></p>'),
 ('SP020', 'Cafe Phindi Hồng Trà', 'uploads/270_crop_PHINDI_Hong_Tra.png', 35000, 100, 2, 1, '<p>PhinDi Kem Sữa - Cà phê Phin thế hệ mới với chất Phin êm hơn, lần đầu tiên kết hợp cùng Hồng Trà mang đến hương vị quyện êm, phiên bản giới hạn chỉ trong mùa lễ hội 2020!<br></p>'),
 ('SP021', 'Cafe Phindi Kem Sữa', 'uploads/270_crop_phindi_kem_sua_new.png', 35000, 90, 2, 2, '<p>PhinDi Kem Sữa - Cà phê Phin thế hệ mới với chất Phin êm hơn, kết hợp cùng Kem Sữa béo ngậy mang đến hương vị mới lạ, không thể hấp dẫn hơn!<br></p>'),
 ('SP022', 'Pepsi', '', 15000, 102, 1, 1, ''),
@@ -273,23 +265,10 @@ INSERT INTO `user` (`id_user`, `hoten`, `sex`, `birthday`, `email`, `address`, `
 --
 
 --
--- Indexes for table `cart`
---
-ALTER TABLE `cart`
-  ADD PRIMARY KEY (`id_user`,`id_product`),
-  ADD KEY `id_product` (`id_product`);
-
---
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `new_address`
---
-ALTER TABLE `new_address`
-  ADD PRIMARY KEY (`id_user`,`name`);
 
 --
 -- Indexes for table `orders`
@@ -321,19 +300,6 @@ ALTER TABLE `user`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `cart`
---
-ALTER TABLE `cart`
-  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`),
-  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `product` (`id`);
-
---
--- Constraints for table `new_address`
---
-ALTER TABLE `new_address`
-  ADD CONSTRAINT `new_address_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 
 --
 -- Constraints for table `orders`
