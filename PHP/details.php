@@ -201,7 +201,10 @@ if (isset($_GET['id'])) {
             'id': id,
             'num': num
         }, function(data) {
+           location.assign("checkout.php");
             location.reload()
+            location.assign("cart.php");
+
         })
     }
 
