@@ -321,6 +321,8 @@ section.main section.recently .product-recently .row .col img {
 section.main section.recently .product-recently .row .col img.thumbnail {
   border: 1px solid rgb(76, 78, 85);
   transition: 0.1s;
+  width: 281px;
+  height: 281px;
 }
 section.main section.recently .product-recently .row .col img.thumbnail:hover {
   box-shadow: 0px 0px 5px 0px grey;

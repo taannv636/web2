@@ -7,12 +7,14 @@ require_once('database/dbhelper.php');
 <main>
     <div class="container">
         <div id="ant-layout">
+            <!--
             <section class="search-quan">
                 <i class="fas fa-search"></i>
                 <form action="thucdon.php" method="GET">
                     <input name="search" type="text" placeholder="Tìm món hoặc thức ăn">
                 </form>
             </section>
+-->
         </div>
         <div class="bg-grey">
 
@@ -159,6 +161,9 @@ require_once('database/dbhelper.php');
 <style>
     .pagination ul li a.active-page {
         color: yellow;
+    }
+    .bg-grey{
+        display: none;
     }
 </style>
 <?php require_once('layout/footer.php'); ?>
