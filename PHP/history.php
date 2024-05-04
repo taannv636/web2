@@ -68,7 +68,8 @@ require_once('utils/utility.php');
 
                             if (isset($_COOKIE['username'])) {
                                 $username = $_COOKIE['username'];
-                                $sql = "SELECT orders.order_date as order_date, orders.id as id, orders.status as order_status 
+                                $sql = "SELECT orders.order_date as order_date, orders.delivery_date as delivery_date, 
+                                orders.hoten, orders.address, orders.phone, orders.id as id, orders.status as order_status 
                                 FROM user JOIN orders ON user.id_user = orders.id_user 
                                 WHERE user.username = '$username'
                                 ORDER BY orders.order_date DESC";
@@ -78,12 +79,19 @@ require_once('utils/utility.php');
                                     $status = getStatus($row['order_status']);
 
                                     echo '<div class="product-list">
-                                                <div class = "product-date-status">
-                                                    <div class="product-date">' . $row['order_date'] . '</div>
-                                                    <div class="product-status">' . $status . '</div>
-                                                </div>
-                                                <hr>';
-                                                
+                                    <div class="product-date-status">
+                                        <div class="product-date">Ngày mua: ' . $row['order_date'] . '</div>
+                                        <div class="product-status">Status: ' . $status . '</div>
+                                        <div class="product-date">Ngày giao hàng: ' . $row['delivery_date'] . '</div>
+                                    </div>
+                                    <div class="product-date-status">
+                                    <div class="product-date">Họ tên: ' . $row['hoten'] . '</div>
+                                    <div class="product-status">Số điện thoại: ' . $row['phone'] . '</div>
+                                    <div class="product-date">Địa chỉ: ' . $row['address'] . '</div>
+                                </div>
+                                </div>
+                                <hr>';
+                                                                                
                                     $id_orders = $row['id'];
                                     $sql_product = "SELECT product.thumbnail as thumbnail, product.title as title, order_details.number as numbers, 
                                     product.price as price
@@ -95,7 +103,7 @@ require_once('utils/utility.php');
                                     foreach ($result_product as $row_product) {
                                         echo '<div class="product">
                                                 <div class = "product-image-title-number">
-                                                <img src="admin/product/' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image">
+                                                <img src="admin/product/' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image" style="width: 200px; height:200px">
                                                 <div class = "product-title-number">
                                                         <div class="product-title">' . $row_product['title'] . '</div>
                                                         <div class="product-number">Số lượng: ' . $row_product['numbers'] . '</div>
