@@ -40,5 +40,14 @@ if (!empty($_POST)) {
 			}
 			setcookie('cart', json_encode($cart), time() + 30 * 24 * 60 * 60, '/');
 			break;
+		case 'update':
+			for ($i = 0; $i < count($cart); $i++) {
+				if ($cart[$i]['id'] == $id) {
+					$cart[$i]['num'] = $num;
+					break;
+				}
+			}
+			setcookie('cart', json_encode($cart), time() + 30 * 24 * 60 * 60, '/');
+			break;
 	}
 }

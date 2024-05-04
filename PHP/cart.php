@@ -2,24 +2,24 @@
 require_once('database/dbhelper.php');
 require_once('utils/utility.php');
 
-    $cart = [];
-    if (isset($_COOKIE['cart'])) {
-        $json = $_COOKIE['cart'];
-        $cart = json_decode($json, true);
-    }
-    $idList = [];
-    foreach ($cart as $item) {
-        $idList[] = $item['id'];
-    }
-    if (count($idList) > 0) {
-        $idList = "'" . implode("','", $idList) . "'"; // transform
-        //[2, 5, 6] => 2,5,6
+$cart = [];
+if (isset($_COOKIE['cart'])) {
+    $json = $_COOKIE['cart'];
+    $cart = json_decode($json, true);
+}
+$idList = [];
+foreach ($cart as $item) {
+    $idList[] = $item['id'];
+}
+if (count($idList) > 0) {
+    $idList = "'" . implode("','", $idList) . "'"; // transform
+    //[2, 5, 6] => 2,5,6
 
-        $sql = "select * from product where id in ($idList)";
-        $cartList = executeResult($sql);
-    } else {
-        $cartList = [];
-    }
+    $sql = "select * from product where id in ($idList)";
+    $cartList = executeResult($sql);
+} else {
+    $cartList = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,7 +94,9 @@ require_once('utils/utility.php');
                                         </td>
                                         <td>' . $item['title'] . '</td>
                                         <td class="b-500 red">' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                        <td width="100px">' . $num . '</td>
+                                        <td width="100px">
+                                            <input type="number" class="form-control quantity-input" value="' . $num . '" min="1" onchange="updateQuantity(this, \'' . $item['id'] . '\')">
+                                        </td>
                                         <td class="b-500 red">' . number_format($num * $item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
                                         <td>
                                             <button class="btn btn-danger" onclick="deleteCart(\'' . $item['id'] . '\')">Xoá</button>
@@ -123,8 +125,19 @@ require_once('utils/utility.php');
             })
         }
 
-        function checkLogin() {
+        function updateQuantity(input, id) {
+            var newQuantity = input.value;
+            $.post('api/cookie.php', {
+                'action': 'update',
+                'id': id,
+                'num': newQuantity
+            }, function(data) {
+                location.reload();
+            });
+        }
 
+        function checkLogin() {
+            // Add your code to check login status before redirecting to checkout
         }
     </script>
 </body>
