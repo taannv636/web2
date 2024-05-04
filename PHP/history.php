@@ -87,8 +87,8 @@ require_once('utils/utility.php');
                                     <div class="product-date-status">
                                     <div class="product-date">Họ tên: ' . $row['hoten'] . '</div>
                                     <div class="product-status">Số điện thoại: ' . $row['phone'] . '</div>
-                                    <div class="product-date">Địa chỉ: ' . $row['address'] . '</div>
                                 </div>
+                                <div class="product-date"> Địa chỉ: ' . $row['address'] . '</div>
                                 </div>
                                 <hr>';
                                                                                 
