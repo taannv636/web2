@@ -49,8 +49,13 @@ $productList = executeResult($sql_product_list);
                 <div class="product-recently">
                     <div class="row">
                         <?php
-                        $sql_most_popular = 'SELECT * from product, order_details where order_details.id_product=product.id 
-                        order by order_details.number DESC limit 4';
+                        $sql_most_popular = 'SELECT *, SUM(od.number) as total_number
+                        FROM product p
+                        JOIN order_details od ON od.id_product = p.id
+                        GROUP BY p.id
+                        ORDER BY total_number DESC
+                        LIMIT 4;
+                        ';
                         $productList_most_popular = executeResult($sql_most_popular);
                         foreach ($productList_most_popular as $item) {
                             if ($item['status'] != 0) {
@@ -71,7 +76,8 @@ $productList = executeResult($sql_product_list);
                                             </div>
                                             <div class="time">
                                                 <img src="images/icon/icon-clock.svg" alt="">
-                                                <span>15 comment</span>
+                                                <!-- <span>15 comment</span> -->
+                                                <span>Đã bán ' . $item['total_number'] . '</span>
                                             </div>
                                         </div>
                                     </a>
