@@ -77,7 +77,7 @@
                                                 <td>' . $item['title'] . '</td>
                                                 <td class="b-500 red" >' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
                                                 <td width="100px" class="quantity">
-                                                    <input type="number" id="quantity" value="' . $item['numbers'] . '" min="1">
+                                                    <input type="number" id="quantity" value="' . $item['numbers'] . '" min="1" data-user-id="' . $id_user . '" data-product-id="' . $item['id'] . '">
                                                 </td>
                                                 <td class="b-500 red" ><span class = "total_item">' . number_format($item['price'] * $item['numbers'], 0, ',', '.') . '</span><span> VNĐ</span></td>
                                                 <td>
@@ -122,13 +122,16 @@
                 if (confirmation) {
                     // Gửi request xóa bằng AJAX
                     var xhr = new XMLHttpRequest();
-                    xhr.open('POST', '/delete_item.php', true);
+                    xhr.open('POST', '../PHP/delete_item.php', true);
                     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                             // Xử lý kết quả nếu cần
                             // Ví dụ: cập nhật giao diện sau khi xóa 
                             location.reload(); // Reload trang sau khi xóa
+                            // var reponse = xhr.responseText;
+                            // alert(reponse);
+                            // console.log(reponse);
 
                         }
                     };
