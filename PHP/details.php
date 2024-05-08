@@ -56,23 +56,66 @@ if (isset($_GET['id'])) {
 
                                 <p class="price">Giá: <span id="price"><?= number_format($product['price'], 0, ',', '.') ?></span><span> VNĐ</span><span class="gia none"><?= $product['price'] ?></span></p>
                                 <!-- <a class="add-cart" href="" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</a> -->
-                                <button class="add-cart" onclick="addToCart(<?= '$id' ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
+                                <button class="add-cart" onclick="addToCart('<?= $id ?>')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                 <!-- <a class="buy-now" href="checkout.php" >Mua ngay</a> -->
-                                <button class="buy-now" onclick="buyNow(<?= '$id' ?>)">Mua ngay</button>
+                                <button class="buy-now" onclick="buyNow('<?= $id ?>')">Mua ngay</button>
+
+                                <div id="alertNotSell" style="font-weight: bold; color: red"></div>
+                                <div id="productNumber" style="font-weight: bold; color: red">Số lượng còn lại: <?= $product['number'] ?></div>
+                                <div id="soldOut" style="font-weight: bold; color: red"></div>
+
+
 
                                 <script>
                                     function updatePrice() {
                                         var price = document.getElementById('price').innerText; // giá tiền
                                         var num = document.querySelector('#num').value; // số lượng
+                                        if (num > <?= $product['number'] ?>)
+                                        {
+                                            alert('Số lượng vượt quá số lượng tồn kho');
+                                            document.getElementById('num').value = 1;
+                                            num = 1;
+                                        }
+
                                         var gia1 = document.querySelector('.gia').innerText;
                                         var gia = price.match(/\d/g);
                                         gia = gia.join("");
                                         var tong = gia1 * num;
-                                        document.getElementById('price').innerHTML = tong.toLocaleString();
+                                        document.getElementById('price').innerHTML = tong.toLocaleString();   
                                     }
+
+                                     // Hàm kiểm tra status và hiển thị thông báo khi trang tải
+                                     function checkStatusAndAlert() {
+                                        // Kiểm tra status
+                                        var status = <?= $product['status'] ?>;
+                                        if (status == 1) {
+                                            var buttons = document.querySelectorAll('.add-cart, .buy-now');
+                                            buttons.forEach(function(button) {
+                                                button.disabled = true;
+                                                button.style.opacity = '0.1'; // Làm mờ button
+                                            });
+                                            document.getElementById('alertNotSell').innerHTML = 'Món ăn tạm thời ngừng kinh doanh. Quý khách vui lòng chọn món khác.';
+                                            document.getElementById('productNumber').style.display = 'none';
+                                        }
+
+                                        // Kiểm tra còn hàng
+                                        var numberRemain = <?= $product['number'] ?>;
+                                        if (numberRemain == 0) {
+                                            var buttons = document.querySelectorAll('.add-cart, .buy-now');
+                                            buttons.forEach(function(button) {
+                                                button.disabled = true;
+                                                button.style.opacity = '0.1'; // Làm mờ button
+                                            });
+                                            document.getElementById('soldOut').innerHTML = 'Món ăn hết hàng. Quý khách vui lòng chọn món khác.';
+                                        }
+                                    }
+
+                                    // Gọi hàm kiểm tra khi trang tải
+                                    window.onload = checkStatusAndAlert;
                                 </script>
                             </div>
                         </div>
+
                         <div class="fb-comments" data-href="http://localhost/PROJECT/details.php" data-width="750" data-numposts="5"></div>
 
                     </section>
@@ -85,6 +128,7 @@ if (isset($_GET['id'])) {
                         $productList = executeResult($sql);
                         $index = 1;
                         foreach ($productList as $item) {
+                            if ($item['status'] != 0)
                             echo '
                                     <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">

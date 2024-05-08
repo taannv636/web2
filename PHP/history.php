@@ -13,7 +13,7 @@ require_once('utils/utility.php');
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" <!-- Latest compiled and minified CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" ><!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -50,27 +50,50 @@ require_once('utils/utility.php');
                         <div class="panel-body"></div>
                         <tbody>
                             <?php
+                            function getStatus($status)
+                            {
+                                switch ($status) {
+                                    case 0:
+                                        return 'Đang chuẩn bị hàng';
+                                    case 1:
+                                        return 'Đang giao hàng';
+                                    case 2:
+                                        return 'Đã giao hàng';
+                                    case 3:
+                                        return 'Đã hủy đơn hàng';
+                                    default:
+                                        return 'Không xác định';
+                                }
+                            }
+
                             if (isset($_COOKIE['username'])) {
                                 $username = $_COOKIE['username'];
-                                $sql = "SELECT orders.order_date as order_date, orders.id as id, orders.status as order_status FROM user JOIN orders ON user.id_user = orders.id_user WHERE user.email = '$username'";
+                                $sql = "SELECT orders.order_date as order_date, orders.id as id, orders.status as order_status 
+                                FROM user JOIN orders ON user.id_user = orders.id_user 
+                                WHERE user.username = '$username'";
                                 $result = executeResult($sql);
                                 foreach ($result as $row) {
                                     $total = 0;
-                                    $status = $row['order_status'] == 1 ? "Đã hoàn thành" : "Chưa hoàn thành";
+                                    $status = getStatus($row['order_status']);
+
                                     echo '<div class="product-list">
                                                 <div class = "product-date-status">
                                                     <div class="product-date">' . $row['order_date'] . '</div>
                                                     <div class="product-status">' . $status . '</div>
                                                 </div>
                                                 <hr>';
+                                                
                                     $id_orders = $row['id'];
-                                    $sql_product = "SELECT product.thumbnail as thumbnail, product.title as title, order_details.number as numbers, product.price as price FROM order_details JOIN product ON order_details.id_product = product.id WHERE order_details.id_order = '$id_orders'";
+                                    $sql_product = "SELECT product.thumbnail as thumbnail, product.title as title, order_details.number as numbers, 
+                                    product.price as price FROM order_details JOIN product ON order_details.id_product = product.id 
+                                    WHERE order_details.id_order = '$id_orders'";
+
                                     $result_product = executeResult($sql_product);
                                     foreach ($result_product as $row_product) {
                                         echo '<div class="product">
                                                 <div class = "product-image-title-number">
-                                                    <img src="' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image">
-                                                    <div class = "product-title-number">
+                                                <img src="admin/product/' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image">
+                                                <div class = "product-title-number">
                                                         <div class="product-title">' . $row_product['title'] . '</div>
                                                         <div class="product-number">Số lượng: ' . $row_product['numbers'] . '</div>
                                                     </div>

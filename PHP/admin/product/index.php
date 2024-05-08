@@ -34,6 +34,9 @@ require_once('../database/dbhelper.php');
         <li class="nav-item">
             <a class="nav-link" href="../user">Quản lý người dùng</a>
         </li>
+        <li class="nav-item">
+                    <a class="nav-link" href="../../index.php" style="font-weight: bold; color: red">Đăng xuất</a>
+        </li>
     </ul>
     <div class="container">
         <div class="panel panel-primary">
@@ -121,10 +124,10 @@ require_once('../database/dbhelper.php');
                                     $status_text = 'Ngừng kinh doanh';
                                     break;
                                 case 1:
-                                    $status_text = 'Còn kinh doanh';
+                                    $status_text = 'Tạm ngừng kinh doanh';
                                     break;
                                 case 2:
-                                    $status_text = 'Tạm ngừng kinh doanh';
+                                    $status_text = 'Còn kinh doanh';
                                     break;
                                 default:
                                     $status_text = 'Không xác định';
@@ -198,15 +201,33 @@ require_once('../database/dbhelper.php');
                 return;
             }
 
-            console.log(id)
-            //ajax - lenh post
-            $.post('ajax.php', {
+            $.ajax({
+            url: 'ajax.php',
+            method: 'POST',
+            data: {
                 'id': id,
-                'action': 'delete'
-            }, function(data) {
-                location.reload()
-            })
-        }
+                'action': 'checkExistence'
+            },
+            success: function(data) {
+                if (data === 'true') {
+                    var option1 = confirm('Đã có đơn hàng được mua với sản phẩm này. \n Không được xóa.');
+                    console.log(option1);
+                    if (!option1) {
+                        return;
+                    }
+                } else {
+                    console.log(id);
+                    // Tiến hành xóa danh mục nếu không có sản phẩm nào liên kết
+                    $.post('ajax.php', {
+                        'id': id,
+                        'action': 'delete'
+                    }, function(data) {
+                        location.reload();
+                    });
+                }
+            }
+        });
+    }
     </script>
 </body>
 

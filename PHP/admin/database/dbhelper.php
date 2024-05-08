@@ -1,6 +1,7 @@
 <?php
 require_once('config.php');
 
+/*
 function execute($sql)
 {
     // Open connection to database
@@ -18,6 +19,26 @@ function execute($sql)
     // Close connection
     mysqli_close($con);
 }
+*/
+function execute($sql)
+{
+    // Open connection to database
+    $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+
+    // Check connection
+    if (mysqli_connect_errno()) {
+        die("Failed to connect to MySQL: " . mysqli_connect_error());
+    }
+
+    // Execute SQL query
+    if (!mysqli_query($con, $sql)) {
+        die("Error executing SQL query: " . mysqli_error($con));
+    }
+
+    // Close connection
+    mysqli_close($con);
+}
+
 
 function executeResult($sql)
 {
@@ -88,4 +109,31 @@ function generateID($ID, $TABLE, $SAMPLE) {
     $newID = $prefix . str_pad($newNumber, strlen($number), '0', STR_PAD_LEFT);
 
     return $newID;
+}
+function checkExistence($sample, $id, $table) {
+    // Escape any special characters to prevent SQL injection
+    $conn = new mysqli('localhost', 'root', '', 'asm_php1');
+    // $conn = new mysqli($servername, $username, $password, $database);
+
+    $category_id = mysqli_real_escape_string($conn, $sample);
+    $id = mysqli_real_escape_string($conn, $id);
+    $table = mysqli_real_escape_string($conn, $table);
+
+    // Query to check existence
+    $sql_check_existence = "SELECT COUNT(*) AS count FROM $table WHERE $id = '$category_id'";
+
+    // Execute the query
+    $result_check_existence = $conn->query($sql_check_existence);
+
+    // Check if result is not empty and count > 0
+    if ($result_check_existence && $result_check_existence->num_rows > 0) {
+        $row = $result_check_existence->fetch_assoc();
+        if ($row['count'] > 0) {
+            return true; // ID exists
+        } else {
+            return false; // ID does not exist
+        }
+    } else {
+        return false; // Error occurred while checking ID existence
+    }
 }

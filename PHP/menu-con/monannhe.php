@@ -13,6 +13,8 @@
 
 
                         foreach ($productList as $item) {
+                            if ($item['status'] != 0)
+                            {
                             echo '
                                 <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
@@ -37,6 +39,7 @@
                                 </div>
                                 ';
                         }
+                    }
                         ?>
                     </div>
                 </div>

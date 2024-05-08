@@ -13,26 +13,6 @@ require_once('database/dbhelper.php');
                     <input name="search" type="text" placeholder="Tìm món hoặc thức ăn">
                 </form>
             </section>
-            <section class="main-layout">
-                <div class="row">
-                    <?php
-                    $sql = 'select * from category';
-                    $categoryList = executeResult($sql);
-                    $index = 1;
-                    foreach ($categoryList as $item) {
-                        echo '
-                                    <div class="box">
-                                        <a href="thucdon.php?id=' . $item['id'] . '">
-                                            <p>' . $item['name'] . '</p>
-                                            <div class="bg"></div>
-                                            <img src="images/bg/gantoi.jpeg" alt="">
-                                        </a>
-                                    </div>
-                                    ';
-                    }
-                    ?>
-                </div>
-            </section>
         </div>
         <div class="bg-grey">
 
@@ -46,10 +26,14 @@ require_once('database/dbhelper.php');
                 <div class="product-recently">
                     <div class="row">
                         <?php
-                        $sql = 'SELECT * from product, order_details where order_details.id_product=product.id order by order_details.number DESC limit 4';
+                        $sql = 'SELECT * from product, order_details where order_details.id_product=product.id 
+                        order by order_details.number 
+                        DESC limit 4';
                         $productList = executeResult($sql);
                         $index = 1;
                         foreach ($productList as $item) {
+                            if ($item['status'] != 0)
+                            {
                             echo '
                                 <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
@@ -74,6 +58,7 @@ require_once('database/dbhelper.php');
                                 </div>
                                 ';
                         }
+                    }
                         ?>
                     </div>
                 </div>
@@ -102,6 +87,8 @@ require_once('database/dbhelper.php');
 
                             $index = 1;
                             foreach ($productList as $item) {
+                                if ($item['status'] != 0)
+                                {
                                 echo '
                                 <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
@@ -126,6 +113,7 @@ require_once('database/dbhelper.php');
                                 </div>
                                 ';
                             }
+                        }
                         } catch (Exception $e) {
                             die("Lỗi thực thi sql: " . $e->getMessage());
                         }

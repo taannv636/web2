@@ -1,7 +1,8 @@
 <?php
 require_once('../database/dbhelper.php');
 
-$id = $title = $price = $number = $thumbnail = $content = $id_category = "";
+$id = $title = $price = $number = $thumbnail = $content = $id_category = $status ="";
+
 if (!empty($_POST['title'])) {
     if (isset($_POST['title'])) {
         $title = $_POST['title'];
@@ -110,18 +111,33 @@ if (!empty($_POST['title'])) {
     if (!empty($title)) {
         // Lưu vào DB
         if ($id == '') {
-            // Thêm danh mục
+            // Thêm sản phẩm
             $id = generateId('id','product','SP');
             $sql = 'INSERT INTO product(id, title, thumbnail, price, number , id_category , status, content ) 
             VALUES ("' . $id . '","' . $title . '","' . $target_file . '","' . $price . '","' . $number . '",
             "' . $id_category . '","' . $status . '","' . $content . '")';     
     }
         else {
-            // Sửa danh mục
+            //Sừa sản phẩm
+            // Kiểm tra xem có hình ảnh mới được tải lên hay không
+            if (!empty($_FILES['thumbnail']['name'])) {
+                // Nếu có hình ảnh mới, thực hiện cập nhật
+                $sql = 'UPDATE product SET title="' . $title . '", thumbnail="' . $target_file . '", 
+                price="' . $price . '", number="' . $number . '", id_category="' . $id_category . '", status="' . $status . '", content="' . $content . '" 
+                WHERE id = "' . $id . '"';
+            } else {
+                // Nếu không có hình ảnh mới, chỉ cập nhật các trường dữ liệu khác
+                $sql = 'UPDATE product SET title="' . $title . '", price="' . $price . '", number="' . $number . '",
+                 id_category="' . $id_category . '", status="' . $status . '", content="' . $content . '"
+                WHERE id = "' . $id . '"';
+            }
 
-            $sql = 'UPDATE product SET title="' . $title . '", thumbnail="' . $target_file . '", price="' . $price . '", number="' . $number . '",
+            /*
+$sql = 'UPDATE product SET title="' . $title . '", thumbnail="' . $target_file . '", price="' . $price . '", number="' . $number . '",
             id_category="' . $id_category . '", status="' . $status . '", content="' . $content . '"
-            WHERE id = "' . $id . '"';
+                WHERE id = "' . $id . '"';  
+            */
+           
         }
         execute($sql);
         header('Location: index.php');
@@ -229,37 +245,10 @@ if (isset($_GET['id'])) {
                     <div class="form-group">
                     <label for="exampleFormControlSelect1">Chọn Trạng Thái</label>
                         <select class="form-control" id="status" name="status">
-                        <option>Chọn trạng thái</option>
-                            <?php
-                            //show string in combobox
-                    $sql = 'SELECT DISTINCT status FROM product';
-                    $statusList = executeResult($sql);
-                foreach ($statusList as $item) {
-                    $status_text = '';
-                    switch ($item['status']) {
-                        case 0:
-                            $status_text = 'Ngừng kinh doanh';
-                            break;
-                        case 1:
-                            $status_text = 'Còn kinh doanh';
-                            break;
-                        case 2:
-                            $status_text = 'Tạm ngừng kinh doanh';
-                            break;
-                        default:
-                            $status_text = 'Không xác định';
-                            break;
-                    }
-
-                    $selected = ($item['status'] == $status) ? 'selected' : '';
-
-                    echo '<option value="' . $item['status'] . '" ' . $selected . '>' . $status_text . '</option>';
-
-                    //insert value tiny int into databse
-
-                }
-                ?>
-             </select>
+                            <option value="0" <?= $status == 0 ? 'selected' : '' ?>>Ngừng kinh doanh</option>
+                            <option value="1" <?= $status == 1 ? 'selected' : '' ?>>Tạm ngừng kinh doanh</option>
+                            <option value="2" <?= $status == 2 ? 'selected' : '' ?>>Còn kinh doanh</option>
+                        </select>
                     </div>
                 
                     <div class="form-group">
