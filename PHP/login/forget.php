@@ -82,20 +82,8 @@ require_once('../database/dbhelper.php');
         <div class="container">
             <form method="POST" action="">
                 <div class="form-group">
-                    <label>Tên của bạn:</label>
-                    <input class="form-control" type="text" name="name" required="required" />
-                </div>
-                <div class="form-group">
                     <label>Gmail của bạn:</label>
                     <input class="form-control" type="email" name="email" required="required" />
-                </div>
-                <div class="form-group">
-                    <label>Số điện thoại:</label>
-                    <input class="form-control" type="text" name="subject" required="required" />
-                </div>
-                <div class="form-group">
-                    <label>Lý do:</label>
-                    <textarea class="form-control" name="message" id="" cols="30" rows="4"></textarea>
                 </div>
                 <button name="send" class="btn btn-primary">Khôi phục</button>
                 <?php
@@ -107,74 +95,79 @@ require_once('../database/dbhelper.php');
                 <a href="<?= $previous ?>" class="btn btn-warning">Quay lại</a>
             </form>
         </div>
+    
         <?php
-        //nhúng thư viện vào để dùng
-        require "../PHPMailer-master/src/PHPMailer.php";
-        require "../PHPMailer-master/src/SMTP.php";
-        require '../PHPMailer-master/src/Exception.php';
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $name = $_POST['name']; // lấy ra tên của bạn
-            $email = $_POST['email']; // Email cần gửi đến
-            $subject = $_POST['subject']; // Tiêu đề email
-            $message = $_POST['message']; // Nội dung email
-            $mail = new PHPMailer\PHPMailer\PHPMailer(true);  //true: cho phép các trường hợp ngoại lệ
+//require_once('../layout/header.php');
 
+// Include PHPMailer library
+require "../PHPMailer-master/src/PHPMailer.php";
+require "../PHPMailer-master/src/SMTP.php";
+require '../PHPMailer-master/src/Exception.php';
 
-            $sql = "SELECT * FROM user WHERE email= '$email'";
-            $kq = $conn->query($sql);
-            $numrows_email = $kq->rowCount();
-            if ($numrows_email == 1) {
-                foreach ($kq as $item) {
-                    $message = 'Xin chào ' . '<strong>' . $item['hoten'] . '</strong>' . '<br>Mật khẩu của bạn là: ' . '<strong>' . $item['password'] . '</strong>';
-                }
-            } else {
-                echo '<script language="javascript">
-                        alert("Tài khoản không tồn tại !");
-                        window.location = "changePass.php";
-                     </script>';
-            }
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Assign form data to variables
+    $email = $_POST['email'];
 
-            // TRY có thể nó sẽ xảy ra ngoại lệ
-            try {
-                //Server settings
-                $mail->isSMTP(); // gửi mail SMTP
-                $mail->CharSet  = "utf-8";
-                $mail->Host = 'smtp.gmail.com';  // khai báo SMTP servers
-                $mail->SMTPAuth = true; // Enable authentication
-                $nguoigui = 'hellook332@gmail.com'; // Tài khoản Email
-                $matkhau = 'thanh1010'; // Mật khẩu Email
-                $mail->SMTPSecure = 'ssl';  // encryption TLS/SSL 
-                $mail->Port = 465;  // Port kết nối: khai báo 465 hoặc 587                
+    // Kiểm tra xem email tồn tại trong cơ sở dữ liệu không
+    $sql_check_email = "SELECT COUNT(*) AS count FROM user WHERE email = '$email'";
+    $result_check_email = executeSingleResult($sql_check_email);
+    
+    if ($result_check_email['count'] == 0) {
+        // Nếu không có email trong cơ sở dữ liệu, dừng việc tiếp tục thực hiện câu lệnh
+        echo '<script language="javascript">
+        alert("Email chưa được đăng ký tài khoản!"); 
+        </script>';
+        exit; // Dừng thực hiện script
+    }
+    
+    // Nếu email tồn tại, tiếp tục thực hiện câu lệnh để lấy mật khẩu
+    $sql_get_password = "SELECT password FROM user WHERE email = '$email'";
+    $user = executeSingleResult($sql_get_password);
+    $pass = $user['password'];
+    
+    // Tiếp tục thực hiện các công việc khác ở đây...
+    
 
+    // Create a new PHPMailer instance
+    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 
-                // Recipients - Người nhận
-                $tennguoigui = 'Nguyễn Đăng Thành'; // Tên người gửi lấy từ form nhập
-                $mail->Username = $nguoigui; // SMTP username
-                $mail->Password = $matkhau;   // SMTP password
-                $mail->setFrom($nguoigui, $tennguoigui); //mail và tên người nhận 
-                $to = $email; // Email cần gửi đến lấy từ form nhập
-                $to_name = "Nguyễn Đăng Thành"; // Tên người cần gửi đến
+    try {
+        // Configure SMTP settings
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'nguyenvantan1k98@gmail.com';
+        $mail->Password = 'iysormyrjnqjxybh';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;
 
-                // Content 
-                $mail->addAddress($to, $to_name); //mail và tên người nhận  
-                $mail->isHTML(true);  // Khai báo nội dung email hiển thị định dạng html
-                $mail->Subject = 'Khôi phục mật khẩu'; // Tiêu đề email
-                $mail->Body = $message; // Nội dung email
+        // Set sender
+        $mail->setFrom('nguyenvantan1k98@gmail.com');
 
-                $mail->send(); // Tiến hành gửi thư
-                echo '<script language="javascript">
-                        alert("Mật khẩu của bạn đã được gửi đến Email !");
-                        window.location = "login.php";
-                     </script>';
-            }
-            // nếu ở trên lỗi thì CATCH sẽ chạy
-            catch (Exception $e) {
-                echo 'Mail không gửi được. Lỗi: ', $mail->ErrorInfo;
-            }
-        }
-        ?>
-    </div>
+        // Add recipient
+        $mail->addAddress($email);
+
+        // Set email content as HTML
+        $mail->isHTML(true);
+
+        // Set email subject and body
+        $mail->Subject = "Email Confirmation";
+        $mail->Body = "Xin chào: $email,<br><br>Cảm ơn bạn đã nhắn tin cho chúng tôi!<br>Mật khẩu của bạn là: $pass <br>";
+
+        // Send email
+        $mail->send();
+
+        // Redirect after successful sending
+        echo '<script>alert("Send Successfully"); document.location.href = "forget.php";</script>';
+    } catch (Exception $e) {
+        // Handle exceptions
+        echo '<script>alert("Message could not be sent. Mailer Error: ' . $mail->ErrorInfo . '");</script>';
+    }
+}
+?>
+       
 </body>
 
 </html>
