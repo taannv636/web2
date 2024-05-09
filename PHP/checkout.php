@@ -16,16 +16,14 @@ foreach ($cart as $item) {
 if (count($idList) > 0) {
     $idList = "'" . implode("','", $idList) . "'"; // transform
     //['SP001', 'SP002', 'SP003'] => 'SP001', 'SP002', 'SP003'
-    
-    $sql = "SELECT * FROM product WHERE id IN ($idList)";
-    $cartList = executeResult($sql);    
 
+    $sql = "SELECT * FROM product WHERE id IN ($idList)";
+    $cartList = executeResult($sql);
 } else {
     $cartList = [];
 }
 
-if (isset($_COOKIE['username']))
-{
+if (isset($_COOKIE['username'])) {
     $username = $_COOKIE['username'];
     $sql = 'SELECT * FROM user WHERE username= "' . $username . '"';
     $user = executeSingleResult($sql);
@@ -36,6 +34,7 @@ if (isset($_COOKIE['username']))
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -53,85 +52,85 @@ if (isset($_COOKIE['username']))
     <title>Giỏ hàng</title>
 </head>
 <?php
-    if (!isset($_COOKIE['username'])) {
-        echo '<script>
+if (!isset($_COOKIE['username'])) {
+    echo '<script>
             alert("Vui lòng đăng nhập để tiến hành mua hàng");
             window.location="login/login.php";
-        </script>';   
-    }
+        </script>';
+}
 ?>
 
 <body>
     <div id="wrapper">
-                        <?php
-                        $cart = [];
-                        if (isset($_COOKIE['cart'])) {
-                            $json = $_COOKIE['cart'];
-                            $cart = json_decode($json, true);
-                        }
-                        $count = 0;
-                        foreach ($cart as $item) {
-                            $count += $item['num']; // đếm tổng số item
-                        }
-                        ?>
-                    </div>
-                </section>
-            </div>
-        </header> 
-        <?php require_once('layout/header.php'); ?>
+        <?php
+        $cart = [];
+        if (isset($_COOKIE['cart'])) {
+            $json = $_COOKIE['cart'];
+            $cart = json_decode($json, true);
+        }
+        $count = 0;
+        foreach ($cart as $item) {
+            $count += $item['num']; // đếm tổng số item
+        }
+        ?>
+    </div>
+    </section>
+    </div>
+    </header>
+    <?php require_once('layout/header.php'); ?>
 
-        <!-- END HEADR -->
-        <main>
-            <section class="cart">
-                <form action="" method="POST">
-                    <div class="container">
-                        <h3 style="text-align: center;">Tiến hành đặt hàng</h3>
-                        <div class="row">
-                            <div class="panel panel-primary col-md-6">
-                                <h4 style="padding: 2rem 0; border-bottom:1px solid black;">Nhập thông tin mua hàng </h4>
-                                <div class="form-group">
-                                    <label for="usr">Họ và tên:</label>
-                                    <input required="true" type="text" class="form-control" id="usr" name="fullname" value="<?= $user['hoten'] ?>">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Email:</label>
-                                    <input type="email" class="form-control" id="email" name="email" value="<?= $user['email'] ?>" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone_number">Số điện thoại:</label>
-                                    <input required="true" type="text" class="form-control" id="phone_number" name="phone_number" value="<?= $user['phone'] ?>">
-                                </div>
-                                <div class="form-group">
-                                    <label for="address">Địa chỉ:</label>
-                                    <input required="true" type="text" class="form-control" id="address" name="address" value="<?= $user['address'] ?>">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="payment">Hình thức thanh toán:</label><br>
-                                    <input type="radio" id="male" name="payment" value="0" checked>
-                                    <label for="cash">Trả tiền mặt</label><br>
-                                    <input type="radio" id="female" name="payment" value="1">
-                                    <label for="banking">Chuyển khoản</label><br>
-                                </div>
-
+    <!-- END HEADR -->
+    <main>
+        <section class="cart">
+            <form action="" method="POST">
+                <div class="container">
+                    <h3 style="text-align: center;">Tiến hành đặt hàng</h3>
+                    <div class="row">
+                        <div class="panel panel-primary col-md-6">
+                            <h4 style="padding: 2rem 0; border-bottom:1px solid black;">Nhập thông tin mua hàng </h4>
+                            <div class="form-group">
+                                <label for="usr">Họ và tên:</label>
+                                <input required="true" type="text" class="form-control" id="usr" name="fullname" value="<?= $user['hoten'] ?>">
                             </div>
-                            <!-- <button onclick="hienthi()"><i class="fas fa-angle-down"></i> Xem lại đơn hàng</button> -->
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email" value="<?= $user['email'] ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone_number">Số điện thoại:</label>
+                                <input required="true" type="text" class="form-control" id="phone_number" name="phone_number" value="<?= $user['phone'] ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Địa chỉ:</label>
+                                <input required="true" type="text" class="form-control" id="address" name="address" value="<?= $user['address'] ?>">
+                            </div>
 
-                            <div class="panel panel-primary col-md-6">
-                                <h4 style="padding: 2rem 0; border-bottom:1px solid black;">Đơn hàng</h4>
-                                <table class="table table-bordered table-hover none">
-                                    <thead>
-                                        <tr style="font-weight: 500;text-align: center;">
-                                            <td width="50px">STT</td>
-                                            <td>Tên Sản Phẩm</td>
-                                            <td>Số lượng</td>
-                                            <td>Tổng tiền</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                         
-                                        $count = 0;
+                            <div class="form-group">
+                                <label for="payment">Hình thức thanh toán:</label><br>
+                                <input type="radio" id="male" name="payment" value="0" checked>
+                                <label for="cash">Trả tiền mặt</label><br>
+                                <input type="radio" id="female" name="payment" value="1">
+                                <label for="banking">Chuyển khoản</label><br>
+                            </div>
+
+                        </div>
+                        <!-- <button onclick="hienthi()"><i class="fas fa-angle-down"></i> Xem lại đơn hàng</button> -->
+
+                        <div class="panel panel-primary col-md-6">
+                            <h4 style="padding: 2rem 0; border-bottom:1px solid black;">Đơn hàng</h4>
+                            <table class="table table-bordered table-hover none">
+                                <thead>
+                                    <tr style="font-weight: 500;text-align: center;">
+                                        <td width="50px">STT</td>
+                                        <td>Tên Sản Phẩm</td>
+                                        <td>Số lượng</td>
+                                        <td>Tổng tiền</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+                                    /*$count = 0;
                                         $total = 0;
                                         foreach ($cartList as $item) {
                                             $num = 0;
@@ -154,21 +153,56 @@ if (isset($_COOKIE['username']))
                                        
                                     </tr>
                                     ';
+                                        }*/
+                                    if (isset($_COOKIE['username'])) {
+                                        $username = $_COOKIE['username'];
+                                        $sql_id = "SELECT * FROM user WHERE username = '$username'";
+                                        $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+                                        $result_id = mysqli_query($con, $sql_id);
+
+                                        // Lấy dữ liệu từ kết quả truy vấn
+                                        $user = mysqli_fetch_assoc($result_id);
+                                        $id_user = $user['id_user'];
+                                        // Lấy danh sách các đơn hàng được chọn từ tham số truyền vào
+                                        $selectedOrders = json_decode($_GET['selectedOrders']);
+                                        $total = 0;
+                                        $stt = 1;
+
+                                        // Lặp qua danh sách các đơn hàng và hiển thị chúng trong bảng
+                                        foreach ($selectedOrders as $order) {
+                                            $sql = "SELECT cart.number as numbers, product.title as title, product.price as price
+                                                    FROM cart JOIN product ON cart.id_product = product.id WHERE cart.id_user = '$id_user' AND cart.id_product = '$order'";
+                                            $result = executeSingleResult($sql);
+                                            
+                                            $productName = $result['title'];
+                                            $quantity = $result['numbers'];
+                                            $price = $result['price']*$result['numbers'];
+                                            $total = $total + $price;
+
+                                            // Hiển thị thông tin của đơn hàng trong bảng
+                                            echo "<tr>";
+                                            echo "<td>$order</td>";
+                                            echo "<td>$productName</td>";
+                                            echo "<td>$quantity</td>";
+                                            echo "<td>$price</td>";
+                                            echo "</tr>";
+                                            $stt = $stt + 1;
                                         }
-                                        ?>
-                                    </tbody>
-                                </table>
-                                <p>Tổng đơn hàng: <span class="bold red"><?= number_format($total, 0, ',', '.') ?><span> VNĐ</span></span></p>
-                                <a href="dashboard.php"><button class="btn btn-success">Đặt hàng</button></a>
-                            </div>
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                            <p>Tổng đơn hàng: <span class="bold red"><?= number_format($total, 0, ',', '.') ?><span> VNĐ</span></span></p>
+                            <a href="dashboard.php"><button class="btn btn-success">Đặt hàng</button></a>
                         </div>
-
                     </div>
-                </form>
 
-            </section>
-        </main>
-        <?php require_once('layout/footer.php'); ?>
+                </div>
+            </form>
+
+        </section>
+    </main>
+    <?php require_once('layout/footer.php'); ?>
     </div>
     <script type="text/javascript">
         function deleteCart(id) {
