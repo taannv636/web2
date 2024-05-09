@@ -22,33 +22,54 @@ function getStatus($stt)
     return $status_text;
 }
 
-// Initialize variables
-$sql = "SELECT p.*, c.name 
-        FROM product AS p 
-        LEFT JOIN category AS c ON p.id_category = c.id";
+// Initialize $start with a default value
+$start = 0;
+$keyword = ''; // Initialize $keyword
 
-// Check if search keyword is provided
-if (isset($_GET['keyword'])) {
-    $keyword = $_GET['keyword'];
-    // Add WHERE clause to filter products by name
-    $sql .= " WHERE p.title LIKE '%$keyword%'";
+if (isset($_GET['page'])) {
+    $pg = $_GET['page'];
+} else {
+    $pg = 1;
 }
 
-// Execute SQL query
-$productList = executeResult($sql);
+try {
+    $limit = 5;
+    if (isset($_GET['keyword'])) {
+        $keyword = $_GET['keyword'];
+        // Count total search results
+        $sqlCount = "SELECT COUNT(*) as total FROM product WHERE title LIKE '%$keyword%' OR title LIKE '%$keyword%'";
+        $resultCount = executeSingleResult($sqlCount);
+        $totalRecords = $resultCount['total'];
 
-// Pagination
-$limit = 5; // Số sản phẩm trên mỗi trang
-$total_records = count($productList);
-$total_pages = ceil($total_records / $limit);
+        // Calculate total pages
+        $totalPages = ceil($totalRecords / $limit);
 
-// Current page
-$current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-$start = ($current_page - 1) * $limit;
+        // Calculate start offset
+        $start = ($pg - 1) * $limit;
 
-// Get products for current page
-$sql .= " LIMIT $start, $limit";
-$productList = executeResult($sql);
+        // Fetch search results for the current page
+        $sql = "SELECT p.*,c.name FROM product AS p LEFT JOIN category AS c ON p.id_category = c.id
+        WHERE title LIKE '%$keyword%' OR title LIKE '%$keyword%' 
+        LIMIT $start, $limit";
+    } else {
+        // Fetch all users without search keyword
+        $sqlCount = "SELECT COUNT(*) as total FROM product";
+        $resultCount = executeSingleResult($sqlCount);
+        $totalRecords = $resultCount['total'];
+
+        // Calculate total pages
+        $totalPages = ceil($totalRecords / $limit);
+
+        $start = ($pg - 1) * $limit;
+        $sql = "SELECT p.*,c.name FROM product AS p LEFT JOIN category AS c ON p.id_category = c.id
+        LIMIT $start, $limit";
+    }
+
+    $productList = executeResult($sql);
+
+} catch (Exception $e) {
+    die("Lỗi thực thi sql: " . $e->getMessage());
+}
 
 ?>
 <!DOCTYPE html>
@@ -155,21 +176,24 @@ $productList = executeResult($sql);
 
             <!-- Pagination -->
             <ul class="pagination">
-                <?php
-                for ($i = 1; $i <= $total_pages; $i++) {
-                    // Nếu là trang hiện tại thì hiển thị thẻ span
-                    // ngược lại hiển thị thẻ a
-                    if ($i == $current_page) {
+            <?php
+            if (isset($totalPages)) {
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    if ($i == $pg) {
                         echo '
-            <li class="page-item active"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+                            <li class="page-item active">
+                                <a class="page-link" style="color: yellow; font-weight: bold;" href="?keyword=' . urlencode($keyword) . '&page=' . $i . '">' . $i . '</a>
+                            </li>';
                     } else {
                         echo '
-            <li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>
-                    ';
+                            <li class="page-item">
+                                <a class="page-link" href="?keyword=' . urlencode($keyword) . '&page=' . $i . '">' . $i . '</a>
+                            </li>';
                     }
                 }
-                ?>
-            </ul>
+            }
+            ?>
+        </ul>
         </div>
     </div>
 
@@ -213,7 +237,22 @@ $productList = executeResult($sql);
         });
     }
 </script>
-
+<script type="text/javascript">
+        document.addEventListener('keydown', function(event) {
+            if (event.keyCode == 37) { // Mũi tên trái
+                var currentPage = parseInt("<?php echo $pg; ?>");
+                if (currentPage > 1) {
+                    window.location.href = '?keyword=' + encodeURIComponent("<?php echo $keyword; ?>") + '&page=' + (currentPage - 1);
+                }
+            } else if (event.keyCode == 39) { // Mũi tên phải
+                var currentPage = parseInt("<?php echo $pg; ?>");
+                var totalPages = parseInt("<?php echo $totalPages; ?>");
+                if (currentPage < totalPages) {
+                    window.location.href = '?keyword=' + encodeURIComponent("<?php echo $keyword; ?>") + '&page=' + (currentPage + 1);
+                }
+            }
+        });
+    </script>
 
 </body>
 
