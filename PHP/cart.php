@@ -37,7 +37,7 @@
                             </ul>
                             <h2 style="padding-top:2rem" class="">Giỏ hàng</h2>
                         </div>
-                        <div class="panel-body"></div>
+                        <div class="panel-body" style="margin-bottom: 10px;">Nếu sản phẩm bạn thêm vào không có trong giỏ hàng. Có thể sản phẩm đã hết hoặc ngừng kinh doanh</div>
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr style="font-weight: 500;text-align: center;">
@@ -61,11 +61,12 @@
                                     // Lấy dữ liệu từ kết quả truy vấn
                                     $user = mysqli_fetch_assoc($result_id);
                                     $id_user = $user['id_user'];
-                                    $sql = "SELECT product.id as id, cart.number as numbers, product.title as title, product.thumbnail as thumbnail, product.price as price
+                                    $sql = "SELECT product.id as id, cart.number as numbers, product.title as title, product.thumbnail as thumbnail, product.price as price, cart.status as status_item
                                             FROM cart JOIN product ON cart.id_product = product.id WHERE cart.id_user = '$id_user'";
                                     $result = executeResult($sql);
                                     foreach ($result as $item) {
-                                        echo '
+                                        if($item['status_item']==1){
+                                            echo '
                                             <tr style="text-align: center;">
                                                 <td width="50px">
                                                     <input type="checkbox" class="checkbox" id="myCheckbox" name="myCheckbox" value="'.$item['id'].'">
@@ -85,6 +86,7 @@
                                                     </a>
                                                 </td>
                                             </tr>';
+                                        }
                                     }
                                 }
                                 ?>
@@ -252,12 +254,12 @@
                 if (this.checked) {
                     var total_item = this.closest('tr').querySelector('.total_item').innerHTML;
                     total = total + convertCurrencyToNumber(total_item);
-                    alert("Kiểu dữ liệu là: " + total);
+                    
                     document.getElementById('total').innerHTML = number_format_script(total, 0, ',', '.') + " VNĐ";
                 } else {
                     var total_item = this.closest('tr').querySelector('.total_item').innerHTML;
                     total = total - convertCurrencyToNumber(total_item);
-                    alert("Kiểu dữ liệu là: " + total);
+                    
                     document.getElementById('total').innerHTML = number_format_script(total, 0, ',', '.') + " VNĐ";
                 }
             });
