@@ -33,7 +33,7 @@ if (!empty($status)) {
     header('Location: dashboard.php');
     die();
 }
-
+$delivery_date = '';
 // Truy vấn dữ liệu từ CSDL để hiển thị thông tin đơn hàng
 if (isset($_GET['order_id'])) {
     $order_id = $_GET['order_id'];
@@ -165,16 +165,23 @@ if (isset($_GET['order_id'])) {
                     <!-- Status  -->
                     <!-- Status  -->
                     <div class="form-group">
-                    <label for="exampleFormControlSelect1">Chọn Trạng Thái</label>
-                        <select class="form-control" id="status" name="status">
+                        <label for="exampleFormControlSelect1">Chọn Trạng Thái</label>
+                        <select class="form-control" id="status" name="status" onchange="updateDeliveryDate()">
                             <option value="0" <?= $status == 0 ? 'selected' : '' ?>>Đang chuẩn bị hàng</option>
                             <option value="1" <?= $status == 1 ? 'selected' : '' ?>>Đang giao hàng</option>
                             <option value="2" <?= $status == 2 ? 'selected' : '' ?>>Đã giao hàng</option>
                             <option value="3" <?= $status == 3 ? 'selected' : '' ?>>Đã hủy đơn hàng</option>
                         </select>
                     </div>
+                    <script>
+                        function updateDeliveryDate() {
+                            var status = document.getElementById("status").value;
+                            var deliveryDate = new Date().toISOString().slice(0, 19).replace('T', ' '); // Lấy thời gian hiện tại của hệ thống và format thành chuỗi YYYY-MM-DD HH:MM:SS
 
-
+                            // Cập nhật giá trị của input hidden với biến deliveryDate
+                            document.getElementById("delivery_date").value = deliveryDate;
+                        }
+                    </script>
                     </div>
 
                     <button type="submit" class="btn btn-success" name="save">Lưu</button>

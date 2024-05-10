@@ -143,10 +143,10 @@ function getStatusColorClass($status)
                             <label for="status">Tình trạng</label>
                             <select class="custom-select" id="status" name="status">
                                 <option value="">Chọn tình trạng</option>
-                                <option value="0" <?= ($_GET['status'] ?? '') == '1' ? 'selected' : '' ?>>Đang chuẩn bị hàng</option>
-                                <option value="1" <?= ($_GET['status'] ?? '') == '2' ? 'selected' : '' ?>>Đang giao hàng</option>
-                                <option value="2" <?= ($_GET['status'] ?? '') == '3' ? 'selected' : '' ?>>Đã giao hàng</option>
-                                <option value="3" <?= ($_GET['status'] ?? '') == '4' ? 'selected' : '' ?>>Đã hủy đơn hàng</option>
+                                <option value="0" <?= ($_GET['status'] ?? '') == '0' ? 'selected' : '' ?>>Đang chuẩn bị hàng</option>
+                                <option value="1" <?= ($_GET['status'] ?? '') == '1' ? 'selected' : '' ?>>Đang giao hàng</option>
+                                <option value="2" <?= ($_GET['status'] ?? '') == '2' ? 'selected' : '' ?>>Đã giao hàng</option>
+                                <option value="3" <?= ($_GET['status'] ?? '') == '3' ? 'selected' : '' ?>>Đã hủy đơn hàng</option>
                             </select>
                         </div>
                         <div class="col-auto">
