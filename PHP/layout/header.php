@@ -50,17 +50,23 @@ require_once('database/dbhelper.php');
                     <div class="cart">
                         <a href="cart.php"><img src="images/icon/cart.svg" alt=""></a>
                         <?php
-$count = 0;
-if (isset($_COOKIE['cart'])) {
-    $json = $_COOKIE['cart'];
-    $cart = json_decode($json, true);
-    foreach ($cart as $item) {
-        $count += $item['num']; // Tính tổng số sản phẩm
-    }
-}
-?>
+                        $count = 0;
+                        // if (isset($_COOKIE['cart'])) {
+                        //     $json = $_COOKIE['cart'];
+                        //     $cart = json_decode($json, true);
+                        //     foreach ($cart as $item) {
+                        //         $count += $item['num']; // Tính tổng số sản phẩm
+                        //     }
+                        // }
+                        if (isset($_COOKIE['username'])) {
+                            $username = $_COOKIE['username'];
+                            $sql = "SELECT * FROM cart JOIN user ON cart.id_user = user.id_user WHERE user.username = '$username'";
+                            $result = executeResult($sql);
+                            $count = sizeof($result);
+                        }
+                        ?>
 
-<span><?php echo isset($_COOKIE['username']) ? $count : ''; ?></span>
+                        <span><?php echo isset($_COOKIE['username']) ? $count : ''; ?></span>
 
                         <!-- <div class="history">
                             <a href="history.php"><i class="fas fa-history" style="font-size: 14px;"></i>Lịch sử</a>
@@ -68,9 +74,10 @@ if (isset($_COOKIE['cart'])) {
                     </div>
                     <div class="login">
                         <?php
-                        if (isset($_COOKIE['username'])) {
+                        if (isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
                             $username = $_COOKIE['username'];
-                            if ($username == 'AdminThanh' || $username == 'admin') {
+                            $password = $_COOKIE['password'];
+                            if ($username == 'admin' && $password == '12345678') {
                                 echo '<a style="color:black;" href="">' . $_COOKIE['username'] . '</a>
                                 <div class="logout">
                                     <a href="admin/"><i class="fas fa-user-edit"></i>Admin</a> <br>
