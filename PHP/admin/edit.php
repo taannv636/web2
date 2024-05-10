@@ -22,17 +22,24 @@ if (isset($_POST['status'])) {
 }
 
 
-// Xử lý khi form được gửi đi và trạng thái không rỗng
-if (!empty($status)) {
-    // Thực hiện câu lệnh SQL cập nhật trạng thái đơn hàng
+$current_status = ''; // Biến lưu trạng thái hiện tại, có thể là giá trị trả về từ CSDL
+
+if (isset($_POST['status'])) {
+    $new_status = $_POST['status'];
+    // Kiểm tra và xử lý dữ liệu nếu cần
+    $new_status = str_replace('"', '\\"', $new_status);
     
-    $sql = 'UPDATE orders SET status="' . $status . '"
-            WHERE id = "' . $id_order . '"';
-    execute($sql);
-    
-    header('Location: dashboard.php');
-    die();
+    // Chỉ cập nhật nếu trạng thái mới khác với trạng thái hiện tại
+    if ($new_status != $current_status) {
+        $sql = 'UPDATE orders SET status="' . $new_status . '"
+                WHERE id = "' . $id_order . '"';
+        execute($sql);
+        
+        header('Location: dashboard.php');
+        die();
+    }
 }
+
 $delivery_date = '';
 // Truy vấn dữ liệu từ CSDL để hiển thị thông tin đơn hàng
 if (isset($_GET['order_id'])) {
