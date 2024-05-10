@@ -22,7 +22,6 @@ if (!empty($_GET['address'])) {
     $params[] = "LOWER(orders.address) LIKE '%" . strtolower($address) . "%'";
 }
 
-
 // Handle date range
 if (!empty($_GET['start_date']) && !empty($_GET['end_date'])) {
     $start_date = $_GET['start_date'];
@@ -211,10 +210,14 @@ function getStatusColorClass($status)
                     <?php
                     // Display pagination links
                     for ($i = 1; $i <= $total_pages; $i++) {
+                        // Append search parameters to pagination links
+                        $params = $_GET; // Copy existing GET parameters
+                        $params['page'] = $i; // Set page parameter
+                        $query_string = http_build_query($params); // Build query string
                         if ($i == $page) {
-                            echo '<li class="page-item active"><a class="page-link" style="color: yellow; font-weight: bold;" href="?page=' . $i . '">' . $i . '</a></li>';
+                            echo '<li class="page-item active"><a class="page-link" style="color: yellow; font-weight: bold;" href="?' . $query_string . '">' . $i . '</a></li>';
                         } else {
-                            echo '<li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+                            echo '<li class="page-item"><a class="page-link" href="?' . $query_string . '">' . $i . '</a></li>';
                         }
                     }
                     ?>
@@ -224,6 +227,7 @@ function getStatusColorClass($status)
         </div>
     </div>
 </body>
+
 <style>
     .b-500 {
         font-weight: 500;
