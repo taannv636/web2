@@ -18,6 +18,15 @@
     <title>Giỏ hàng</title>
 </head>
 
+<?php
+if (!isset($_COOKIE['username'])) {
+    echo '<script>
+            alert("Vui lòng đăng nhập để tiến hành thêm vào giỏ hàng");
+            window.location="login/login.php";
+        </script>';
+}
+?>
+
 <body>
     <div id="wrapper">
         <?php require_once('layout/header.php'); ?>
@@ -127,9 +136,6 @@
             // })
         }
 
-        function checkLogin() {
-
-        }
         document.querySelectorAll('.quantity input[type="number"]').forEach(input => {
             input.addEventListener('change', function() {
                 var productId = this.getAttribute('data-product-id');

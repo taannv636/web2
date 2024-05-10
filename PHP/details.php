@@ -4,6 +4,7 @@ require_once('database/config.php');
 require_once('database/dbhelper.php');
 require_once('utils/utility.php');
 // Lấy id từ trang index.php truyền sang rồi hiển thị nó
+$id_user = $id = $num = $product = '';
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     
@@ -17,7 +18,39 @@ if (isset($_GET['id'])) {
         exit(); // Dừng việc thực thi mã ngay tại đây
     }
 }
+
+if (isset($_POST['num']) && isset($_COOKIE['username'])){
+    $num = $_POST['num'];
+    $username = $_COOKIE['username'];
+
+    $sql = 'SELECT id_user FROM user WHERE username = "' . $username . '"';
+    $user = executeSingleResult($sql);
+    $id_user = $user['id_user'];
+
+    if (!empty($product)) {
+        $status = $product['status'];
+    
+        // Kiểm tra xem primary key đã tồn tại trong bảng cart chưa
+        $sql_check = 'SELECT * FROM cart WHERE id_user = "' . $id_user . '" AND id_product = "' . $id . '"';
+        $existing_cart_item = executeSingleResult($sql_check);
+    
+        if ($existing_cart_item) {
+            // Nếu primary key đã tồn tại, thực hiện cập nhật cột number
+            $sql = 'UPDATE cart SET number = "' . $num . '" WHERE id_user = "' . $id_user . '" AND id_product = "' . $id . '"';
+        } else {
+            // Nếu primary key chưa tồn tại, thực hiện insert mới
+            $sql = 'INSERT INTO cart(id_user, id_product, number, status) 
+            VALUES ("' . $id_user . '","' . $id . '","' . $num . '","' . $status . '") 
+            ON DUPLICATE KEY UPDATE number = VALUES(number)';
+        }
+    
+        execute($sql);
+    }
+    
+}
+
 ?>
+
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0&appId=264339598396676&autoLogAppEvents=1" nonce="8sTfFiF4"></script>
 <!-- END HEADR -->
@@ -52,15 +85,17 @@ if (isset($_GET['id'])) {
                                         <li><a href="">L</a></li>
                                     </ul>
                                 </div>
-                                <div class="number">
-                                    <span class="number-buy">Số lượng</span>
-                                    <input id="num" type="number" value="1" min="1" onchange="updatePrice()">
-                                </div>
-
-                                <p class="price">Giá: <span id="price"><?= number_format($product['price'], 0, ',', '.') ?></span><span> VNĐ</span><span class="gia none"><?= $product['price'] ?></span></p>
-                                <!-- <a class="add-cart" href="" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</a> -->
-                                <button class="add-cart" onclick="addToCart('<?= $id ?>')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
-                                <!-- <a class="buy-now" href="checkout.php" >Mua ngay</a> -->
+                                <form method="POST" enctype="multipart/form-data">
+                                    <div class="number">
+                                        <span class="number-buy">Số lượng</span>
+                                        <!-- Đặt tên "name" cho input number -->
+                                        <input id="num" name="num" type="number" value="1" min="1" onchange="updatePrice()">
+                                    </div>
+                                    <p class="price">Giá: <span id="price"><?= number_format($product['price'], 0, ',', '.') ?></span><span> VNĐ</span><span class="gia none"><?= $product['price'] ?></span></p>
+                                    <!-- <a class="add-cart" href="" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</a> -->
+                                    <button type="submit" class="add-cart" onclick="addToCart('<?= $id ?>')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
+                                    <!-- <a class="buy-now" href="checkout.php" >Mua ngay</a> -->
+                                </form>
                                 <button class="buy-now" onclick="buyNow('<?= $id ?>')">Mua ngay</button>
 
                                 <div id="alertNotSell" style="font-weight: bold; color: red"></div>
@@ -204,10 +239,7 @@ if (isset($_GET['id'])) {
             'id': id,
             'num': num
         }, function(data) {
-           location.assign("checkout.php");
-            location.reload()
-            location.assign("cart.php");
-
+        location.assign("cart.php");
         })
     }
 
