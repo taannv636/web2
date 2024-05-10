@@ -79,7 +79,7 @@ if (isset($_COOKIE['cart'])) {
                             } else {
                                 echo '<a style="color:black;" href="">' . $_COOKIE['username'] . '</a>
                             <div class="logout">
-                                <a href="login/changePass.php"><i class="fas fa-exchange-alt"></i>Đổi mật khẩu</a> <br>
+                                <a href="login/changePass.php"><i class="fas fa-exchange-alt"></i>Thông Tin Cá Nhân</a> <br>
                                 <a href="login/logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
                             </div>';
                             }
