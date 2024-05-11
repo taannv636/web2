@@ -97,6 +97,8 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])) {
                                     <!-- <a class="buy-now" href="checkout.php" >Mua ngay</a> -->
                                 </form>
                                 <?php
+                                if (isset($_COOKIE['username'])) {
+                                     
                                     $username = $_COOKIE['username'];
                                     $sql_id = "SELECT * FROM user WHERE username = '$username'";
                                     $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
@@ -105,6 +107,7 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])) {
                                     // Lấy dữ liệu từ kết quả truy vấn
                                     $user = mysqli_fetch_assoc($result_id);
                                     $id_user = $user['id_user'];
+                                }
                                 ?>
                                 <button class="buy-now" id_user='<?php echo $id_user ?>' id_product='<?php echo $id ?>'>Mua ngay</button>
 
@@ -278,7 +281,8 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])) {
                 // Ví dụ: cập nhật giao diện sau khi xóa 
                 //location.reload(); // Reload trang sau khi xóa
                 var reponse = xhr.responseText;
-                alert(reponse);
+
+            
                 console.log(reponse);
 
             }
