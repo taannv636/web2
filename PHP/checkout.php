@@ -115,7 +115,7 @@ if (!isset($_COOKIE['username'])) {
 
                                             // Hiển thị thông tin của đơn hàng trong bảng
                                             echo "<tr>";
-                                            echo "<td>$order</td>";
+                                            echo "<td>$stt</td>";
                                             echo "<td>$productName</td>";
                                             echo "<td>$quantity</td>";
                                             echo "<td>$price</td>";

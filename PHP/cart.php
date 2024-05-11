@@ -18,6 +18,15 @@
     <title>Giỏ hàng</title>
 </head>
 
+<?php
+if (!isset($_COOKIE['username'])) {
+    echo '<script>
+            alert("Vui lòng đăng nhập để tiến hành thêm vào giỏ hàng");
+            window.location="login/login.php";
+        </script>';
+}
+?>
+
 <body>
     <div id="wrapper">
         <?php require_once('layout/header.php'); ?>
@@ -65,11 +74,11 @@
                                             FROM cart JOIN product ON cart.id_product = product.id WHERE cart.id_user = '$id_user'";
                                     $result = executeResult($sql);
                                     foreach ($result as $item) {
-                                        if($item['status_item']==1){
+                                        if ($item['status_item'] == 1) {
                                             echo '
                                             <tr style="text-align: center;">
                                                 <td width="50px">
-                                                    <input type="checkbox" class="checkbox" id="myCheckbox" name="myCheckbox" value="'.$item['id'].'">
+                                                    <input type="checkbox" class="checkbox" id="myCheckbox" name="myCheckbox" value="' . $item['id'] . '">
                                                 </td>
                                                 <td style="text-align:center">
                                                     <img src="admin/product/' . $item['thumbnail'] . '" alt="" style="width: 50px">
@@ -110,7 +119,7 @@
                             </tbody>
                         </table>
                         <p>Tổng đơn hàng: <span class="red bold" id="total"><?= number_format(0, 0, ',', '.') ?><span> VNĐ</span></span></p>
-                        <a href="checkout.php" onclick="checkLogin()"><button class="btn btn-success">Thanh toán</button></a>
+                        <button class="btn btn-success">Thanh toán</button>
                     </div>
                 </div>
             </section>
@@ -118,18 +127,6 @@
         <?php require_once('layout/footer.php'); ?>
     </div>
     <script type="text/javascript">
-        function deleteCart(id) {
-            // $.post('api/cookie.php', {
-            //     'action': 'delete',
-            //     'id': id
-            // }, function(data) {
-            //     location.reload()
-            // })
-        }
-
-        function checkLogin() {
-
-        }
         document.querySelectorAll('.quantity input[type="number"]').forEach(input => {
             input.addEventListener('change', function() {
                 var productId = this.getAttribute('data-product-id');
@@ -155,7 +152,7 @@
                         console.log(total_abs);
                         //console.log(response);
                         //var total_input_change = 0 ;
-                        if(checkbox.checked){
+                        if (checkbox.checked) {
                             //var total_item = input.closest('tr').querySelector('.total_item').innerHTML;
                             total = total + total_abs;
                             document.getElementById('total').innerHTML = number_format_script(total, 0, ',', '.') + " VNĐ";
@@ -203,9 +200,15 @@
                 selectedOrders.push(checkbox.value);
             });
 
-            // Chuyển hướng đến trang thanh toán với danh sách các món hàng được chọn
-            var url = 'checkout.php?selectedOrders=' + JSON.stringify(selectedOrders);
-            window.location.href = url;
+            // Kiểm tra nếu có mục được chọn
+            if (selectedOrders.length > 0) {
+                // Chuyển hướng đến trang thanh toán với danh sách các món hàng được chọn
+                var url = 'checkout.php?selectedOrders=' + JSON.stringify(selectedOrders);
+                window.location.href = url;
+            } else {
+                // Nếu không có mục được chọn, ở lại trang hiện tại
+                alert("Vui lòng chọn ít nhất một mục để thanh toán.");
+            }
         });
 
         function number_format_script(number, decimals, dec_point, thousands_sep) {
@@ -254,12 +257,12 @@
                 if (this.checked) {
                     var total_item = this.closest('tr').querySelector('.total_item').innerHTML;
                     total = total + convertCurrencyToNumber(total_item);
-                    
+
                     document.getElementById('total').innerHTML = number_format_script(total, 0, ',', '.') + " VNĐ";
                 } else {
                     var total_item = this.closest('tr').querySelector('.total_item').innerHTML;
                     total = total - convertCurrencyToNumber(total_item);
-                    
+
                     document.getElementById('total').innerHTML = number_format_script(total, 0, ',', '.') + " VNĐ";
                 }
             });

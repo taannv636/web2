@@ -24,6 +24,73 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `id_user` varchar(50) NOT NULL,
+  `id_product` varchar(50) NOT NULL,
+  `number` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`id_user`, `id_product`, `number`, `status`) VALUES
+('KH0001', 'SP002', 7, 1),
+('KH0001', 'SP008', 5, 1),
+('KH0001', 'SP015', 5, 1),
+('KH0001', 'SP020', 10, 1),
+('KH0002', 'SP022', 1, 1),
+('KH0003', 'SP003', 10, 1),
+('KH0003', 'SP015', 9, 1),
+('KH0003', 'SP024', 9, 1),
+('KH0004', 'SP003', 1, 1),
+('KH0005', 'SP010', 9, 1),
+('KH0006', 'SP009', 2, 1),
+('KH0006', 'SP014', 8, 1),
+('KH0007', 'SP008', 2, 1),
+('KH0007', 'SP013', 2, 1),
+('KH0007', 'SP022', 2, 1),
+('KH0008', 'SP018', 3, 1),
+('KH0009', 'SP024', 5, 1),
+('KH0010', 'SP002', 10, 1),
+('KH0010', 'SP007', 5, 1),
+('KH0010', 'SP008', 7, 1),
+('KH0010', 'SP013', 5, 1),
+('KH0010', 'SP019', 5, 1),
+('KH0011', 'SP001', 1, 1),
+('KH0012', 'SP020', 5, 1),
+('KH0013', 'SP020', 2, 1),
+('KH0014', 'SP015', 10, 1),
+('KH0015', 'SP015', 10, 1),
+('KH0016', 'SP024', 6, 1),
+('KH0017', 'SP018', 3, 1),
+('KH0018', 'SP012', 7, 1),
+('KH0019', 'SP012', 5, 1),
+('KH0020', 'SP018', 9, 1),
+('KH0021', 'SP003', 4, 1),
+('KH0022', 'SP009', 3, 1),
+('KH0023', 'SP010', 8, 1),
+('KH0024', 'SP023', 8, 1),
+('KH0025', 'SP023', 9, 1),
+('KH0026', 'SP026', 2, 1),
+('KH0027', 'SP015', 10, 1),
+('KH0028', 'SP005', 4, 1),
+('KH0029', 'SP022', 8, 1),
+('KH0030', 'SP020', 2, 1),
+('KH0031', 'SP020', 4, 1),
+('KH0032', 'SP013', 2, 1),
+('KH0033', 'SP016', 9, 1),
+('KH0034', 'SP025', 10, 1),
+('KH0035', 'SP023', 3, 1),
+('KH0036', 'SP023', 8, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `category`
 --
 
@@ -265,6 +332,13 @@ INSERT INTO `user` (`id_user`, `hoten`, `sex`, `birthday`, `email`, `address`, `
 --
 
 --
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`id_user`,`id_product`),
+  ADD KEY `id_product` (`id_product`);
+
+--
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
@@ -302,6 +376,13 @@ ALTER TABLE `user`
 --
 
 --
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`),
+  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `product` (`id`);
+
+--
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
@@ -321,6 +402,40 @@ ALTER TABLE `product`
   ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`id_category`) REFERENCES `category` (`id`);
 COMMIT;
 
+
+DELIMITER //
+
+CREATE TRIGGER update_cart_status AFTER UPDATE ON product
+FOR EACH ROW
+BEGIN
+    IF NEW.status = 0 OR NEW.status = 1 THEN
+        UPDATE cart
+        SET status = 0
+        WHERE id_product = NEW.id;
+    ELSE
+        UPDATE cart
+        SET status = 1
+        WHERE id_product = NEW.id;
+    END IF;
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE TRIGGER update_product_status BEFORE UPDATE ON product
+FOR EACH ROW
+BEGIN
+    IF NEW.number = 0 AND OLD.status = 2 THEN
+        SET NEW.status = 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
