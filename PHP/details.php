@@ -281,7 +281,8 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])) {
                 // Ví dụ: cập nhật giao diện sau khi xóa 
                 //location.reload(); // Reload trang sau khi xóa
                 var reponse = xhr.responseText;
-                alert(reponse);
+
+            
                 console.log(reponse);
 
             }
