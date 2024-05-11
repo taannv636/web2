@@ -36,7 +36,7 @@ require_once('utils/utility.php');
                                     <a class="nav-link" href="cart.php">Giỏ hàng</a>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link active" href="dashboard.php">Lịch sử mua hàng</a>
+                                    <a class="nav-link active" href="#">Lịch sử mua hàng</a>
                                 </li>
                             </ul>
                             <h2 style="padding-top:2rem" class="">Lịch sử mua hàng</h2>
