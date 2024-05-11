@@ -70,7 +70,7 @@ if (!isset($_COOKIE['username'])) {
                                     // Lấy dữ liệu từ kết quả truy vấn
                                     $user = mysqli_fetch_assoc($result_id);
                                     $id_user = $user['id_user'];
-                                    $sql = "SELECT product.id as id, cart.number as numbers, product.title as title, product.thumbnail as thumbnail, product.price as price, cart.status as status_item
+                                    $sql = "SELECT product.id as id, cart.number as numbers, product.title as title, product.thumbnail as thumbnail, product.price as price, cart.status as status_item, product.number as max
                                             FROM cart JOIN product ON cart.id_product = product.id WHERE cart.id_user = '$id_user'";
                                     $result = executeResult($sql);
                                     foreach ($result as $item) {
@@ -86,7 +86,7 @@ if (!isset($_COOKIE['username'])) {
                                                 <td>' . $item['title'] . '</td>
                                                 <td class="b-500 red" id="price">' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
                                                 <td width="100px" class="quantity">
-                                                    <input type="number" id="quantity" value="' . $item['numbers'] . '" min="1" data-user-id="' . $id_user . '" data-product-id="' . $item['id'] . '">
+                                                    <input type="number" id="quantity" value="' . $item['numbers'] . '" min="1" data-user-id="' . $id_user . '" data-product-id="' . $item['id'] . '" max = "'.$item['max'].'">
                                                 </td>
                                                 <td class="b-500 red" ><span class = "total_item">' . number_format($item['price'] * $item['numbers'], 0, ',', '.') . '</span><span> VNĐ</span></td>
                                                 <td>
@@ -129,8 +129,14 @@ if (!isset($_COOKIE['username'])) {
     <script type="text/javascript">
         document.querySelectorAll('.quantity input[type="number"]').forEach(input => {
             input.addEventListener('change', function() {
-                var productId = this.getAttribute('data-product-id');
-                var quantity = this.value;
+                //var max =this.getAttribute('max');
+                //var quantity = this.value;
+                var max = parseInt(this.getAttribute('max'), 10);
+                var quantity = parseInt(this.value, 10);
+                
+                if(quantity<max){
+                    var productId = this.getAttribute('data-product-id');
+                
                 var userId = this.getAttribute('data-user-id');
                 var checkbox = this.closest('tr').querySelector('.checkbox');
 
@@ -160,6 +166,10 @@ if (!isset($_COOKIE['username'])) {
                     }
                 };
                 xhr.send('productId=' + productId + '&quantity=' + quantity + '&userId=' + userId);
+                }else{
+                    alert("Sản phẩm vượt quá số lượng tồn!");
+                    location.reload();
+                }
             });
         });
         document.querySelectorAll('.delete-btn').forEach(btn => {
