@@ -28,8 +28,9 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])) {
     $id_user = $user['id_user'];
 
     if (!empty($product)) {
-        $status = $product['status'];
 
+        $status = 1;
+    
         // Kiểm tra xem primary key đã tồn tại trong bảng cart chưa
         $sql_check = 'SELECT * FROM cart WHERE id_user = "' . $id_user . '" AND id_product = "' . $id . '"';
         $existing_cart_item = executeSingleResult($sql_check);
