@@ -94,7 +94,7 @@ require_once('utils/utility.php');
                                     foreach ($result_product as $row_product) {
                                         echo '<div class="product">
                                                 <div class="product-image-title-number">
-                                                    <img src="admin/product/' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image" style="width: 200px; height:200px">
+                                                    <img src="admin/product/' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image" style="width: 100px; height:100px">
                                                     <div class="product-title-number">
                                                         <div class="product-title">' . $row_product['title'] . '</div>
                                                         <div class="product-number">Số lượng: ' . $row_product['numbers'] . '</div>
