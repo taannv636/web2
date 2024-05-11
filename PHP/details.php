@@ -7,7 +7,7 @@ require_once('utils/utility.php');
 $id_user = $id = $num = $product = '';
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    
+
     // Truy vấn để lấy thông tin sản phẩm
     $sql = 'SELECT * FROM product WHERE id = "' . $id . '"';
     $product = executeSingleResult($sql);
@@ -19,7 +19,7 @@ if (isset($_GET['id'])) {
     }
 }
 
-if (isset($_POST['num']) && isset($_COOKIE['username'])){
+if (isset($_POST['num']) && isset($_COOKIE['username'])) {
     $num = $_POST['num'];
     $username = $_COOKIE['username'];
 
@@ -28,12 +28,13 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])){
     $id_user = $user['id_user'];
 
     if (!empty($product)) {
+
         $status = 1;
     
         // Kiểm tra xem primary key đã tồn tại trong bảng cart chưa
         $sql_check = 'SELECT * FROM cart WHERE id_user = "' . $id_user . '" AND id_product = "' . $id . '"';
         $existing_cart_item = executeSingleResult($sql_check);
-    
+
         if ($existing_cart_item) {
             // Nếu primary key đã tồn tại, thực hiện cập nhật cột number
             $sql = 'UPDATE cart SET number = "' . $num . '" WHERE id_user = "' . $id_user . '" AND id_product = "' . $id . '"';
@@ -43,10 +44,9 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])){
             VALUES ("' . $id_user . '","' . $id . '","' . $num . '","' . $status . '") 
             ON DUPLICATE KEY UPDATE number = VALUES(number)';
         }
-    
+
         execute($sql);
     }
-    
 }
 
 ?>
@@ -65,7 +65,7 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])){
             </section>
         </div>
         <!-- <div class="bg-grey">
-
+        
         </div> -->
         <!-- END LAYOUT  -->
         <section class="main">
@@ -96,7 +96,17 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])){
                                     <button type="submit" class="add-cart" onclick="addToCart('<?= $id ?>')"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                     <!-- <a class="buy-now" href="checkout.php" >Mua ngay</a> -->
                                 </form>
-                                <button class="buy-now" onclick="buyNow('<?= $id ?>')">Mua ngay</button>
+                                <?php
+                                    $username = $_COOKIE['username'];
+                                    $sql_id = "SELECT * FROM user WHERE username = '$username'";
+                                    $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+                                    $result_id = mysqli_query($con, $sql_id);
+                            
+                                    // Lấy dữ liệu từ kết quả truy vấn
+                                    $user = mysqli_fetch_assoc($result_id);
+                                    $id_user = $user['id_user'];
+                                ?>
+                                <button class="buy-now" id_user='<?php echo $id_user ?>' id_product='<?php echo $id ?>'>Mua ngay</button>
 
                                 <div id="alertNotSell" style="font-weight: bold; color: red"></div>
                                 <div id="productNumber" style="font-weight: bold; color: red">Số lượng còn lại: <?= $product['number'] ?></div>
@@ -108,8 +118,7 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])){
                                     function updatePrice() {
                                         var price = document.getElementById('price').innerText; // giá tiền
                                         var num = document.querySelector('#num').value; // số lượng
-                                        if (num > <?= $product['number'] ?>)
-                                        {
+                                        if (num > <?= $product['number'] ?>) {
                                             alert('Số lượng vượt quá số lượng tồn kho');
                                             document.getElementById('num').value = 1;
                                             num = 1;
@@ -119,11 +128,11 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])){
                                         var gia = price.match(/\d/g);
                                         gia = gia.join("");
                                         var tong = gia1 * num;
-                                        document.getElementById('price').innerHTML = tong.toLocaleString();   
+                                        document.getElementById('price').innerHTML = tong.toLocaleString();
                                     }
 
-                                     // Hàm kiểm tra status và hiển thị thông báo khi trang tải
-                                     function checkStatusAndAlert() {
+                                    // Hàm kiểm tra status và hiển thị thông báo khi trang tải
+                                    function checkStatusAndAlert() {
                                         // Kiểm tra status
                                         var status = <?= $product['status'] ?>;
                                         if (status == 1) {
@@ -167,7 +176,7 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])){
                         $index = 1;
                         foreach ($productList as $item) {
                             if ($item['status'] != 0)
-                            echo '
+                                echo '
                                     <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
                                         <img src="admin/product/' . $item['thumbnail'] . '" alt="">
@@ -239,7 +248,7 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])){
             'id': id,
             'num': num
         }, function(data) {
-        location.assign("cart.php");
+            location.assign("cart.php");
         })
     }
 
@@ -252,6 +261,36 @@ if (isset($_POST['num']) && isset($_COOKIE['username'])){
             location.assign("checkout.php");
         })
     }
+
+    // Lắng nghe sự kiện click của nút thanh toán
+    document.querySelector('.buy-now').addEventListener('click', function(event) {
+        var userId = this.getAttribute('id_user');
+        var productId = this.getAttribute('id_product');
+        var number = document.getElementById("num").value;
+        
+        // Gửi request xóa bằng AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '../PHP/add_item_cart.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                // Xử lý kết quả nếu cần
+                // Ví dụ: cập nhật giao diện sau khi xóa 
+                //location.reload(); // Reload trang sau khi xóa
+                var reponse = xhr.responseText;
+                alert(reponse);
+                console.log(reponse);
+
+            }
+        };
+        xhr.send('userId=' + userId + '&productId=' + productId + '&number='+number);
+        // Lấy danh sách các món hàng được chọn
+        var selectedOrders = [];
+        selectedOrders.push(productId);
+        var url = 'checkout.php?selectedOrders=' + JSON.stringify(selectedOrders);
+        window.location.href = url;
+                
+    });
 </script>
 </body>
 
