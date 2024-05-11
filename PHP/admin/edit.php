@@ -192,7 +192,6 @@ if (isset($_GET['order_id'])) {
                     </div>
 
                     <button type="submit" class="btn btn-success" name="save">Lưu</button>
-                    <button type="button" class="btn btn-danger" id="btnOrderPDF">In PDF</button>
                
                     <?php
                     $previous = "javascript:history.go(-1)";
