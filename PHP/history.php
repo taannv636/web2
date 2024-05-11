@@ -13,15 +13,11 @@ require_once('utils/utility.php');
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" ><!-- Latest compiled and minified CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <!-- <link rel="stylesheet" href="css/index.css"> -->
     <link rel="stylesheet" href="plugin/fontawesome/css/all.css">
     <link rel="stylesheet" href="css/cart.css">
     <title>Giỏ hàng</title>
@@ -30,8 +26,6 @@ require_once('utils/utility.php');
 <body>
     <div id="wrapper">
         <?php require('layout/header.php') ?>
-
-        <!-- END HEADR -->
         <main>
             <section class="cart">
                 <div class="container-top">
@@ -85,50 +79,44 @@ require_once('utils/utility.php');
                                         <div class="product-date">Ngày giao hàng: ' . $row['delivery_date'] . '</div>
                                     </div>
                                     <div class="product-date-status">
-                                    <div class="product-date">Họ tên: ' . $row['hoten'] . '</div>
-                                    <div class="product-status">Số điện thoại: ' . $row['phone'] . '</div>
-                                </div>
-                                <div class="product-date"> Địa chỉ: ' . $row['address'] . '</div>
-                                </div>
-                                <hr>';
-                                                                                
+                                        <div class="product-date">Họ tên: ' . $row['hoten'] . '</div>
+                                        <div class="product-status">Số điện thoại: ' . $row['phone'] . '</div>
+                                    </div>
+                                    <div class="product-date"> Địa chỉ: ' . $row['address'] . '</div>';
+
                                     $id_orders = $row['id'];
                                     $sql_product = "SELECT product.thumbnail as thumbnail, product.title as title, order_details.number as numbers, 
                                     product.price as price
                                     FROM order_details JOIN product ON order_details.id_product = product.id 
-                                    WHERE order_details.id_order = '$id_orders'
-                                    ";
+                                    WHERE order_details.id_order = '$id_orders'";
 
                                     $result_product = executeResult($sql_product);
                                     foreach ($result_product as $row_product) {
                                         echo '<div class="product">
-                                                <div class = "product-image-title-number">
-                                                <img src="admin/product/' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image" style="width: 200px; height:200px">
-                                                <div class = "product-title-number">
+                                                <div class="product-image-title-number">
+                                                    <img src="admin/product/' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image" style="width: 100px; height:100px">
+                                                    <div class="product-title-number">
                                                         <div class="product-title">' . $row_product['title'] . '</div>
                                                         <div class="product-number">Số lượng: ' . $row_product['numbers'] . '</div>
                                                     </div>
                                                 </div>
-                                        
-                                                <div class="product-price">'. number_format($row_product['numbers']*$row_product['price'], 0, ',', '.') .'<span> VNĐ</span></div>
-                                            </div>
-                                            <hr>';
-                                        $total += $row_product['numbers']*$row_product['price'];
+                                                <div class="product-price">' . number_format($row_product['numbers'] * $row_product['price'], 0, ',', '.') . '<span> VNĐ</span></div>
+                                            </div>';
+                                        $total += $row_product['numbers'] * $row_product['price'];
                                     }
-                                    echo '<div class="product-total">Tổng tiền: '. number_format($total, 0, ',', '.') .'<span> VNĐ</span></div>
-                                        </div>';
+                                    echo '<div class="product-total">Tổng tiền: ' . number_format($total, 0, ',', '.') . '<span> VNĐ</span></div>
+                                        </div>
+                                        <hr>';
                                 }
                             }
                             ?>
                         </tbody>
-
                     </div>
                 </div>
             </section>
         </main>
         <?php require_once('layout/footer.php'); ?>
     </div>
-    </script>
 </body>
 <style>
     main {
