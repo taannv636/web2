@@ -40,7 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_user']) && isset($
         execute($sql_add_order_detail);
         $sql_delete_cart = "DELETE FROM cart WHERE id_user = '$userId' AND id_product = '$id_product'";
         execute($sql_delete_cart);
+        $sql_max = "SELECT * FROM product WHERE id = '$id_product'";
+        $re = executeSingleResult($sql_max);
+        $number_pr = $re['number'];
+        $conlai = $number_pr - $number_product;
+        $sql_update_product ="UPDATE product SET number = '$conlai' WHERE id = '$id_product'";
+        execute($sql_update_product);
     }
+
+    
 
 
     // Trả về kết quả (có thể trả về JSON nếu cần)
