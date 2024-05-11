@@ -403,38 +403,6 @@ ALTER TABLE `product`
 COMMIT;
 
 
-DELIMITER //
-
-CREATE TRIGGER update_cart_status AFTER UPDATE ON product
-FOR EACH ROW
-BEGIN
-    IF NEW.status = 0 OR NEW.status = 1 THEN
-        UPDATE cart
-        SET status = 0
-        WHERE id_product = NEW.id;
-    ELSE
-        UPDATE cart
-        SET status = 1
-        WHERE id_product = NEW.id;
-    END IF;
-END //
-
-DELIMITER ;
-
-
-DELIMITER //
-
-CREATE TRIGGER update_product_status BEFORE UPDATE ON product
-FOR EACH ROW
-BEGIN
-    IF NEW.number = 0 AND OLD.status = 2 THEN
-        SET NEW.status = 1;
-    END IF;
-END //
-
-DELIMITER ;
-
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
