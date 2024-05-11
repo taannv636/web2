@@ -42,7 +42,7 @@ require_once('utils/utility.php');
                                     <a class="nav-link" href="cart.php">Giỏ hàng</a>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link active" href="dashboard.php">Lịch sử mua hàng</a>
+                                    <a class="nav-link active" href="#">Lịch sử mua hàng</a>
                                 </li>
                             </ul>
                             <h2 style="padding-top:2rem" class="">Lịch sử mua hàng</h2>
@@ -103,7 +103,7 @@ require_once('utils/utility.php');
                                     foreach ($result_product as $row_product) {
                                         echo '<div class="product">
                                                 <div class = "product-image-title-number">
-                                                <img src="admin/product/' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image" style="width: 200px; height:200px">
+                                                <img src="admin/product/' . $row_product['thumbnail'] . '" alt="Bánh" class="product-image" style="width: 100px; height:100px">
                                                 <div class = "product-title-number">
                                                         <div class="product-title">' . $row_product['title'] . '</div>
                                                         <div class="product-number">Số lượng: ' . $row_product['numbers'] . '</div>
